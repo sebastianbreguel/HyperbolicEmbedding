@@ -1,2 +1,2 @@
 # EmbeddingHyperbolic
-This is a repository for the investigation to generate music based on Hyperbolic Embeddings
+This is a repository for the investigation to generate music based with Hyperbolic Embeddings
