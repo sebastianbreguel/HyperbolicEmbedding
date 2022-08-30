@@ -47,6 +47,7 @@ def log_map_x(x, y, c = 1):
     return first * second * third 
 
 
+
 #Parallel Trnasport
 def parallel_transport(x, v, c = 1):
     lambda_0 = lambda_x(0, c)
@@ -54,3 +55,4 @@ def parallel_transport(x, v, c = 1):
     return np.dot(lambda_0, v) / lam_x
 
 
+# Euclidean distan
