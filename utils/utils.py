@@ -19,37 +19,40 @@ def mob_add(x, y, c=1):
     )
     return numerator / denominator
 
-#lambda x
-def lambda_x(x, c = 1):
-    return 2. / (1 - c * np.linalg.norm(x)**2)
+
+# lambda x
+def lambda_x(x, c=1):
+    return 2.0 / (1 - c * np.linalg.norm(x) ** 2)
+
 
 # Gyrovectorspace multiplication of vectors and scalars
 def mob_mult(x, r, c=1):
     first = 1 / np.sqrt(c)
     second = np.dot(r, np.arctanh(np.dot(np.sqrt(c), np.linalg.norm(x))))
-    third = x /  np.linalg.norm(x)
+    third = x / np.linalg.norm(x)
     return first * np.exp(second) * third
 
+
 # Exponential map
-def exp_map_x(x, v, c = 1):
+def exp_map_x(x, v, c=1):
     first_term = x
     second_term = np.sqrt(c) * lambda_x(x, c) * np.linalg.norm(v) / 2
     third_term = (np.sqrt(c) * np.linalg.norm(v)) * v
     return mob_add(first_term, np.tanh(second_term * third_term), c)
 
-#log map
-def log_map_x(x, y, c = 1):
+
+# log map
+def log_map_x(x, y, c=1):
     diff = mob_add(-x, y, c)
     lam = lambda_x(x, c)
-    first =  2. / (np.sqrt(c) * lam) 
-    second  = np.arctanh(np.sqrt(c) * np.linalg.norm(diff))
+    first = 2.0 / (np.sqrt(c) * lam)
+    second = np.arctanh(np.sqrt(c) * np.linalg.norm(diff))
     third = diff / np.linalg.norm(diff)
-    return first * second * third 
+    return first * second * third
 
 
-
-#Parallel Trnasport
-def parallel_transport(x, v, c = 1):
+# Parallel Trnasport
+def parallel_transport(x, v, c=1):
     lambda_0 = lambda_x(0, c)
     lam_x = lambda_x(x, c)
     return np.dot(lambda_0, v) / lam_x
