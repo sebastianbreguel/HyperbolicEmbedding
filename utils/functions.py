@@ -1,58 +1,47 @@
-import random
-import torch
 import pandas as pd
 import numpy as np
-import csv
+from parameters import *
 
-V = 5
-L = 15
-N = 1000
-
-s = "abcdefghijklmnopqrstuvwxyz"[:V]
-vocabuary = [i for i in s]
-
-
-def metric(x, y) -> int:
+# funcion of the real distance in a tree between two nodes
+def metric(
+    x,
+    y,
+):
     h = 0
-    max = min(len(x), len(y))
-    while h < max and x[h] == y[h]:
-        h += 1
+    for i in range(min(len(x), len(y))):
+        if x[i] == y[i]:
+            h += 1
+        else:
+            break
     return len(x) + len(y) - 2 * h
 
 
-def generate_word(max_length=20, vocabuary=["a", "b", "c"]) -> str:
+# function to generate a random word
+def generate_word(max_length=L, vocabuary=["a", "b", "c"]):
     s = ""
-    length = random.randint(1, max_length)
-    for _ in range(length):
-        s += random.choice(vocabuary)
+    # print("maxlength", max_length)
+    number = np.random.randint(0, max_length + 1)
+    for _ in range(number):
+        s += np.random.choice(vocabuary)
     return s
 
 
-words = [" "] * N
-for _ in range(N):
-    a = generate_word(L, vocabuary)
-    words[_] = a
+def embedding1(x):
+    l = 0
+    for i in range(len(x)):
+        l += (i + 1) * (S.find(x[i]) + 1)
+    return np.array(l)
 
-df_words = pd.DataFrame(words, columns=["word"]).drop_duplicates()
-# reset the index of the dataframe
-df_words = df_words.reset_index(drop=True)
-n = len(df_words)
-lista = [[]] * (int((n - 1) * (n) / 2))
 
-value = 0
-for i in range(n):
-    a = df_words.iloc[i]["word"]
+def embedding2(x):
+    l = 0
+    for i in range(len(x)):
+        l += S.find(x[i]) + 1
+    return np.array(l)
 
-    for _ in range(i + 1, n):
-        # select two random words and then aply metric
 
-        b = df_words.iloc[_]["word"]
-
-        lista[value] = [a, b, metric(a, b)]
-        value += 1
-
-# dataframe of the words and the distance
-df_distances = pd.DataFrame(lista, columns=["words 1", "words 2", "metric"])
-
-df_words.to_csv(f"data/tree_{V}_{L}.csv")
-df_distances.to_csv(f"data/distance_{V}_{L}.csv")
+def embed(x):
+    l = np.zeros(L)
+    for i in range(len(x)):
+        l[i] = S.find(x[i])
+    return np.array(l)
