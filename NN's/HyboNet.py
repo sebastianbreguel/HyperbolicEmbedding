@@ -1,17 +1,25 @@
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
+
 import numpy as np
 import pandas as pd
-from parameters import *
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
-from NN's import *
+# Custom data
+from .Hyperbolic import HNNLayer
+from Optimizer.Radam import RiemannianAdam
+from Manifolds.poincare import PoincareBall
+from Manifolds.math_utils import Artanh
+from utils import artanh
+from Optimizer.rsgd import RiemannianSGD
+
+V = 15
+L = 500
+URL_EMBEDDING = f"data/embedding_{V}_{L}.csv"
+
 df = pd.read_csv(URL_EMBEDDING, header=0)
 df = df.drop(df.columns[0], axis=1)
-# df = df.sample(frac=0.8, random_state=1).reset_index().drop("index", axis=1)
-# print(df)
 df.columns = ["EF1", "EF2", "ES1", "ES2", "Metric"]
 
 ##########################
@@ -42,6 +50,7 @@ scaler = MinMaxScaler()
 X_train = scaler.fit_transform(X_train)
 X_val = scaler.transform(X_val)
 X_test = scaler.transform(X_test)
+
 X_train, y_train = np.array(X_train), np.array(y_train)
 X_val, y_val = np.array(X_val), np.array(y_val)
 X_test, y_test = np.array(X_test), np.array(y_test)
@@ -112,56 +121,29 @@ test_loader = DataLoader(dataset=test_dataset, batch_size=1)
 ##########################
 
 
-class Net(nn.Module):
-    def __init__(self, input):
-        super(Net, self).__init__()
-        self.l1 = nn.Linear(input, 1)
-        # self.l2 = nn.Linear(16, 32)
-        # self.l3 = nn.Linear(32, 16)
-        # self.l4 = nn.Linear(16, 4)
-        # self.oupt = nn.Linear(4, 1)
-        # self.relu = nn.ReLU()
-
-    def forward(self, x):
-        x = self.l1(x)
-        # x = self.relu(self.2(x))
-        # x = self.relu(self.l3(x))
-        # x = self.relu(self.l4(x))
-        # x = self.oupt(x)
-        return x
-
-    def predict(self, test_x):
-        x = self.l1(test_x)
-        # x = self.relu(self.l2(test_x))
-        # x = self.relu(self.l3(test_x))
-        # x = self.relu(self.l4(test_x))
-        # x = self.oupt(x)
-        return x
-
-
 ##########################
 #####   Check for GPU
 ##########################
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-print(device)
+device = torch.device("cpu")
+poincareBall = PoincareBall()
 
-
-n = Net(4)
+n = HNNLayer(poincareBall, 4, 1, 1, Artanh, 1)
 n.to(device)
 
-print(n)
+# print(n)
 
 criterion = nn.MSELoss()
-optimizer = torch.optim.Adam(n.parameters(), lr=0.001)
-
+# optimizer = torch.optim.Adam(n.parameters(), lr=0.001)
+optimizer = RiemannianAdam(n.parameters(), lr=0.001)
+print(n)
 
 ##########################
 #####  Train Model
 ##########################
 
 # loss_stats = {"train": [], "val": []}
-
+torch.autograd.set_detect_anomaly(True)
 
 print("Begin training.")
 for e in range(1, EPOCHS + 1):
@@ -176,15 +158,14 @@ for e in range(1, EPOCHS + 1):
         optimizer.zero_grad()
 
         y_train_pred = n(X_train_batch)
-        # print(y_train_pred)
-
         train_loss = criterion(y_train_pred, y_train_batch.unsqueeze(1))
 
         train_loss.backward()
+
         optimizer.step()
-
         train_epoch_loss += train_loss.item()
-
+    #     break
+    # break
     # VALIDATION
     with torch.no_grad():
 
@@ -195,6 +176,7 @@ for e in range(1, EPOCHS + 1):
             X_val_batch, y_val_batch = X_val_batch.to(device), y_val_batch.to(device)
             # print(X_val_batch)
             y_val_pred = n(X_val_batch)
+            # print(y_val_batch)
 
             val_loss = criterion(y_val_pred, y_val_batch.unsqueeze(1))
 

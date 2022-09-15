@@ -1,9 +1,14 @@
 import os
 
+if __name__ == "__main__":
 
-def get_path():
-    return os.path.dirname(os.path.realpath(__file__))
+    # Generate the folder
+    os.system("mkdir -p ../data")
 
+    # run generate_data.py
+    os.system("python3 generate_data.py")
 
-# run generate_data.py
-# run embedding.py
+    # run embedding.py
+    os.system("python3 embedding.py")
+
+    print("Done")

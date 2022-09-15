@@ -4,7 +4,7 @@ from time import perf_counter
 
 words = [" "] * N
 for _ in range(N):
-    a = generate_word(L, vocabuary)
+    a = generate_word(L, VOCABULARY)
     words[_] = a
 df_words = pd.DataFrame(words, columns=["word"]).drop_duplicates()
 # reset the index of the dataframe
