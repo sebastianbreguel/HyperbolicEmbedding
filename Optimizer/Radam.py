@@ -1,15 +1,16 @@
 """Riemannian adam optimizer geoopt implementation (https://github.com/geoopt/)."""
 import torch.optim
-from ..Manifolds.poincare import PoincareBall
-from ..Manifolds.euclidean import Euclidean
+from Manifolds.poincare import PoincareBall
+from Manifolds.euclidean import Euclidean
 
-from geoopt import ManifoldParameter, ManifoldTensor
+from Manifolds.base import ManifoldParameter
 
 # in order not to create it at each iteration
-_default_manifold = Euclidean()
 
 
 class OptimMixin(object):
+    _default_manifold = Euclidean()
+
     def __init__(self, *args, stabilize=None, **kwargs):
         self._stabilize = stabilize
         super().__init__(*args, **kwargs)
@@ -75,6 +76,10 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
         https://openreview.net/forum?id=ryQu7f-RZ
     """
 
+    def __init__(self, *args, stabilize=None, **kwargs):
+        self._stabilize = stabilize
+        super().__init__(*args, **kwargs)
+
     def step(self, closure=None):
         """Performs a single optimization step.
         Arguments
@@ -106,8 +111,10 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
                         print("yapo rey")
                     else:
                         # print("tsiuu")
-                        manifold = PoincareBall()
-                        c = 1
+                        # manifold = PoincareBall()
+                        # c = 1
+                        c = None
+                        manifold = self._default_manifold
 
                     if grad.is_sparse:
                         raise RuntimeError(
@@ -191,4 +198,4 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
             c = p.c
             exp_avg = state["exp_avg"]
             copy_or_set_(p, manifold.proj(p, c))
-            exp_avg.set_(manifold.proj_tan(exp_avg, u, c))
+            exp_avg.set_(manifold.proj_tan(exp_avg, c))

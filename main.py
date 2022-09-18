@@ -1,28 +1,24 @@
-from model_data import get_data, get_model
+from model_data import get_data, get_model, get_stats
 import torch
 from parameters import *
 import numpy as np
 import torch.nn as nn
-from NNs.Optimizer import RiemannianAdam
+from Optimizer import RiemannianAdam
 from geoopt import ManifoldParameter
 from utils import generate_data
-import os
+import argparse
 
-if "__main__" == __name__:
-    generate_data()
 
-    torch.manual_seed(18625541)
+def train_eval(option_model, optimizer_option):
 
     train_loader, val_loader, test_loader, y_test = get_data()
 
     ##########################
-    #####   Check for GPU
+    #####    MODEL
     ##########################
 
-    option = int(input("Enter 1 for Euclidean, 2 for Hyperbolic: "))
-
     device = torch.device("cpu")
-    model = get_model(option).to(device)
+    model = get_model(option_model).to(device)
 
     # loss function
     criterion = nn.MSELoss()
@@ -52,26 +48,23 @@ if "__main__" == __name__:
         },
     ]
 
-    print(optimizer_grouped_parameters[0], optimizer_grouped_parameters[1])
-    print(optimizer_grouped_parameters)
-    print(model)
-
-
-    optimizer_option = int(input("Enter 1 for Adam, 2 for RiemannianAdam: "))
-
-    if optimizer_option == 1:
+    if optimizer_option == "Adam":
         optimizer = torch.optim.Adam(optimizer_grouped_parameters, lr=LEARNING_RATE)
 
-    elif optimizer_option == 2:
+    elif optimizer_option == "RiemannianAdam":
         optimizer = RiemannianAdam(
             optimizer_grouped_parameters, lr=LEARNING_RATE, stabilize=10
         )
+    print("\n"+"#" * 25)
+    print(f"Running {option_model} Model - {optimizer_option} Optimizer")
+    print("#" * 25, "\n")
+    # print(optimizer_grouped_parameters)
+    # print(model)
 
     ##########################
     #####  Train Model
     ##########################
 
-    # loss_stats = {"train": [], "val": []}
     torch.autograd.set_detect_anomaly(True)
 
     print("Begin training.")
@@ -131,55 +124,41 @@ if "__main__" == __name__:
 
     y_pred_list = np.array(y_pred_list)
 
-    ##########################
-    #####   Evaluate Model
-    ##########################
-    wrong = [0] * 4
-    error_7 = 0
-    error_5 = 0
-    error_3 = 0
-    error_1 = 0
+    get_stats(y_pred_list, y_test)
 
-    for i in range(len(y_pred_list)):
-        if round(y_pred_list[i], 0) != y_test[i]:
-            # print("Predicted: ", round(y_pred_list[i],0),"-",y_pred_list[i], "Actual: ", y_test[i])
-            wrong[0] += 1
 
-        if round(y_pred_list[i], 1) != y_test[i]:
-            # print("Predicted: ", round(y_pred_list[i],1),"-",y_pred_list[i], "Actual: ", y_test[i])
-            wrong[1] += 1
+if "__main__" == __name__:
 
-        if round(y_pred_list[i], 2) != y_test[i]:
-            # print("Predicted: ", round(y_pred_list[i],2),"-",y_pred_list[i], "Actual: ", y_test[i])
-            wrong[2] += 1
+    parser = argparse.ArgumentParser()
 
-        if round(y_pred_list[i], 3) != y_test[i]:
-            # print("Predicted: ", round(y_pred_list[i],3),"-",y_pred_list[i], "Actual: ", y_test[i])
-            wrong[3] += 1
-        diff = round(y_pred_list[i], 0) - y_test[i]
-
-        if diff > 1:
-            # print(
-            #     "Predicted: ",
-            #     round(y_pred_list[i], 0),
-            #     "-",
-            #     y_pred_list[i],
-            #     "Actual: ",
-            #     y_test[i],
-            # )
-            error_1 += 1
-            if diff > 3:
-                error_3 += 1
-                if diff > 5:
-                    error_5 += 1
-                    if diff > 7:
-                        error_7 += 1
-
-    print(
-        wrong,
-        len(y_pred_list),
-        error_1,
-        error_3,
-        error_5,
-        error_7,
+    parser.add_argument("--gen_data", action="store_true", help="Generate data")
+    parser.add_argument(
+        "--make_train_eval", action="store_true", help="Train and evaluate model"
     )
+    parser.add_argument(
+        "--delete_folder", action="store_true", help="Delete data folder"
+    )
+    parser.add_argument(
+        "--create_folder", action="store_true", help="Create data folder"
+    )
+    parser.add_argument("--model", action="store", help="Model to use")
+    parser.add_argument("--optimizer", action="store", help="Optimizer to use")
+
+    results = parser.parse_args()
+    gen_data = results.gen_data
+    make_train_eval = results.make_train_eval
+    delete_folder = results.delete_folder
+    create_folder = results.create_folder
+    model = results.model
+    optimizer = results.optimizer
+
+    if gen_data:
+        print("\n"+"#" * 21)
+        print("## GENERATING DATA ##")
+        print("#" * 21)
+        generate_data(delete_folder, create_folder)
+
+    torch.manual_seed(18625541)
+
+    if make_train_eval:
+        train_eval(model, optimizer)

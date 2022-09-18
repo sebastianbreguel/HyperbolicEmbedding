@@ -1,28 +1,30 @@
 import os
-from .generate import generate_words
-from .embedding import make_embedding
+from .functions import generate_words, make_embedding
 from time import sleep
 
 
-def generate_data() -> None:
+def generate_data(delete_folder, create_folder) -> None:
     # Generate the folder
-    delete_older = input("Do you want to delete the older data? (y/n): ")
-    if delete_older == "y":
+    if delete_folder:
+        print("#" * 20, "\nDeleting folder")
         os.system("rm -rf data")
         sleep(1)
+        print("Folder deleted\n")
 
-    new_folder = input("Do you want to create a new folder? (y/n): ")
-    if new_folder == "y":
+    if create_folder:
+        print("Creating folder")
         os.system("mkdir data")
         os.system("mkdir data/distances")
         os.system("mkdir data/embeddings")
         os.system("mkdir data/words")
+        sleep(1)
+        print("\nFolder created\n")
 
     # run generate_data.py
     generate_words()
 
     # run embedding.py
     make_embedding()
-    os.system("ls data")
 
-    print("\nDone")
+    line = "\n" + "#" * 20
+    print(line + "\n## Data Generated ##" + line + "\n")
