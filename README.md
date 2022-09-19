@@ -2,7 +2,7 @@
 
 This is a repository to investigate how to generate music based in Hyperbolic Embeddings
 
-To create the daraset :
+To create the dataset :
 
 ```sh
 python3 main.py --gen_data
