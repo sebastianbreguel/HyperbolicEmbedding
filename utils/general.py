@@ -14,9 +14,7 @@ def generate_data(delete_folder, create_folder) -> None:
     if create_folder:
         print("Creating folder")
         os.system("mkdir data")
-        os.system("mkdir data/Prefix_05")
-        os.system("mkdir data/Prefix_10")
-        os.system("mkdir data/Prefix_15")
+        os.system("mkdir data/Prefix")
         sleep(1)
         print("\nFolder created\n")
 

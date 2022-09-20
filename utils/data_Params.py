@@ -2,11 +2,12 @@
 #####    Data Params
 ##########################
 
-K = 3
-NG = 100000
-R = 0.6
-NUM = 9
+NG = 20000  # Number of examples
+R = 0.5  # Prefix Positive Samples
+NUM = 5  # Number of OPTIONS
 NUMBERS = [str(i) for i in range(1, NUM + 1)]
-URL_GANEA_15 = "data/Prefix_15/ganea.csv"
-URL_GANEA_10 = "data/Prefix_10/ganea.csv"
-URL_GANEA_05 = "data/Prefix_05/ganea.csv"
+URL_PREFIX_50 = "data/Prefix/Prefix_50.csv"
+URL_PREFIX_30 = "data/Prefix/Prefix_30.csv"
+URL_PREFIX_10 = "data/Prefix/Prefix_10.csv"
+LARGE = 1
+K = 3 * LARGE  # Number of changes
