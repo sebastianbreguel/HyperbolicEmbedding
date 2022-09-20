@@ -25,14 +25,14 @@ def get_model(option: str) -> torch.nn.Module:
         manifold = PoincareBall()
         c = 1
 
-    model = HNNLayer(manifold, 50, NUM_FEATURES, c, 1)
+    model = HNNLayer(manifold, 35, OUT_FEATURES, c, 1)
 
     return model
 
 
 def get_data():
 
-    df = pd.read_csv(URL_GANEA_05, header=0)
+    df = pd.read_csv(URL_GANEA_15, header=0)
     df = df.drop(df.columns[0], axis=1)
 
     ##########################

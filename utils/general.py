@@ -1,5 +1,5 @@
 import os
-from .functions import generate_words, make_embedding, data_ganea
+from .functions import data_ganea
 from time import sleep
 
 
