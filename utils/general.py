@@ -1,5 +1,5 @@
 import os
-from .functions import generate_words, make_embedding
+from .functions import data_ganea
 from time import sleep
 
 
@@ -14,17 +14,14 @@ def generate_data(delete_folder, create_folder) -> None:
     if create_folder:
         print("Creating folder")
         os.system("mkdir data")
-        os.system("mkdir data/distances")
-        os.system("mkdir data/embeddings")
-        os.system("mkdir data/words")
+        os.system("mkdir data/Prefix_05")
+        os.system("mkdir data/Prefix_10")
+        os.system("mkdir data/Prefix_15")
         sleep(1)
         print("\nFolder created\n")
 
     # run generate_data.py
-    generate_words()
-
-    # run embedding.py
-    make_embedding()
+    data_ganea()
 
     line = "\n" + "#" * 20
     print(line + "\n## Data Generated ##" + line + "\n")

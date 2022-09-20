@@ -111,10 +111,10 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
                         print("yapo rey")
                     else:
                         # print("tsiuu")
-                        # manifold = PoincareBall()
-                        # c = 1
-                        c = None
-                        manifold = self._default_manifold
+                        manifold = PoincareBall()
+                        c = 1
+                        # c = None
+                        # manifold = self._default_manifold
 
                     if grad.is_sparse:
                         raise RuntimeError(
@@ -137,7 +137,6 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
                     # print("1)exp_avg:",exp_avg)
                     exp_avg_sq = state["exp_avg_sq"]
                     # actual step
-                    # print("1)grad:",grad)
                     # if isinstance(point, (ManifoldParameter)):
                     grad.add_(point, alpha=weight_decay)
                     # print("2)grad:",grad)
@@ -165,17 +164,14 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
                     # copy the state, we need it for retraction
                     # get the direction for ascend
                     direction = exp_avg / denom
-                    # print(f"hol{step_size}-{direction}ahola->\n\n",step_size*direction)
+
                     # transport the exponential averaging to the new point
                     new_point = manifold.proj(
                         manifold.expmap(-step_size * direction, point, c), c
                     )
-                    # print(8,self.param_groups,"como comoc",new_point)
                     exp_avg_new = manifold.ptransp(point, new_point, exp_avg, c)
                     # use copy only for user facing point
-                    # print(999,self.param_groups,"como comoc",new_point)
                     copy_or_set_(point, new_point)
-                    # print("\n\n",123,self.param_groups)
                     exp_avg.set_(exp_avg_new)
 
                     group["step"] += 1

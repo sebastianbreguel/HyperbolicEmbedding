@@ -25,23 +25,23 @@ def get_model(option: str) -> torch.nn.Module:
         manifold = PoincareBall()
         c = 1
 
-    model = HNNLayer(manifold, 4, 1, c, 1)
+    model = HNNLayer(manifold, 35, OUT_FEATURES, c, 1)
 
     return model
 
 
 def get_data():
 
-    df = pd.read_csv(URL_EMBEDDING, header=0)
+    df = pd.read_csv(URL_GANEA_15, header=0)
     df = df.drop(df.columns[0], axis=1)
-    df.columns = ["EF1", "EF2", "ES1", "ES2", "Metric"]
 
     ##########################
     #####Create Input and Output Data
     ##########################
 
-    X = df.iloc[:, :-1]
-    y = df["Metric"].iloc[:]
+    X = df.iloc[:, 2:]
+    # columns isPrefix and isNotPrefix
+    y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
 
     ##########################
     #####Train — Validation — Test
@@ -60,10 +60,10 @@ def get_data():
     #####Normalize Input
     ##########################
 
-    # scaler = MinMaxScaler()
-    # X_train = scaler.fit_transform(X_train)
-    # X_val = scaler.transform(X_val)
-    # X_test = scaler.transform(X_test)
+    scaler = MinMaxScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_val = scaler.transform(X_val)
+    X_test = scaler.transform(X_test)
 
     X_train, y_train = np.array(X_train), np.array(y_train)
     X_val, y_val = np.array(X_val), np.array(y_val)
@@ -116,59 +116,3 @@ def get_data():
     test_loader = DataLoader(dataset=test_dataset, batch_size=1)
 
     return train_loader, val_loader, test_loader, y_test
-
-
-def get_stats(y_pred, y_test):
-
-    ##########################
-    #####   Evaluate Model
-    ##########################
-    wrong = [0] * 4
-    error_7 = 0
-    error_5 = 0
-    error_3 = 0
-    error_1 = 0
-
-    for i in range(len(y_pred)):
-        if round(y_pred[i], 0) != y_test[i]:
-            # print("Predicted: ", round(y_pred[i],0),"-",y_pred[i], "Actual: ", y_test[i])
-            wrong[0] += 1
-
-        if round(y_pred[i], 1) != y_test[i]:
-            # print("Predicted: ", round(y_pred[i],1),"-",y_pred[i], "Actual: ", y_test[i])
-            wrong[1] += 1
-
-        if round(y_pred[i], 2) != y_test[i]:
-            # print("Predicted: ", round(y_pred[i],2),"-",y_pred[i], "Actual: ", y_test[i])
-            wrong[2] += 1
-
-        if round(y_pred[i], 3) != y_test[i]:
-            # print("Predicted: ", round(y_pred[i],3),"-",y_pred[i], "Actual: ", y_test[i])
-            wrong[3] += 1
-        diff = round(y_pred[i], 0) - y_test[i]
-
-        if diff > 1:
-            # print(
-            #     "Predicted: ",
-            #     round(y_pred[i], 0),
-            #     "-",
-            #     y_pred[i],
-            #     "Actual: ",
-            #     y_test[i],
-            # )
-            error_1 += 1
-            if diff > 3:
-                error_3 += 1
-                if diff > 5:
-                    error_5 += 1
-                    if diff > 7:
-                        error_7 += 1
-
-    print(
-        wrong,
-        len(y_pred),
-        error_1,
-        error_3,
-        error_5,
-        error_7,
-    )
