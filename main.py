@@ -1,4 +1,4 @@
-from model_data import get_data, get_model, get_stats
+from model_data import get_data, get_model
 import torch
 from parameters import *
 import numpy as np
@@ -21,7 +21,7 @@ def train_eval(option_model, optimizer_option):
     model = get_model(option_model).to(device)
 
     # loss function
-    criterion = nn.MSELoss()
+    criterion = nn.CrossEntropyLoss()
 
     no_decay = ["bias", "scale"]
     weight_decay = 0.0001
@@ -55,7 +55,7 @@ def train_eval(option_model, optimizer_option):
         optimizer = RiemannianAdam(
             optimizer_grouped_parameters, lr=LEARNING_RATE, stabilize=10
         )
-    print("\n"+"#" * 25)
+    print("\n" + "#" * 25)
     print(f"Running {option_model} Model - {optimizer_option} Optimizer")
     print("#" * 25, "\n")
     # print(optimizer_grouped_parameters)
@@ -80,7 +80,7 @@ def train_eval(option_model, optimizer_option):
             optimizer.zero_grad()
 
             y_train_pred = model(X_train_batch)
-            train_loss = criterion(y_train_pred, y_train_batch.unsqueeze(1))
+            train_loss = criterion(y_train_pred, y_train_batch)
 
             train_loss.backward()
 
@@ -100,9 +100,8 @@ def train_eval(option_model, optimizer_option):
                 )
                 # print(X_val_batch)
                 y_val_pred = model(X_val_batch)
-                # print(y_val_batch)
 
-                val_loss = criterion(y_val_pred, y_val_batch.unsqueeze(1))
+                val_loss = criterion(y_val_pred, y_val_batch)
 
                 val_epoch_loss += val_loss.item()
 
@@ -122,9 +121,23 @@ def train_eval(option_model, optimizer_option):
             y_pred_list.append(y_test_pred.cpu().numpy())
     y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
 
-    y_pred_list = np.array(y_pred_list)
+    corrects = 0
+    for i in range(len(y_pred_list)):
 
-    get_stats(y_pred_list, y_test)
+        max_value = max(y_pred_list[i])
+        index_max = y_pred_list[i].index(max_value)
+        max_real = max(y_test[i])
+
+        index_max_real = np.where(y_test[i] == max_real)
+        print(f"Valor:        Predicted: {index_max}, Real: {index_max_real[0][0]}")
+        print(f"Probabilidad: Predicted: {y_pred_list[i]}")
+        if index_max == index_max_real[0][0]:
+            print("Correct")
+            corrects += 1
+        else:
+            print("Incorrect")
+
+    print(f"Accuracy: {corrects/len(y_pred_list)}")
 
 
 if "__main__" == __name__:
@@ -153,7 +166,7 @@ if "__main__" == __name__:
     optimizer = results.optimizer
 
     if gen_data:
-        print("\n"+"#" * 21)
+        print("\n" + "#" * 21)
         print("## GENERATING DATA ##")
         print("#" * 21)
         generate_data(delete_folder, create_folder)

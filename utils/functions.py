@@ -1,10 +1,27 @@
 import pandas as pd
 import numpy as np
 from time import perf_counter
-from random import choice, random, sample
+from random import choice, random, sample, randrange
 
-from data_Params import *
-from functions import *
+from .data_Params import *
+
+
+def beaty_print(start, initial, value, total, needed):
+    end = perf_counter()
+    arrows = int(value / total * 10 // 1)
+    arrows = "-" + "-" * (arrows) + ">" + " " * (10 - arrows)
+    if needed:
+        print(f"\n\nLAST: {(end - start):.2f} seconds")
+        start = perf_counter()
+    stringa = f"{int(value)}/{int(total)}"
+    print(
+        "{:>17}".format(stringa)
+        + f"{arrows}"
+        + "{:>5}".format(((value / total * 1000) // 1) / 10)
+        + f"% |total time:{((end - initial)/60):.2f} minutes"
+    )
+    return start
+
 
 # funcion of the real distance in a tree between two nodes
 def metric(x: int, y: int) -> float:
@@ -77,21 +94,9 @@ def generate_words():
             lista[value] = [a, b, metric(a, b)]
             value += 1
         if value % 100 == 0:
-            end = perf_counter()
-            arrows = int(value / total * 10 // 1)
-            arrows = "-" + "-" * (arrows) + ">" + " " * (10 - arrows)
-            print(f"\n\nLAST: {(end - start):.2f} seconds")
-            start = perf_counter()
-            print(
-                f"{int(value/1000)}/{int(total/1000)}{arrows}{((value/total * 1000)//1)/10}% \n|total time:{((end - initial)/60):.2f} minutes\n"
-            )
+            start = beaty_print(start, initial, value, total, True)
 
-    end = perf_counter()
-    arrows = "-" + "-" * (10) + ">"
-    print(f"\n\nLAST: {(end - start):.2f} seconds")
-    print(
-        f"{int(value/1000)}/{int(total/1000)}{arrows}{((value/total * 1000)//1)/10}% \n|total time:{((end - initial)/60):.2f} minutes\n"
-    )
+    beaty_print(start, initial, value, total, True)
 
     # # dataframe of the words and the distance
     df_distances = pd.DataFrame(lista, columns=["words 1", "words 2", "metric"])
@@ -132,32 +137,90 @@ def make_embedding():
 
     print(f"\nData Charged: {(perf_counter() - start):.2f} seconds")
 
+
 def data_ganea(num=NUMBERS):
 
     df = pd.DataFrame(columns=list("ABC"))
+    first_15 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+    initial = perf_counter()
+    start = initial
+    lista_15 = [[]] * NG
+    lista_10 = [[]] * NG
+    lista_05 = [[]] * NG
+    large = 2
+    total = 20 * large
+    porcent_15 = 15 * large
+    porcent_10 = 10 * large
+    porcent_05 = 5 * large
 
-    for _ in range(NG):
+    for i in range(NG):
 
         a = ""
-        for _ in range(20):
+        if i % (NG / 1000) == 0:
+            start = beaty_print(start, initial, i, NG, False)
+        for j in range(total):
             a += choice(num)
 
         b = ""
+        d = ""
+        e = ""
         if random() > R:
             c = 1
-            r = sample(a, K)
-            for i in range(15):
-                if i in r:
+            r = sample(range(porcent_15), K)
+            for z in range(porcent_15):
+                if z in r:
                     b += choice(num)
                 else:
-                    b += a[i]
+                    b += a[z]
+            lista_15[i] = [a, b, 0, 1]
+            lista_10[i] = [a, b, 0, 1]
+            lista_05[i] = [a, b, 0, 1]
         else:
-            c = 0
-            for _ in range(15):
+            c = 1
+            for _ in range(porcent_15):
                 b += choice(num)
 
-        d = pd.DataFrame([[int(a), int(b), c]], columns=list("ABC"))
-        df = pd.concat([df, d], ignore_index=True)
-    df.to_csv(URL_GANEA)
-    # print(df)
-# data_ganea()
+            for _ in range(porcent_10):
+                d += choice(num)
+
+            for _ in range(porcent_05):
+                e += choice(num)
+
+            lista_15[i] = [a, b, 1, 0]
+            lista_10[i] = [a, d, 1, 0]
+            lista_05[i] = [a, e, 1, 0]
+    beaty_print(start, initial, NG, NG, False)
+
+    df_15 = pd.DataFrame(
+        lista_15, columns=["Word", "Prefix", "isPrefix", "isNotPrefix"]
+    )
+    df_10 = pd.DataFrame(
+        lista_10, columns=["Word", "Prefix", "isPrefix", "isNotPrefix"]
+    )
+    df_05 = pd.DataFrame(
+        lista_05, columns=["Word", "Prefix", "isPrefix", "isNotPrefix"]
+    )
+    print(df_05)
+
+    for i in range(total):
+        df_15[f"word-{i}"] = df_15["Word"].apply(lambda x: str(x)[i])
+        df_10[f"word-{i}"] = df_10["Word"].apply(lambda x: str(x)[i])
+        df_05[f"word-{i}"] = df_05["Word"].apply(lambda x: str(x)[i])
+
+    for i in range(porcent_15):
+        df_15[f"prefix-{i}"] = df_15["Prefix"].apply(lambda x: str(x)[i])
+
+    for i in range(porcent_10):
+        df_10[f"prefix-{i}"] = df_10["Prefix"].apply(lambda x: str(x)[i])
+
+    for i in range(porcent_05):
+        df_05[f"prefix-{i}"] = df_05["Prefix"].apply(lambda x: str(x)[i])
+
+    df_15 = df_15.drop(["Word", "Prefix"], axis=1).drop_duplicates()
+    df_15.to_csv(URL_GANEA_15)
+
+    df_10 = df_10.drop(["Word", "Prefix"], axis=1).drop_duplicates()
+    df_10.to_csv(URL_GANEA_10)
+
+    df_05 = df_05.drop(["Word", "Prefix"], axis=1).drop_duplicates()
+    df_05.to_csv(URL_GANEA_05)
