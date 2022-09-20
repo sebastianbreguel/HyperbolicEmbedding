@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.init as init
 import math
+from utils.data_Params import *
 
 
 class HNNLayer(nn.Module):
@@ -11,27 +12,22 @@ class HNNLayer(nn.Module):
 
     def __init__(self, manifold, in_features, out_features, c, use_bias):
         super(HNNLayer, self).__init__()
-        self.linear = HypLinear(manifold, in_features, 60, c, use_bias)
-        self.linea2 = HypLinear(manifold, 60, 10, c, use_bias)
-        self.linea3 = HypLinear(manifold, 10, out_features, c, use_bias)
+        self.linear1 = HypLinear(manifold, in_features, 16 * LARGE, c, use_bias)
+        self.linear2 = HypLinear(manifold, 16 * LARGE, 4 * LARGE, c, use_bias)
+        self.linear3 = HypLinear(manifold, 4 * LARGE, out_features, c, use_bias)
         self.softmax = nn.Softmax(dim=1)
-        # self.hyp_act = HypAct(manifold, c, c, act)
+        self.hyp_act_relu = HypAct(manifold, c, c, nn.ReLU())
 
     def forward(self, x):
-        h = self.linear.forward(x)
-        h = self.linea2.forward(h)
-        h = self.linea3.forward(h)
+        h = self.hyp_act_relu(self.linear1(x))
+        h = self.hyp_act_relu(self.linear2(h))
+        h = self.hyp_act_relu(self.linear3(h))
         ouput = self.softmax(h)
         return ouput
 
     def predict(self, test_x):
-        h = self.linear.forward(test_x)
-        h = self.linea2.forward(h)
-        h = self.linea3.forward(h)
-        ouput = self.softmax(h)
-        return ouput
-
-        # h = self.hyp_act.forward(h)
+        h = self.forward(test_x)
+        return h
 
 
 class HypLinear(nn.Module):
