@@ -1,9 +1,10 @@
 import pandas as pd
 import numpy as np
 from time import perf_counter
+from random import choice, random, sample
 
-from .data_Params import *
-from .functions import *
+from data_Params import *
+from functions import *
 
 # funcion of the real distance in a tree between two nodes
 def metric(x: int, y: int) -> float:
@@ -130,3 +131,33 @@ def make_embedding():
     data.to_csv(URL_EMBEDDING)
 
     print(f"\nData Charged: {(perf_counter() - start):.2f} seconds")
+
+def data_ganea(num=NUMBERS):
+
+    df = pd.DataFrame(columns=list("ABC"))
+
+    for _ in range(NG):
+
+        a = ""
+        for _ in range(20):
+            a += choice(num)
+
+        b = ""
+        if random() > R:
+            c = 1
+            r = sample(a, K)
+            for i in range(15):
+                if i in r:
+                    b += choice(num)
+                else:
+                    b += a[i]
+        else:
+            c = 0
+            for _ in range(15):
+                b += choice(num)
+
+        d = pd.DataFrame([[int(a), int(b), c]], columns=list("ABC"))
+        df = pd.concat([df, d], ignore_index=True)
+    df.to_csv(URL_GANEA)
+    # print(df)
+# data_ganea()
