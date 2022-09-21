@@ -8,6 +8,10 @@ from geoopt import ManifoldParameter
 from utils import generate_data
 import argparse
 from time import perf_counter
+from sklearn.metrics import confusion_matrix
+import pandas as pd
+import seaborn as sn
+import matplotlib.pyplot as plt
 
 
 def train_eval(option_model, optimizer_option):
@@ -20,6 +24,7 @@ def train_eval(option_model, optimizer_option):
 
     device = torch.device("cpu")
     model = get_model(option_model).to(device)
+    # use all the cpu cores for torch
 
     # loss function
     criterion = nn.CrossEntropyLoss()
@@ -56,11 +61,7 @@ def train_eval(option_model, optimizer_option):
         optimizer = RiemannianAdam(
             optimizer_grouped_parameters, lr=LEARNING_RATE, stabilize=10
         )
-    print("\n" + "#" * 25)
     print(f"Running {option_model} Model - {optimizer_option} Optimizer")
-    print("#" * 25, "\n")
-    # print(optimizer_grouped_parameters)
-    # print(model)
 
     ##########################
     #####  Train Model
@@ -109,6 +110,7 @@ def train_eval(option_model, optimizer_option):
             f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.5f} | Val Loss: {val_epoch_loss/len(val_loader):.5f}"
             + f" | {((perf_counter() - initial)/60):.2f} minutes"
         )
+    print(torch.get_num_threads())
 
     y_pred_list = []
     with torch.no_grad():
@@ -131,9 +133,44 @@ def train_eval(option_model, optimizer_option):
             correct += 1
 
     print(
-        f"Accuracy of the network on the {len(y_test)} test data: {100 * correct // len(y_pred_list)} %"
+        f"Accuracy of the network on the {len(y_test)} test data: {round(100 * correct /len(y_pred_list),3)} %"
     )
 
+    y_pred = []
+    y_true = []
+
+# iterate over test data
+    for inputs, labels in test_loader:
+            output = model(inputs) # Feed Network
+
+            output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()
+            y_pred.extend(output) # Save Prediction
+            
+            labels = labels.data.cpu().numpy()
+            y_true.extend(labels) # Save Truth
+
+    # constant for classes
+    classes = ( "Prefix","Random")
+    # obtain the position of the max
+    new = []
+    # Build confusion matrix
+    # value = 0
+    for i in y_true:
+        # obtain the index ob the max
+        index = np.where(i == 1)[0][0]
+        new.append(index)
+        # print(i, y_pred[value])
+        # value+=1
+
+    y_true = new
+    # print(y_true, y_pred)
+    cf_matrix = confusion_matrix(y_true, y_pred)
+    print(cf_matrix)
+    df_cm = pd.DataFrame(cf_matrix/np.sum(cf_matrix) *10, index = [i for i in classes],
+                        columns = [i for i in classes])
+    plt.figure(figsize = (12,7))
+    sn.heatmap(df_cm, annot=True)
+    plt.savefig(f'ConfusionMatrix/output-{option_model}-{R}-{NG}.png')
 
 if "__main__" == __name__:
 
