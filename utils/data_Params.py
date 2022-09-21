@@ -2,9 +2,9 @@
 #####    Data Params
 ##########################
 
-NG = 20000  # Number of examples
+NG = 10000  # Number of examples
 R = 0.5  # Prefix Positive Samples
-NUM = 6  # Number of OPTIONS
+NUM = 9 # Number of OPTIONS
 NUMBERS = [str(i) for i in range(0, NUM + 1)]
 URL_PREFIX_50 = "data/Prefix/Prefix_50.csv"
 URL_PREFIX_30 = "data/Prefix/Prefix_30.csv"

@@ -52,9 +52,9 @@ def data_ganea(num=NUMBERS):
         e = ""
 
         if random() < R:
-            positives +=1
+            positives += 1
 
-            # WITH CHANGES
+            # CHANGES OF LETTERS IN THE PREFIX
             r = sample(range(porcent_50), K)
             for z in range(porcent_50):
                 if z in r:
@@ -79,7 +79,7 @@ def data_ganea(num=NUMBERS):
             lista_10[i] = [a, e, 1, 0]
 
         else:
-            negatives +=1
+            negatives += 1
             for _ in range(porcent_50):
                 b += choice(num)
 

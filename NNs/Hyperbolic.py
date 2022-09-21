@@ -13,18 +13,16 @@ class HNNLayer(nn.Module):
     def __init__(self, manifold, in_features, out_features, c, use_bias):
         super(HNNLayer, self).__init__()
         self.linear1 = HypLinear(manifold, in_features, 8 * LARGE, c, use_bias)
-        self.linear2 = HypLinear(manifold, 8 * LARGE, 16 * LARGE , c, use_bias)
-        self.linear5 = HypLinear(manifold, 16 * LARGE, 8 * LARGE, c, use_bias)
-        self.linear6 = HypLinear(manifold, 8 * LARGE, out_features, c, use_bias)
+        self.linear2 = HypLinear(manifold, 8 * LARGE, 4 * LARGE, c, use_bias)
+        self.linear3 = HypLinear(manifold, 4 * LARGE, out_features, c, use_bias)
         self.softmax = nn.Softmax(dim=1)
         self.hyp_Relu = HypAct(manifold, c, c, nn.ReLU())
-        self.hyp_Tanh = HypAct(manifold, c, c, nn.Tanh())
+
 
     def forward(self, x):
         h = self.hyp_Relu(self.linear1(x))
-        h = self.hyp_Tanh(self.linear2(h))
-        h = self.hyp_Relu(self.linear5(h))
-        h = self.linear6(h)
+        h = self.hyp_Relu(self.linear2(h))
+        h = self.linear3(h)
         return h
 
     def predict(self, test_x):

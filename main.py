@@ -62,6 +62,7 @@ def train_eval(option_model, optimizer_option):
             optimizer_grouped_parameters, lr=LEARNING_RATE, stabilize=10
         )
     print(f"Running {option_model} Model - {optimizer_option} Optimizer")
+    print(model)
 
     ##########################
     #####  Train Model
@@ -139,18 +140,18 @@ def train_eval(option_model, optimizer_option):
     y_pred = []
     y_true = []
 
-# iterate over test data
+    # iterate over test data
     for inputs, labels in test_loader:
-            output = model(inputs) # Feed Network
+        output = model(inputs)  # Feed Network
 
-            output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()
-            y_pred.extend(output) # Save Prediction
-            
-            labels = labels.data.cpu().numpy()
-            y_true.extend(labels) # Save Truth
+        output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()
+        y_pred.extend(output)  # Save Prediction
+
+        labels = labels.data.cpu().numpy()
+        y_true.extend(labels)  # Save Truth
 
     # constant for classes
-    classes = ( "Prefix","Random")
+    classes = ("Prefix", "Random")
     # obtain the position of the max
     new = []
     # Build confusion matrix
@@ -166,11 +167,15 @@ def train_eval(option_model, optimizer_option):
     # print(y_true, y_pred)
     cf_matrix = confusion_matrix(y_true, y_pred)
     print(cf_matrix)
-    df_cm = pd.DataFrame(cf_matrix/np.sum(cf_matrix) *10, index = [i for i in classes],
-                        columns = [i for i in classes])
-    plt.figure(figsize = (12,7))
+    df_cm = pd.DataFrame(
+        cf_matrix / np.sum(cf_matrix) * 10,
+        index=[i for i in classes],
+        columns=[i for i in classes],
+    )
+    plt.figure(figsize=(12, 7))
     sn.heatmap(df_cm, annot=True)
-    plt.savefig(f'ConfusionMatrix/output-{option_model}-{R}-{NG}.png')
+    plt.savefig(f"output-{option_model}.png")
+
 
 if "__main__" == __name__:
 
