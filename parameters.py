@@ -4,8 +4,7 @@ from utils.data_Params import *
 #####    Model Params
 ##########################
 
-EPOCHS = 13
-BATCH_SIZE = 512
-LEARNING_RATE = 0.001
-NUM_FEATURES = 2
+EPOCHS = 100
+BATCH_SIZE = 64
+LEARNING_RATE = 0.002
 OUT_FEATURES = 2

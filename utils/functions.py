@@ -24,10 +24,7 @@ def beaty_print(start, initial, value, total, needed):
 
 
 def data_ganea(num=NUMBERS):
-    seed(18625541)
-
-    initial = perf_counter()
-    start = initial
+    seed(1862554)
 
     lista_50 = [[]] * NG
     lista_30 = [[]] * NG
@@ -42,13 +39,12 @@ def data_ganea(num=NUMBERS):
     print(f"K: {K} | R: {R} | NG: {NG}")
     print(f"NUMBERS: {num}")
     print(f"K -> 50%: {K} | 30%: {K*2/3} | 10%:{K/3}")
-
+    positives = 0
+    negatives = 0
     for i in range(NG):
 
         a = ""
-        if i % (NG / 10) == 0:
-            start = beaty_print(start, initial, i, NG, False)
-        for j in range(total):
+        for _ in range(total):
             a += choice(num)
 
         b = ""
@@ -56,11 +52,9 @@ def data_ganea(num=NUMBERS):
         e = ""
 
         if random() < R:
-            b = a
-            d = a
-            e = a
+            positives += 1
 
-            # WITH CHANGES
+            # CHANGES OF LETTERS IN THE PREFIX
             r = sample(range(porcent_50), K)
             for z in range(porcent_50):
                 if z in r:
@@ -73,7 +67,6 @@ def data_ganea(num=NUMBERS):
                     d += choice(num)
                 else:
                     d += a[z]
-
             r = sample(range(porcent_10), int(K / 3))
             for z in range(porcent_10):
                 if z in r:
@@ -86,6 +79,7 @@ def data_ganea(num=NUMBERS):
             lista_10[i] = [a, e, 1, 0]
 
         else:
+            negatives += 1
             for _ in range(porcent_50):
                 b += choice(num)
 
@@ -98,9 +92,7 @@ def data_ganea(num=NUMBERS):
             lista_50[i] = [a, b, 0, 1]
             lista_30[i] = [a, d, 0, 1]
             lista_10[i] = [a, e, 0, 1]
-
-    beaty_print(start, initial, NG, NG, False)
-
+    print(f"Positives: {positives} | Negatives: {negatives}")
     df_50 = pd.DataFrame(
         lista_50, columns=["Word", "Prefix", "isPrefix", "isNotPrefix"]
     )

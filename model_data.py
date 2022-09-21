@@ -30,14 +30,10 @@ def get_model(option: str) -> torch.nn.Module:
     return model
 
 
-def get_data():
+def get_data() -> tuple:
 
     df = pd.read_csv(URL_PREFIX_50, header=0)
     df = df.drop(df.columns[0], axis=1)
-
-    ##########################
-    #####Create Input and Output Data
-    ##########################
 
     X = df.iloc[:, 2:]
     # columns isPrefix and isNotPrefix
