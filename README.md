@@ -47,5 +47,5 @@ python3 main.py --make_train_eval --model hyperbolic --optimizer RiemannianAdam
 ```
 
 ```sh
-python3 main.py --make_train_eval --model hyperbolic --optimizer RiemannianAdam
+python main.py --make_train_eval --model hyperbolic --optimizer RiemannianAdam
 ```
