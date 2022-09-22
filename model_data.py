@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
 
 # Parameters
 from parameters import *
@@ -25,7 +26,7 @@ def get_model(option: str) -> torch.nn.Module:
         manifold = PoincareBall()
         c = 1
 
-    model = HNNLayer(manifold, LARGE * 30, OUT_FEATURES, c, 1)
+    model = HNNLayer(manifold, COMPONENTS_A + COMPONENTS_B + 20, OUT_FEATURES, c, 1)
 
     return model
 
@@ -35,7 +36,11 @@ def get_data() -> tuple:
     df = pd.read_csv(URL_PREFIX_50, header=0)
     df = df.drop(df.columns[0], axis=1)
 
+    # A = PCA(n_components=COMPONENTS_A).fit_transform(df.iloc[:, 2:22])
+    # B = PCA(n_components=COMPONENTS_B).fit_transform(df.iloc[:, 22:])
+    # X = np.concatenate((A,B), axis=1)
     X = df.iloc[:, 2:]
+
     # columns isPrefix and isNotPrefix
     y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
 

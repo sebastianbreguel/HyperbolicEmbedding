@@ -98,7 +98,7 @@ class PoincareBall(Manifold):
         )
         cond = (mx == 0).prod(-1, keepdim=True, dtype=torch.uint8)
         res_0 = torch.zeros(1, dtype=res_c.dtype, device=res_c.device)
-        res = torch.where(cond, res_0, res_c)
+        res = torch.where(cond.type(torch.BoolTensor), res_0, res_c)
         return res
 
     def init_weights(self, w, c, irange=1e-5):

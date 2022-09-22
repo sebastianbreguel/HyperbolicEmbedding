@@ -3,6 +3,7 @@ import torch
 from parameters import *
 import numpy as np
 import torch.nn as nn
+import torch.nn.functional as F
 from Optimizer import RiemannianAdam
 from geoopt import ManifoldParameter
 from utils import generate_data
@@ -24,10 +25,11 @@ def train_eval(option_model, optimizer_option):
 
     device = torch.device("cpu")
     model = get_model(option_model).to(device)
-    # use all the cpu cores for torch
+    # use all cpu cores for torch
 
-    # loss function
+    # Loss Function
     criterion = nn.CrossEntropyLoss()
+    # criterion = F.binary_cross_entropy_with_logits
 
     no_decay = ["bias", "scale"]
     weight_decay = 0.0001
@@ -70,7 +72,7 @@ def train_eval(option_model, optimizer_option):
 
     torch.autograd.set_detect_anomaly(True)
     initial = perf_counter()
-    start = initial
+    # start = initial
     print("Begin training.")
     for e in range(1, EPOCHS + 1):
 
@@ -84,8 +86,12 @@ def train_eval(option_model, optimizer_option):
             optimizer.zero_grad()
 
             y_train_pred = model(X_train_batch)
+            # print(y_train_pred)
             train_loss = criterion(y_train_pred, y_train_batch)
 
+            if np.isnan(train_loss.item()):
+                # print(train_loss.data)
+                train_loss = torch.tensor(EPS, requires_grad=True)
             train_loss.backward()
 
             optimizer.step()
@@ -108,8 +114,8 @@ def train_eval(option_model, optimizer_option):
                 val_epoch_loss += val_loss.item()
 
         print(
-            f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.5f} | Val Loss: {val_epoch_loss/len(val_loader):.5f}"
-            + f" | {((perf_counter() - initial)/60):.2f} minutes"
+            f"Epoch {e}/{EPOCHS}:\tTrain Loss: {train_epoch_loss/len(train_loader):.5f}\tVal Loss: {val_epoch_loss/len(val_loader):.5f}"
+            + f"\t{((perf_counter() - initial)/60):.2f} minutes"
         )
     print(torch.get_num_threads())
 
