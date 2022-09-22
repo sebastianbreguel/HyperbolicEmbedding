@@ -16,8 +16,6 @@ To run the model:
 python3 main.py --make_train_eval --model euclidean --optimizer Adam
 ```
 
-or
-
 ```sh
 python main.py --make_train_eval --model euclidean --optimizer Adam
 ```
@@ -27,8 +25,6 @@ python main.py --make_train_eval --model euclidean --optimizer Adam
 ```sh
 python3 main.py --make_train_eval --model euclidean --optimizer RiemannianAdam
 ```
-
-or
 
 ```sh
 python main.py --make_train_eval --model euclidean --optimizer RiemannianAdam
@@ -40,8 +36,6 @@ python main.py --make_train_eval --model euclidean --optimizer RiemannianAdam
 python3 main.py --make_train_eval --model hyperbolic --optimizer Adam
 ```
 
-or
-
 ```sh
 python main.py --make_train_eval --model hyperbolic --optimizer Adam
 ```
@@ -51,8 +45,6 @@ python main.py --make_train_eval --model hyperbolic --optimizer Adam
 ```sh
 python3 main.py --make_train_eval --model hyperbolic --optimizer RiemannianAdam
 ```
-
-or
 
 ```sh
 python3 main.py --make_train_eval --model hyperbolic --optimizer RiemannianAdam
