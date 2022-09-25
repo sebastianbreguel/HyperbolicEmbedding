@@ -8,6 +8,10 @@ To create the dataset :
 python3 main.py --gen_data
 ```
 
+```sh
+python main.py --gen_data
+```
+
 To run the model:
 
 - Euclidean Adam:
