@@ -1,8 +1,6 @@
 """Riemannian adam optimizer geoopt implementation (https://github.com/geoopt/)."""
 import torch.optim
-from Manifolds.poincare import PoincareBall
 from Manifolds.euclidean import Euclidean
-
 from Manifolds.base import ManifoldParameter
 
 # in order not to create it at each iteration
@@ -39,7 +37,6 @@ def copy_or_set_(dest, source):
     dest
         torch.Tensor, modified inplace
     """
-    # print(dest, source, "k wea hermano qlooo")
     if dest.stride() != source.stride():
         return dest.copy_(source)
     else:
@@ -76,10 +73,6 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
         https://openreview.net/forum?id=ryQu7f-RZ
     """
 
-    def __init__(self, *args, stabilize=None, **kwargs):
-        self._stabilize = stabilize
-        super().__init__(*args, **kwargs)
-
     def step(self, closure=None):
         """Performs a single optimization step.
         Arguments
@@ -93,7 +86,6 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
             loss = closure()
         with torch.no_grad():
             for group in self.param_groups:
-                # print("grupo entero:",group)
                 if "step" not in group:
                     group["step"] = 0
                 betas = group["betas"]
@@ -108,20 +100,16 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
                     if isinstance(point, (ManifoldParameter)):
                         manifold = point.manifold
                         c = point.c
-                        print("yapo rey")
                     else:
-                        # print("tsiuu")
-                        manifold = PoincareBall()
-                        c = 1
-                        # c = None
-                        # manifold = self._default_manifold
-
+                        manifold = self._default_manifold
+                        c = None
                     if grad.is_sparse:
                         raise RuntimeError(
                             "Riemannian Adam does not support sparse gradients yet (PR is welcome)"
                         )
 
                     state = self.state[point]
+
                     # State initialization
                     if len(state) == 0:
                         state["step"] = 0
@@ -134,18 +122,13 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
                             state["max_exp_avg_sq"] = torch.zeros_like(point)
                     # make local variables for easy access
                     exp_avg = state["exp_avg"]
-                    # print("1)exp_avg:",exp_avg)
                     exp_avg_sq = state["exp_avg_sq"]
                     # actual step
-                    # if isinstance(point, (ManifoldParameter)):
-                    grad.add_(point, alpha=weight_decay)
-                    # print("2)grad:",grad)
+                    grad.add_(weight_decay, point)
                     grad = manifold.egrad2rgrad(point, grad, c)
-                    # print("3)grad:",grad)
-                    exp_avg.mul_(betas[0]).add_(grad, alpha=1 - betas[0])
-                    # print("2)exp_avg:",exp_avg)
+                    exp_avg.mul_(betas[0]).add_(1 - betas[0], grad)
                     exp_avg_sq.mul_(betas[1]).add_(
-                        manifold.inner(point, c, grad, keepdim=True), alpha=1 - betas[1]
+                        1 - betas[1], manifold.inner(point, c, grad, keepdim=True)
                     )
                     if amsgrad:
                         max_exp_avg_sq = state["max_exp_avg_sq"]
@@ -161,10 +144,10 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
                     step_size = (
                         learning_rate * bias_correction2**0.5 / bias_correction1
                     )
+
                     # copy the state, we need it for retraction
                     # get the direction for ascend
                     direction = exp_avg / denom
-
                     # transport the exponential averaging to the new point
                     new_point = manifold.proj(
                         manifold.expmap(-step_size * direction, point, c), c
@@ -177,9 +160,6 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
                     group["step"] += 1
                 if self._stabilize is not None and group["step"] % self._stabilize == 0:
                     self.stabilize_group(group)
-                # print(10,self.param_groups)
-        # print(self.param_groups)
-        # print("aca andiamos",loss)
         return loss
 
     @torch.no_grad()
@@ -194,4 +174,4 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
             c = p.c
             exp_avg = state["exp_avg"]
             copy_or_set_(p, manifold.proj(p, c))
-            exp_avg.set_(manifold.proj_tan(exp_avg, c))
+            exp_avg.set_(manifold.proj_tan0(exp_avg, c))

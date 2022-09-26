@@ -3,12 +3,15 @@ import torch
 from parameters import *
 import numpy as np
 import torch.nn as nn
-from Optimizer import RiemannianAdam
+import torch.nn.functional as F
+
+# from Optimizer import RiemannianAdam
 from geoopt import ManifoldParameter
+from geoopt.optim import RiemannianAdam
 from utils import generate_data
 import argparse
 from time import perf_counter
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
 import pandas as pd
 import seaborn as sn
 import matplotlib.pyplot as plt
@@ -24,10 +27,11 @@ def train_eval(option_model, optimizer_option):
 
     device = torch.device("cpu")
     model = get_model(option_model).to(device)
-    # use all the cpu cores for torch
+    # use all cpu cores for torch
 
-    # loss function
+    # Loss Function
     criterion = nn.CrossEntropyLoss()
+    # criterion = F.binary_cross_entropy_with_logits
 
     no_decay = ["bias", "scale"]
     weight_decay = 0.0001
@@ -55,13 +59,18 @@ def train_eval(option_model, optimizer_option):
     ]
 
     if optimizer_option == "Adam":
-        optimizer = torch.optim.Adam(optimizer_grouped_parameters, lr=LEARNING_RATE)
-
-    elif optimizer_option == "RiemannianAdam":
-        optimizer = RiemannianAdam(
-            optimizer_grouped_parameters, lr=LEARNING_RATE, stabilize=10
+        optimizer = torch.optim.Adam(
+            optimizer_grouped_parameters, lr=LEARNING_RATE, betas=(0.9, 0.999)
         )
-    print(f"Running {option_model} Model - {optimizer_option} Optimizer")
+
+    elif optimizer_option == "Radam":
+        optimizer = RiemannianAdam(
+            optimizer_grouped_parameters,
+            lr=LEARNING_RATE,
+            stabilize=10,
+            betas=(0.9, 0.999),
+        )
+    print(f"Running {option_model} Model - {optimizer_option} Optimizer", LEARNING_RATE)
     print(model)
 
     ##########################
@@ -70,7 +79,7 @@ def train_eval(option_model, optimizer_option):
 
     torch.autograd.set_detect_anomaly(True)
     initial = perf_counter()
-    start = initial
+    # start = initial
     print("Begin training.")
     for e in range(1, EPOCHS + 1):
 
@@ -84,8 +93,12 @@ def train_eval(option_model, optimizer_option):
             optimizer.zero_grad()
 
             y_train_pred = model(X_train_batch)
+            # print(y_train_pred)
             train_loss = criterion(y_train_pred, y_train_batch)
 
+            if np.isnan(train_loss.item()):
+                # print(train_loss.data)
+                train_loss = torch.tensor(EPS, requires_grad=True)
             train_loss.backward()
 
             optimizer.step()
@@ -108,8 +121,8 @@ def train_eval(option_model, optimizer_option):
                 val_epoch_loss += val_loss.item()
 
         print(
-            f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.5f} | Val Loss: {val_epoch_loss/len(val_loader):.5f}"
-            + f" | {((perf_counter() - initial)/60):.2f} minutes"
+            f"Epoch {e}/{EPOCHS}:\tTrain Loss: {train_epoch_loss/len(train_loader):.5f}\tVal Loss: {val_epoch_loss/len(val_loader):.5f}"
+            + f"\t{((perf_counter() - initial)/60):.2f} minutes"
         )
     print(torch.get_num_threads())
 
@@ -160,11 +173,10 @@ def train_eval(option_model, optimizer_option):
         # obtain the index ob the max
         index = np.where(i == 1)[0][0]
         new.append(index)
-        # print(i, y_pred[value])
-        # value+=1
 
     y_true = new
-    # print(y_true, y_pred)
+    print("Accuracy", accuracy_score(y_true, y_pred))
+    print(f1_score(y_true, y_pred, average=None))
     cf_matrix = confusion_matrix(y_true, y_pred)
     print(cf_matrix)
     df_cm = pd.DataFrame(
@@ -193,6 +205,7 @@ if "__main__" == __name__:
     )
     parser.add_argument("--model", action="store", help="Model to use")
     parser.add_argument("--optimizer", action="store", help="Optimizer to use")
+    parser.add_argument("--replace", type=bool, help="", default=False)
 
     results = parser.parse_args()
     gen_data = results.gen_data
@@ -201,12 +214,13 @@ if "__main__" == __name__:
     create_folder = results.create_folder
     model = results.model
     optimizer = results.optimizer
+    replace = results.replace
 
     if gen_data:
         print("\n" + "#" * 21)
         print("## GENERATING DATA ##")
         print("#" * 21)
-        generate_data(delete_folder, create_folder)
+        generate_data(delete_folder, create_folder, replace)
 
     torch.manual_seed(18625541)
 

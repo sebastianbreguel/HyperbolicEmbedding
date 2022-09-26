@@ -5,7 +5,7 @@ This is a repository to investigate how to generate music based in Hyperbolic Em
 To create the dataset :
 
 ```sh
-python3 main.py --gen_data
+python3 main.py --gen_data --replace
 ```
 
 ```sh

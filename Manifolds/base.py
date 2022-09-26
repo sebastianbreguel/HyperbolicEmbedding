@@ -1,6 +1,7 @@
 """Base manifold."""
 
 from torch.nn import Parameter
+from geoopt import ManifoldTensor
 
 
 class Manifold(object):
@@ -82,6 +83,7 @@ class ManifoldParameter(Parameter):
         return Parameter.__new__(cls, data, requires_grad)
 
     def __init__(self, data, requires_grad, manifold, c):
+        Parameter.__init__(data, requires_grad)
         self.c = c
         self.manifold = manifold
 
