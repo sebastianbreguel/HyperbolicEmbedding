@@ -4,12 +4,14 @@ from parameters import *
 import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
-from Optimizer import RiemannianAdam
+
+# from Optimizer import RiemannianAdam
 from geoopt import ManifoldParameter
+from geoopt.optim import RiemannianAdam
 from utils import generate_data
 import argparse
 from time import perf_counter
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
 import pandas as pd
 import seaborn as sn
 import matplotlib.pyplot as plt
@@ -57,13 +59,18 @@ def train_eval(option_model, optimizer_option):
     ]
 
     if optimizer_option == "Adam":
-        optimizer = torch.optim.Adam(optimizer_grouped_parameters, lr=LEARNING_RATE)
-
-    elif optimizer_option == "RiemannianAdam":
-        optimizer = RiemannianAdam(
-            optimizer_grouped_parameters, lr=LEARNING_RATE, stabilize=10
+        optimizer = torch.optim.Adam(
+            optimizer_grouped_parameters, lr=LEARNING_RATE, betas=(0.9, 0.999)
         )
-    print(f"Running {option_model} Model - {optimizer_option} Optimizer")
+
+    elif optimizer_option == "Radam":
+        optimizer = RiemannianAdam(
+            optimizer_grouped_parameters,
+            lr=LEARNING_RATE,
+            stabilize=10,
+            betas=(0.9, 0.999),
+        )
+    print(f"Running {option_model} Model - {optimizer_option} Optimizer", LEARNING_RATE)
     print(model)
 
     ##########################
@@ -166,11 +173,10 @@ def train_eval(option_model, optimizer_option):
         # obtain the index ob the max
         index = np.where(i == 1)[0][0]
         new.append(index)
-        # print(i, y_pred[value])
-        # value+=1
 
     y_true = new
-    # print(y_true, y_pred)
+    print("Accuracy", accuracy_score(y_true, y_pred))
+    print(f1_score(y_true, y_pred, average=None))
     cf_matrix = confusion_matrix(y_true, y_pred)
     print(cf_matrix)
     df_cm = pd.DataFrame(
@@ -199,6 +205,7 @@ if "__main__" == __name__:
     )
     parser.add_argument("--model", action="store", help="Model to use")
     parser.add_argument("--optimizer", action="store", help="Optimizer to use")
+    parser.add_argument("--replace", type=bool, help="", default=False)
 
     results = parser.parse_args()
     gen_data = results.gen_data
@@ -207,12 +214,13 @@ if "__main__" == __name__:
     create_folder = results.create_folder
     model = results.model
     optimizer = results.optimizer
+    replace = results.replace
 
     if gen_data:
         print("\n" + "#" * 21)
         print("## GENERATING DATA ##")
         print("#" * 21)
-        generate_data(delete_folder, create_folder)
+        generate_data(delete_folder, create_folder, replace)
 
     torch.manual_seed(18625541)
 

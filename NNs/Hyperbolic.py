@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.init as init
 import math
 from utils.data_Params import *
+from Manifolds.base import ManifoldParameter
 
 
 class HNNLayer(nn.Module):
@@ -12,17 +13,14 @@ class HNNLayer(nn.Module):
 
     def __init__(self, manifold, in_features, out_features, c, use_bias):
         super(HNNLayer, self).__init__()
-        self.linear1 = HypLinear(manifold, in_features, 8 * LARGE, c, use_bias)
-        self.linear2 = HypLinear(manifold, 8 * LARGE, 4 * LARGE, c, use_bias)
-        self.linear3 = HypLinear(manifold, 4 * LARGE, out_features, c, use_bias)
+        self.linear1 = HypLinear(manifold, in_features, 16, c, use_bias)
+        self.linear2 = HypLinear(manifold, 16, out_features, c, use_bias)
         self.softmax = nn.Softmax(dim=1)
-        self.hyp_Relu = HypAct(manifold, c, c, nn.LeakyReLU())
-
+        self.hyp_Relu = HypAct(manifold, c, c, nn.ReLU())
 
     def forward(self, x):
         x = self.hyp_Relu(self.linear1(x))
-        x = self.hyp_Relu(self.linear2(x))
-        x = self.softmax(self.linear3(x))
+        x = self.linear2(x)
         return x
 
     def predict(self, test_x):
@@ -42,9 +40,14 @@ class HypLinear(nn.Module):
         self.out_features = out_features
         self.c = c
         self.use_bias = use_bias
-        self.bias = nn.Parameter(torch.Tensor(out_features), requires_grad=True)
-        self.weight = nn.Parameter(
-            torch.Tensor(out_features, in_features), requires_grad=True
+        self.bias = ManifoldParameter(
+            torch.Tensor(out_features), requires_grad=True, c=c, manifold=manifold
+        )
+        self.weight = ManifoldParameter(
+            torch.Tensor(out_features, in_features),
+            requires_grad=True,
+            c=c,
+            manifold=manifold,
         )
         self.reset_parameters()
 
