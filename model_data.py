@@ -15,7 +15,18 @@ from Manifolds.poincare import PoincareBall
 from NNs import HNNLayer
 
 
-def get_model(option: str) -> torch.nn.Module:
+def get_model(option: str, dataset) -> torch.nn.Module:
+    print(dataset)
+    inputs = 20
+
+    if dataset == 10:
+        inputs +=2
+    
+    elif dataset == 30:
+        inputs += 6
+    
+    elif dataset ==  50:
+        inputs += 10
 
     manifold = None
 
@@ -26,14 +37,21 @@ def get_model(option: str) -> torch.nn.Module:
         manifold = PoincareBall()
         c = 1
 
-    model = HNNLayer(manifold, LARGE * (20 + 2), OUT_FEATURES, c, 1)
+    model = HNNLayer(manifold, inputs, OUT_FEATURES, c, 1)
 
     return model
 
 
-def get_data() -> tuple:
+def get_data(dataset) -> tuple:
 
-    df = pd.read_csv(URL_PREFIX_10, header=0)
+    if dataset == 10:
+        url = URL_PREFIX_10
+    elif dataset == 30:
+        url = URL_PREFIX_30
+    elif dataset == 50:
+        url = URL_PREFIX_50
+
+    df = pd.read_csv(url, header=0)
     df = df.drop(df.columns[0], axis=1)
 
     # X = PCA(n_components=COMPONENTS_A).fit_transform(df.iloc[:, 2:])

@@ -17,16 +17,16 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 
 
-def train_eval(option_model, optimizer_option):
+def train_eval(option_model, optimizer_option,dataset):
 
-    train_loader, val_loader, test_loader, y_test = get_data()
+    train_loader, val_loader, test_loader, y_test = get_data(dataset)
 
     ##########################
     #####    MODEL
     ##########################
 
     device = torch.device("cpu")
-    model = get_model(option_model).to(device)
+    model = get_model(option_model,dataset).to(device)
     # use all cpu cores for torch
 
     # Loss Function
@@ -206,6 +206,7 @@ if "__main__" == __name__:
     parser.add_argument("--model", action="store", help="Model to use")
     parser.add_argument("--optimizer", action="store", help="Optimizer to use")
     parser.add_argument("--replace", type=bool, help="", default=False)
+    parser.add_argument("--dataset", type=int, help="", default=10)
 
     results = parser.parse_args()
     gen_data = results.gen_data
@@ -215,6 +216,7 @@ if "__main__" == __name__:
     model = results.model
     optimizer = results.optimizer
     replace = results.replace
+    dataset = results.dataset
 
     if gen_data:
         print("\n" + "#" * 21)
@@ -225,4 +227,5 @@ if "__main__" == __name__:
     torch.manual_seed(18625541)
 
     if make_train_eval:
-        train_eval(model, optimizer)
+        print(dataset, type(dataset))
+        train_eval(model, optimizer, dataset)
