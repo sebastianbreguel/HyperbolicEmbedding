@@ -113,7 +113,7 @@ class PoincareBall(Manifold):
         res_c = (
             tanh(mx_norm / x_norm * artanh(sqrt_c * x_norm)) * mx / (mx_norm * sqrt_c)
         )
-        cond = (mx == 0).prod(-1, keepdim=True, dtype=torch.uint8)
+        cond = (mx == 0).prod(-1, keepdim=True, dtype=torch.uint8).type(torch.BoolTensor)
         res_0 = torch.zeros(1, dtype=res_c.dtype, device=res_c.device)
         res = torch.where(cond.type(torch.BoolTensor), res_0, res_c)
         return res

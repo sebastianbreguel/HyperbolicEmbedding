@@ -96,11 +96,18 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
                 group["step"] += 1
                 for point in group["params"]:
                     grad = point.grad
+                    # print(grad)
                     if grad is None:
                         continue
                     if isinstance(point, (ManifoldParameter, ManifoldTensor)):
                         manifold = point.manifold
+                        c = point.c
+                        # print("yapo rey")
                     else:
+                        # print("tsiuu")
+                        # manifold = PoincareBall()
+                        # c = 1
+                        c = None
                         manifold = self._default_manifold
 
                     if grad.is_sparse:
