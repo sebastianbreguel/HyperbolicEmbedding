@@ -86,10 +86,7 @@ class ManifoldParameter(Parameter):
 
     def __init__(self, data, requires_grad, manifold, c):
         Parameter.__init__(data, requires_grad)
-<<<<<<< HEAD
-=======
         # print("AAAAAAAAAAAAAAAAA")
->>>>>>> 8cff952 (phylogenetic)
         self.c = c
         self.manifold = manifold
 

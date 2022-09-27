@@ -7,9 +7,11 @@ from sklearn.model_selection import train_test_split
 
 # Parameters
 from parameters import (
+    URL,
     URL_PREFIX_10,
     URL_PREFIX_30,
     URL_PREFIX_50,
+    IN_FEATURES,
     OUT_FEATURES,
     BATCH_SIZE,
     LARGE,

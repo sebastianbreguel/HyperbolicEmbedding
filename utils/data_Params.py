@@ -19,17 +19,18 @@ K = 3 * LARGE  # Number of changes
 
 URL = "data/Phylogenetics.csv"
 V = 20
-NM = 10000
+NM = 1000
 VOCABULARY = 'abcdefghijklmnopqrstuvwxyz'[:V]
 VOCABULARY = [x for x in VOCABULARY]
 MIN_RANDOM = 0
 MAX_RANDOM = 0.3
-p1 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), 2)
-p2 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), 2)
-p3 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), 2)
-p4 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), 2)
-p5 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), 2)
-p6 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), 2)
+ROUND = 3
+p1 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
+p2 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
+p3 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
+p4 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
+p5 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
+p6 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
 p = [p1, p2, p3, p4, p5, p6]
 EMB = {}
 for i, e in enumerate(VOCABULARY):

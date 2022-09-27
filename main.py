@@ -22,7 +22,6 @@ import matplotlib.pyplot as plt
 
 
 def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
-
     train_loader, val_loader, test_loader, y_test = get_data(dataset)
 
     ##########################
@@ -93,7 +92,7 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
 
     torch.autograd.set_detect_anomaly(True)
     initial = perf_counter()
-    # start = initial
+    start = initial
     print("Begin training.")
     e = 0
     # start = time()
@@ -113,9 +112,9 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
             # print(y_train_pred)
             train_loss = criterion(y_train_pred, y_train_batch)
 
-            if np.isnan(train_loss.item()):
-                # print(train_loss.data)
-                train_loss = torch.tensor(EPS, requires_grad=True)
+            # if np.isnan(train_loss.item()):
+            #     # print(train_loss.data)
+            #     train_loss = torch.tensor(EPS, requires_grad=True)
             # print("TRAIN LOSS", y_train_batch, y_train_pred)
 
             train_loss.backward()
@@ -138,7 +137,7 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
                 val_loss = criterion(y_val_pred, y_val_batch)
 
                 val_epoch_loss += val_loss.item()
-        if e % 10 == 0 or e ==1:
+        if True:#e % 10 == 0 or e ==1:
             print(
                 f"Epoch {e+0:03}:\tTrain Loss: {train_epoch_loss/len(train_loader):.4f}\tVal Loss: {val_epoch_loss/len(val_loader):.4f}"
                 + f"\tTime: {((perf_counter() - initial)/60):.2f} minutes"
@@ -167,6 +166,7 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
     print(
         f"Accuracy of the network on the {len(y_test)} test data: {round(100 * correct /len(y_pred_list),3)} %"
     )
+    return
 
     y_pred = []
     y_true = []
@@ -261,13 +261,16 @@ if "__main__" == __name__:
         print("## GENERATING DATA ##")
         print("#" * 21)
         generate_data(delete_folder, create_folder, replace)
+    
+    if make_train_eval:
+        train_eval(model, optimizer, dataset)
 
     torch.manual_seed(18625541)
 
 
-    for dataset in [10, 30, 50]:
-        for model in ["euclidean", "hyperbolic"]:
-            print("\n\ndataset:",dataset,"model:", model)
-            if make_train_eval:
-                print()
-                train_eval(model, optimizer, dataset)
+    # for dataset in [10, 30, 50]:
+    #     for model in ["euclidean", "hyperbolic"]:
+    #         print("\n\ndataset:",dataset,"model:", model)
+    #         if make_train_eval:
+    #             print()
+    #             train_eval(model, optimizer, dataset)
