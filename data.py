@@ -6,47 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 
 # Parameters
-from parameters import (
-    URL_PREFIX_10,
-    URL_PREFIX_30,
-    URL_PREFIX_50,
-    OUT_FEATURES,
-    BATCH_SIZE,
-    LARGE,
-)
-
-# Custom NN and Manifolds
-from Manifolds.euclidean import Euclidean
-from Manifolds.poincare import PoincareBall
-from NNs import HNNLayer
-
-
-def get_model(option: str, dataset: int) -> torch.nn.Module:
-    inputs = 20 
-
-    if dataset == 10:
-        inputs += 2
-
-    elif dataset == 30:
-        inputs += 6
-
-    elif dataset == 50:
-        inputs += 10
-
-    manifold = None
-    inputs *= LARGE
-
-    c = 0
-    if option == "euclidean":
-        manifold = Euclidean(c)
-    elif option == "hyperbolic":
-        c = 1
-        manifold = PoincareBall(c)
-
-
-    model = HNNLayer(manifold, inputs, OUT_FEATURES, c, 1)
-
-    return model
+from parameters import URL_PREFIX_10, URL_PREFIX_30, URL_PREFIX_50, BATCH_SIZE
 
 
 def get_data(dataset) -> tuple:
@@ -107,17 +67,6 @@ def get_data(dataset) -> tuple:
     #####       Initialize Dataset
     ##########################
 
-    class RegressionDataset(Dataset):
-        def __init__(self, X_data, y_data):
-            self.X_data = X_data
-            self.y_data = y_data
-
-        def __getitem__(self, index):
-            return self.X_data[index], self.y_data[index]
-
-        def __len__(self):
-            return len(self.X_data)
-
     train_dataset = RegressionDataset(
         torch.from_numpy(X_train).float(), torch.from_numpy(y_train).float()
     )
@@ -139,3 +88,15 @@ def get_data(dataset) -> tuple:
     test_loader = DataLoader(dataset=test_dataset, batch_size=1)
 
     return train_loader, val_loader, test_loader, y_test
+
+
+class RegressionDataset(Dataset):
+    def __init__(self, X_data, y_data):
+        self.X_data = X_data
+        self.y_data = y_data
+
+    def __getitem__(self, index):
+        return self.X_data[index], self.y_data[index]
+
+    def __len__(self):
+        return len(self.X_data)

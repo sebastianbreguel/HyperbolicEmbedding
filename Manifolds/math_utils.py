@@ -58,10 +58,10 @@ class Arsinh(torch.autograd.Function):
 class Arcosh(torch.autograd.Function):
     @staticmethod
     def forward(ctx, x):
-        x = x.clamp(min=1.0 + 1e-15)
+        x = x.clamp(min=1.0 + 1e-5)
         ctx.save_for_backward(x)
         z = x.double()
-        return (z + torch.sqrt_(z.pow(2) - 1)).clamp_min_(1e-15).log_().to(x.dtype)
+        return (z + torch.sqrt_(z.pow(2) - 1)).clamp_min_(1e-5).log_().to(x.dtype)
 
     @staticmethod
     def backward(ctx, grad_output):
