@@ -1,13 +1,14 @@
 from model_data import get_data, get_model
 import torch
-from parameters import *
+from parameters import EPOCHS, LEARNING_RATE, EPS
 import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 
 # from Optimizer import RiemannianAdam
-from geoopt import ManifoldParameter
-from geoopt.optim import RiemannianAdam
+from Manifolds.base import ManifoldParameter
+
+from geoopt.optim import RiemannianAdam, RiemannianSGD
 from utils import generate_data
 import argparse
 from time import perf_counter
@@ -17,16 +18,16 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 
 
-def train_eval(option_model, optimizer_option):
+def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
 
-    train_loader, val_loader, test_loader, y_test = get_data()
+    train_loader, val_loader, test_loader, y_test = get_data(dataset)
 
     ##########################
     #####    MODEL
     ##########################
 
     device = torch.device("cpu")
-    model = get_model(option_model).to(device)
+    model = get_model(option_model, dataset).to(device)
     # use all cpu cores for torch
 
     # Loss Function
@@ -63,6 +64,16 @@ def train_eval(option_model, optimizer_option):
             optimizer_grouped_parameters, lr=LEARNING_RATE, betas=(0.9, 0.999)
         )
 
+    elif optimizer_option == "SGD":
+        optimizer = torch.optim.SGD(
+            optimizer_grouped_parameters, lr=LEARNING_RATE, momentum=0.9
+        )
+
+    # elif optimizer_option == "RSGD":
+    #     optimizer = RiemannianSGD(
+    #         optimizer_grouped_parameters, lr=LEARNING_RATE, momentum=0.9
+    #     )
+
     elif optimizer_option == "Radam":
         optimizer = RiemannianAdam(
             optimizer_grouped_parameters,
@@ -71,7 +82,7 @@ def train_eval(option_model, optimizer_option):
             betas=(0.9, 0.999),
         )
     print(f"Running {option_model} Model - {optimizer_option} Optimizer", LEARNING_RATE)
-    print(model)
+    # print(model)
 
     ##########################
     #####  Train Model
@@ -79,7 +90,6 @@ def train_eval(option_model, optimizer_option):
 
     torch.autograd.set_detect_anomaly(True)
     initial = perf_counter()
-    # start = initial
     print("Begin training.")
     for e in range(1, EPOCHS + 1):
 
@@ -119,12 +129,11 @@ def train_eval(option_model, optimizer_option):
                 val_loss = criterion(y_val_pred, y_val_batch)
 
                 val_epoch_loss += val_loss.item()
-
-        print(
+        if e%10==0 or e ==1:
+           print(
             f"Epoch {e}/{EPOCHS}:\tTrain Loss: {train_epoch_loss/len(train_loader):.5f}\tVal Loss: {val_epoch_loss/len(val_loader):.5f}"
             + f"\t{((perf_counter() - initial)/60):.2f} minutes"
         )
-    print(torch.get_num_threads())
 
     y_pred_list = []
     with torch.no_grad():
@@ -184,7 +193,6 @@ def train_eval(option_model, optimizer_option):
         index=[i for i in classes],
         columns=[i for i in classes],
     )
-    plt.figure(figsize=(12, 7))
     sn.heatmap(df_cm, annot=True)
     plt.savefig(f"output-{option_model}.png")
 
@@ -206,6 +214,7 @@ if "__main__" == __name__:
     parser.add_argument("--model", action="store", help="Model to use")
     parser.add_argument("--optimizer", action="store", help="Optimizer to use")
     parser.add_argument("--replace", type=bool, help="", default=False)
+    parser.add_argument("--dataset", type=int, help="", default=10)
 
     results = parser.parse_args()
     gen_data = results.gen_data
@@ -215,6 +224,7 @@ if "__main__" == __name__:
     model = results.model
     optimizer = results.optimizer
     replace = results.replace
+    dataset = results.dataset
 
     if gen_data:
         print("\n" + "#" * 21)
@@ -224,5 +234,10 @@ if "__main__" == __name__:
 
     torch.manual_seed(18625541)
 
-    if make_train_eval:
-        train_eval(model, optimizer)
+
+    for dataset in [10, 30, 50]:
+        for model in ["euclidean", "hyperbolic"]:
+            print("\n\ndataset:",dataset,"model:", model)
+            if make_train_eval:
+                print()
+                train_eval(model, optimizer, dataset)

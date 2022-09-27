@@ -56,13 +56,13 @@ class HypLinear(nn.Module):
         init.constant_(self.bias, 0)
 
     def forward(self, x):
-        mv = self.manifold.mobius_matvec(self.weight, x, self.c)
-        res = self.manifold.proj(mv, self.c)
-        bias = self.manifold.proj_tan0(self.bias.view(1, -1), self.c)
-        hyp_bias = self.manifold.expmap0(bias, self.c)
-        hyp_bias = self.manifold.proj(hyp_bias, self.c)
-        res = self.manifold.mobius_add(res, hyp_bias, c=self.c)
-        res = self.manifold.proj(res, self.c)
+        mv = self.manifold.mobius_matvec(self.weight, x)
+        res = self.manifold.proj(mv)
+        bias = self.manifold.proj_tan0(self.bias.view(1, -1))
+        hyp_bias = self.manifold.expmap0(bias)
+        hyp_bias = self.manifold.proj(hyp_bias)
+        res = self.manifold.mobius_add(res, hyp_bias)
+        res = self.manifold.proj(res)
         return res
 
     def extra_repr(self):
@@ -84,9 +84,9 @@ class HypAct(nn.Module):
         self.act = act
 
     def forward(self, x):
-        xt = self.act(self.manifold.logmap0(x, c=self.c_in))
-        xt = self.manifold.proj_tan0(xt, c=self.c_out)
-        return self.manifold.proj(self.manifold.expmap0(xt, c=self.c_out), c=self.c_out)
+        xt = self.act(self.manifold.logmap0(x))
+        xt = self.manifold.proj_tan0(xt)
+        return self.manifold.proj(self.manifold.expmap0(xt))
 
     def extra_repr(self):
         return "c_in={}, c_out={}".format(self.c_in, self.c_out)
