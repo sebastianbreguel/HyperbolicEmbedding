@@ -92,7 +92,7 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
 
     torch.autograd.set_detect_anomaly(True)
     initial = perf_counter()
-    start = initial
+    # start = initial
     print("Begin training.")
     e = 0
     # start = time()
@@ -109,7 +109,6 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
             optimizer.zero_grad()
 
             y_train_pred = model(X_train_batch)
-            # print(y_train_pred)
             train_loss = criterion(y_train_pred, y_train_batch)
 
             # if np.isnan(train_loss.item()):
@@ -152,20 +151,25 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
             y_pred_list.append(y_test_pred.cpu().numpy())
     y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
 
-    correct = 0
 
-    for i in range(len(y_pred_list)):
-        max_value = max(y_pred_list[i])
-        index_max = y_pred_list[i].index(max_value)
-        max_real = max(y_test[i])
-        index_max_real = np.where(y_test[i] == max_real)[0][0]
+    print(f"Loss on Test Data: {np.linalg.norm(y_pred_list-y_test)}")
 
-        if index_max == index_max_real:
-            correct += 1
+    # correct = 0
 
-    print(
-        f"Accuracy of the network on the {len(y_test)} test data: {round(100 * correct /len(y_pred_list),3)} %"
-    )
+    # for i in range(len(y_pred_list)):
+    #     max_value = max(y_pred_list[i])
+    #     index_max = y_pred_list[i].index(max_value)
+    #     max_real = max(y_test[i])
+    #     index_max_real = np.where(y_test[i] == max_real)[0][0]
+
+    #     if index_max == index_max_real:
+    #         correct += 1
+
+    # print(
+    #     f"Accuracy of the network on the {len(y_test)} test data: {round(100 * correct /len(y_pred_list),5)} %"
+    # )
+
+
     return
 
     y_pred = []

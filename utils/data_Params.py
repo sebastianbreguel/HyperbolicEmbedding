@@ -19,12 +19,12 @@ K = 3 * LARGE  # Number of changes
 
 URL = "data/Phylogenetics.csv"
 V = 20
-NM = 1000
+NM = 10000
 VOCABULARY = 'abcdefghijklmnopqrstuvwxyz'[:V]
 VOCABULARY = [x for x in VOCABULARY]
 MIN_RANDOM = 0
 MAX_RANDOM = 0.3
-ROUND = 3
+ROUND = 5
 p1 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
 p2 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
 p3 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)

@@ -15,9 +15,9 @@ class HNNLayer(nn.Module):
         super(HNNLayer, self).__init__()
         self.manifold = manifold
         self.c = c
-        self.linear1 = HypLinear(manifold, in_features, 50, c, use_bias)
+        self.linear1 = HypLinear(manifold, in_features, 100, c, use_bias)
         # self.linear2 = HypLinear(manifold, 40, 13, c, use_bias)
-        self.linear3 = HypLinear(manifold, 50, out_features, c, use_bias)
+        self.linear3 = HypLinear(manifold, 100, out_features, c, use_bias)
         self.softmax = nn.Softmax(dim=1)
         self.hyp_Relu = HypAct(manifold, c, c, nn.LeakyReLU())
     
