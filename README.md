@@ -9,7 +9,7 @@ python3 main.py --gen_data --replace
 ```
 
 ```sh
-python main.py --gen_data
+python main.py --gen_data --replace
 ```
 
 To run the model:
