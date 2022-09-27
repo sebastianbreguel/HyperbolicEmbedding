@@ -13,7 +13,7 @@ class Manifold(object):
 
     def __init__(self):
         super().__init__()
-        self.eps = 10e-8
+        self.eps = 1e-5
 
     def sqdist(self, p1, p2):
         """Squared distance between pairs of points."""
@@ -86,6 +86,10 @@ class ManifoldParameter(Parameter):
 
     def __init__(self, data, requires_grad, manifold, c):
         Parameter.__init__(data, requires_grad)
+<<<<<<< HEAD
+=======
+        # print("AAAAAAAAAAAAAAAAA")
+>>>>>>> 8cff952 (phylogenetic)
         self.c = c
         self.manifold = manifold
 

@@ -1,3 +1,4 @@
+from tkinter import E
 from model_data import get_data, get_model
 import torch
 from parameters import EPOCHS, LEARNING_RATE, EPS
@@ -13,6 +14,8 @@ from utils import generate_data
 import argparse
 from time import perf_counter
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
+from time import perf_counter, time
+from sklearn.metrics import confusion_matrix
 import pandas as pd
 import seaborn as sn
 import matplotlib.pyplot as plt
@@ -31,8 +34,8 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
     # use all cpu cores for torch
 
     # Loss Function
-    criterion = nn.CrossEntropyLoss()
-    # criterion = F.binary_cross_entropy_with_logits
+    # loss function
+    criterion = nn.MSELoss()
 
     no_decay = ["bias", "scale"]
     weight_decay = 0.0001
@@ -90,8 +93,12 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
 
     torch.autograd.set_detect_anomaly(True)
     initial = perf_counter()
+    # start = initial
     print("Begin training.")
-    for e in range(1, EPOCHS + 1):
+    e = 0
+    # start = time()
+    while e < EPOCHS:# and time()-start < 60:
+        e += 1
 
         # TRAINING
         train_epoch_loss = 0
@@ -109,6 +116,8 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
             if np.isnan(train_loss.item()):
                 # print(train_loss.data)
                 train_loss = torch.tensor(EPS, requires_grad=True)
+            # print("TRAIN LOSS", y_train_batch, y_train_pred)
+
             train_loss.backward()
 
             optimizer.step()
@@ -129,11 +138,11 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
                 val_loss = criterion(y_val_pred, y_val_batch)
 
                 val_epoch_loss += val_loss.item()
-        if e%10==0 or e ==1:
-           print(
-            f"Epoch {e}/{EPOCHS}:\tTrain Loss: {train_epoch_loss/len(train_loader):.5f}\tVal Loss: {val_epoch_loss/len(val_loader):.5f}"
-            + f"\t{((perf_counter() - initial)/60):.2f} minutes"
-        )
+        if e % 10 == 0 or e ==1:
+            print(
+                f"Epoch {e+0:03}:\tTrain Loss: {train_epoch_loss/len(train_loader):.4f}\tVal Loss: {val_epoch_loss/len(val_loader):.4f}"
+                + f"\tTime: {((perf_counter() - initial)/60):.2f} minutes"
+                )
 
     y_pred_list = []
     with torch.no_grad():
@@ -195,6 +204,27 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
     )
     sn.heatmap(df_cm, annot=True)
     plt.savefig(f"output-{option_model}.png")
+    # print(y_true)
+    # for i in y_true:
+    #     # obtain the index ob the max
+    #     print(i)
+    #     index = np.where(i == 1)[0][0]
+    #     new.append(index)
+    #     # print(i, y_pred[value])
+    #     # value+=1
+
+    # y_true = new
+    # # print(y_true, y_pred)
+    # cf_matrix = confusion_matrix(y_true, y_pred)
+    # print(cf_matrix)
+    # df_cm = pd.DataFrame(
+    #     cf_matrix / np.sum(cf_matrix) * 10,
+    #     index=[i for i in classes],
+    #     columns=[i for i in classes],
+    # )
+    # plt.figure(figsize=(12, 7))
+    # sn.heatmap(df_cm, annot=True)
+    # plt.savefig(f"output-{option_model}.png")
 
 
 if "__main__" == __name__:

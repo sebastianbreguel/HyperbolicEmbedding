@@ -1,5 +1,5 @@
 import os
-from .functions import data_ganea
+from .functions import data_ganea, data_mircea
 from time import sleep
 
 
@@ -19,7 +19,8 @@ def generate_data(delete_folder, create_folder, replace) -> None:
         print("\nFolder created\n")
 
     # run generate_data.py
-    data_ganea(replace)
+    # data_ganea()
+    data_mircea()
 
     line = "\n" + "#" * 20
     print(line + "\n## Data Generated ##" + line + "\n")

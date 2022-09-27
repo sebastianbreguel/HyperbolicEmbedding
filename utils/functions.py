@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 from time import perf_counter
-from random import choice, random, sample, seed
+from random import choice, sample, seed
+import random
 
 from .data_Params import *
 
@@ -129,3 +130,109 @@ def data_ganea(replace):
 
     df_10 = df_10.drop(["Word", "Prefix"], axis=1).drop_duplicates()
     df_10.to_csv(URL_PREFIX_10)
+
+def data_mircea():
+
+    #    A
+    #  B   C
+    # D E F G
+
+    lista = []
+    for _ in range(NM):
+        lista.append([])
+        a = []
+        for _ in range(V):
+            a.append(choice(VOCABULARY))
+
+        b = []
+        for i in range(V):
+            r = random.random()
+            if r < p1:
+                b.append(choice(VOCABULARY))
+            else:
+                b.append(a[i])
+
+        c = []
+        for i in range(V):
+            r = random.random()
+            if r < p2:
+                c.append(choice(VOCABULARY))
+            else:
+                c.append(a[i])
+
+        d = []
+        for i in range(V):
+            r = random.random()
+            if r < p3:
+                d.append(choice(VOCABULARY))
+            else:
+                d.append(b[i])
+
+        e = []
+        for i in range(V):
+            r = random.random()
+            if r < p4:
+                e.append(choice(VOCABULARY))
+            else:
+                e.append(b[i])
+
+        f = []
+        for i in range(V):
+            r = random.random()
+            if r < p5:
+                f.append(choice(VOCABULARY))
+            else:
+                f.append(c[i])
+
+        g = []
+        for i in range(V):
+            r = random.random()
+            if r < p6:
+                g.append(choice(VOCABULARY))
+            else:
+                g.append(c[i])
+        
+        for i in range(V):
+
+            a[i] = EMB[a[i]]
+            b[i] = EMB[b[i]]
+            c[i] = EMB[c[i]]
+            d[i] = EMB[d[i]]
+            e[i] = EMB[e[i]]
+            f[i] = EMB[f[i]]
+            g[i] = EMB[g[i]]
+
+        dist = ([[0, p1, p2, p1 + p3, p1 + p4, p2 + p5, p2 + p6],
+        [0, 0, p1 + p2, p3, p4, p1 + p2 + p5, p1 + p2 + p6],
+        [0, 0, 0, p2 + p1 + p3, p2 + p1 + p4, p5, p6],
+        [0, 0, 0, 0, p3 + p4, p3 + p1 + p2 + p5, p3 + p1 + p2 + p6],
+        [0, 0, 0, 0, 0, p4 + p1 + p2 + p5, p4 + p1 + p2 + p6],
+        [0, 0, 0, 0, 0, 0, p5 + p6],
+        [0, 0, 0, 0, 0, 0, 0]])
+        for i in range(len(dist)):
+            for j in range(i, len(dist)):
+                dist[j][i] = dist[i][j]
+        
+        # print(p)
+        # print(dist)
+        # lista = [a, b, c, d, e, f, g, dist]
+        for i in a:
+            lista[-1].append(i)
+        for i in b:
+            lista[-1].append(i)
+        for i in c:
+            lista[-1].append(i)
+        for i in d:
+            lista[-1].append(i)
+        for i in e:
+            lista[-1].append(i)
+        for i in f:
+            lista[-1].append(i)
+        for i in g:
+            lista[-1].append(i)
+        for i in range(len(dist)):
+            for j in range(i + 1, len(dist[i])):
+                lista[-1].append(dist[i][j])
+
+    df = pd.DataFrame(lista)
+    df.to_csv(URL)
