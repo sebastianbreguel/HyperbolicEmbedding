@@ -153,6 +153,11 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
 
 
     print(f"Loss on Test Data: {round(np.linalg.norm(y_pred_list-y_test), 4)}")
+    # print()
+    # print(np.array(y_pred_list))
+    # print(y_test)
+    # for i in y_test:
+    #     print(i)
 
     # correct = 0
 

@@ -15,26 +15,11 @@ class HNNLayer(nn.Module):
         super(HNNLayer, self).__init__()
         self.manifold = manifold
         self.c = c
-        self.linear1 = HypLinear(manifold, in_features, 30, c, use_bias)
+        self.linear1 = HypLinear(manifold, in_features, 21, c, use_bias)
         # self.linear2 = HypLinear(manifold, 40, 13, c, use_bias)
-        self.linear3 = HypLinear(manifold, 30, out_features, c, use_bias)
+        self.linear3 = HypLinear(manifold, 21, out_features, c, use_bias)
         self.softmax = nn.Softmax(dim=1)
         self.hyp_Relu = HypAct(manifold, c, c, nn.LeakyReLU())
-    
-    def one_rnn_transform(self, W, h, U, x, b):
-        hyp_x = x
-        if self.inputs_geom == 'eucl':
-            hyp_x = self.manifold.expmap0(x, self.c)
-
-        hyp_b = b
-        if self.bias_geom == 'eucl':
-            hyp_b = self.manifold.expmap0(b, self.c)
-
-        W_otimes_h = self.manifold.mobius_matvec(W, h, self.c)
-        U_otimes_x = self.manifold.mobius_matvec(U, hyp_x, self.c)
-        Wh_plus_Ux = self.manifold.mobius_add(W_otimes_h, U_otimes_x, self.c)
-        result = self.manifold.mobius_add(Wh_plus_Ux, hyp_b, self.c)
-        return result
 
     def forward(self, x):
         x = self.manifold.expmap0(x)#, self.c)
@@ -47,6 +32,21 @@ class HNNLayer(nn.Module):
     def predict(self, x):
         x = self.forward(x)
         return x
+    
+    # def one_rnn_transform(self, W, h, U, x, b):
+    #     hyp_x = x
+    #     if self.inputs_geom == 'eucl':
+    #         hyp_x = self.manifold.expmap0(x, self.c)
+
+    #     hyp_b = b
+    #     if self.bias_geom == 'eucl':
+    #         hyp_b = self.manifold.expmap0(b, self.c)
+
+    #     W_otimes_h = self.manifold.mobius_matvec(W, h, self.c)
+    #     U_otimes_x = self.manifold.mobius_matvec(U, hyp_x, self.c)
+    #     Wh_plus_Ux = self.manifold.mobius_add(W_otimes_h, U_otimes_x, self.c)
+    #     result = self.manifold.mobius_add(Wh_plus_Ux, hyp_b, self.c)
+    #     return result
 
 
 class HypLinear(nn.Module):

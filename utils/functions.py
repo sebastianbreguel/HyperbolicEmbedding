@@ -139,6 +139,12 @@ def data_mircea():
 
     lista = []
     for _ in range(NM):
+        p1 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
+        p2 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
+        p3 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
+        p4 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
+        p5 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
+        p6 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
         lista.append([])
         a = []
         for _ in range(V):
@@ -202,20 +208,13 @@ def data_mircea():
             f[i] = EMB[f[i]]
             g[i] = EMB[g[i]]
 
-        dist = ([[0, p1, p2, p1 + p3, p1 + p4, p2 + p5, p2 + p6],
-        [0, 0, p1 + p2, p3, p4, p1 + p2 + p5, p1 + p2 + p6],
-        [0, 0, 0, p2 + p1 + p3, p2 + p1 + p4, p5, p6],
-        [0, 0, 0, 0, p3 + p4, p3 + p1 + p2 + p5, p3 + p1 + p2 + p6],
-        [0, 0, 0, 0, 0, p4 + p1 + p2 + p5, p4 + p1 + p2 + p6],
-        [0, 0, 0, 0, 0, 0, p5 + p6],
-        [0, 0, 0, 0, 0, 0, 0]])
-        for i in range(len(dist)):
-            for j in range(i, len(dist)):
-                dist[j][i] = dist[i][j]
-        
-        # print(p)
-        # print(dist)
-        # lista = [a, b, c, d, e, f, g, dist]
+        dist = ([p1, p2, p1 + p3, p1 + p4, p2 + p5, p2 + p6,
+        p1 + p2, p3, p4, p1 + p2 + p5, p1 + p2 + p6,
+        p2 + p1 + p3, p2 + p1 + p4, p5, p6,
+        p3 + p4, p3 + p1 + p2 + p5, p3 + p1 + p2 + p6,
+        p4 + p1 + p2 + p5, p4 + p1 + p2 + p6,
+        p5 + p6])
+
         for i in a:
             lista[-1].append(i)
         for i in b:
@@ -230,9 +229,8 @@ def data_mircea():
             lista[-1].append(i)
         for i in g:
             lista[-1].append(i)
-        for i in range(len(dist)):
-            for j in range(i + 1, len(dist[i])):
-                lista[-1].append(dist[i][j])
+        for i in dist:
+            lista[-1].append(i)
 
     df = pd.DataFrame(lista)
     df.to_csv(URL)

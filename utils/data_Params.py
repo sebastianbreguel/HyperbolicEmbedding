@@ -25,13 +25,7 @@ VOCABULARY = [x for x in VOCABULARY]
 MIN_RANDOM = 0
 MAX_RANDOM = 0.3
 ROUND = 5
-p1 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
-p2 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
-p3 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
-p4 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
-p5 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
-p6 = round(random.uniform(low=MIN_RANDOM, high=MAX_RANDOM), ROUND)
-p = [p1, p2, p3, p4, p5, p6]
+# p = [p1, p2, p3, p4, p5, p6]
 EMB = {}
 for i, e in enumerate(VOCABULARY):
     EMB[e] = i
