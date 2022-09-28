@@ -4,15 +4,15 @@
 import numpy.random as random
 # GANEA
 
-NG = 5000  # Number of examples
+NG = 36500  # Number of examples
 R = 0.5  # Prefix Positive Samples
-NUM = 3 # Number of OPTIONS
-NUMBERS = [str(i) for i in range(1, NUM + 1)]
+NUM = 9  # Number of OPTIONS
+NUMBERS = [str(i) for i in range(0, NUM + 1)]
 URL_PREFIX_50 = "data/Prefix/Prefix_50.csv"
 URL_PREFIX_30 = "data/Prefix/Prefix_30.csv"
 URL_PREFIX_10 = "data/Prefix/Prefix_10.csv"
 LARGE = 1
-K = 3 * LARGE  # Number of changes
+K = 3 * LARGE  # Nuof changes
 
 
 # MIRCEA

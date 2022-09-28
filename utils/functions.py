@@ -23,9 +23,7 @@ def beaty_print(start, initial, value, total, needed):
     )
     return start
 
-
 def data_ganea(replace):
-    seed(1862554)
     num = NUMBERS
     print(replace)
 
@@ -37,10 +35,15 @@ def data_ganea(replace):
     porcent_50 = int(total * 0.5)
     porcent_30 = int(total * 0.3)
     porcent_10 = int(total * 0.1)
+    K1= int(porcent_50 * 0.5)
+    K2= int(porcent_30 * 0.5)
+    K3= int(porcent_10 * 0.5)
+
 
     print(f"Total: {total} | 50%: {porcent_50} | 30%: {porcent_30} | 10%: {porcent_10}")
-    print(f"K -> 50%: {K+2} | 30%: {K} | 10%:{K/3}")
-
+    print(f"K: {K} | R: {R} | NG: {NG}")
+    print(f"NUMBERS: {num}")
+    print(f"K -> 50%: {K} | 30%: {K*2/3} | 10%:{K/3}")
     positives = 0
     negatives = 0
     for i in range(NG):
@@ -53,25 +56,23 @@ def data_ganea(replace):
         d = ""
         e = ""
 
-        if random() < R:
+        if random.random() < R:
             positives += 1
 
             # CHANGES OF LETTERS IN THE PREFIX
-            r = sample(range(porcent_50), K+2)
+            r = sample(range(porcent_50), K1)
             for z in range(porcent_50):
                 if z in r and replace:
                     b += choice(num)
                 else:
                     b += a[z]
-
-            r = sample(range(porcent_30), int(K ))
+            r = sample(range(porcent_30), K2)
             for z in range(porcent_30):
                 if z in r and replace:
                     d += choice(num)
                 else:
                     d += a[z]
-
-            r = sample(range(porcent_10), int(K / 3))
+            r = sample(range(porcent_10), K3)
             for z in range(porcent_10):
                 if z in r and replace:
                     e += choice(num)
@@ -106,7 +107,7 @@ def data_ganea(replace):
     )
     df_10 = pd.DataFrame(
         lista_10, columns=["Word", "Prefix", "isPrefix", "isNotPrefix"]
-    )   
+    )
 
     for i in range(total):
         df_50[f"word-{i}"] = df_50["Word"].apply(lambda x: str(x)[i])

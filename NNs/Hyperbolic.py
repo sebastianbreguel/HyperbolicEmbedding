@@ -15,39 +15,20 @@ class HNNLayer(nn.Module):
         super(HNNLayer, self).__init__()
         self.manifold = manifold
         self.c = c
-        self.linear1 = HypLinear(manifold, in_features, 21, c, use_bias)
-        # self.linear2 = HypLinear(manifold, 40, 13, c, use_bias)
-        self.linear3 = HypLinear(manifold, 21, out_features, c, use_bias)
+        self.linear1 = HypLinear(manifold, in_features, 16, c, use_bias)
+        self.linear2 = HypLinear(manifold, 16, out_features, c, use_bias)
         self.softmax = nn.Softmax(dim=1)
-        self.hyp_Relu = HypAct(manifold, c, c, nn.LeakyReLU())
+        self.hyp_Relu = HypAct(manifold, c, c, nn.ReLU())
 
     def forward(self, x):
-        x = self.manifold.expmap0(x)#, self.c)
         x = self.hyp_Relu(self.linear1(x))
-        # x = self.hyp_Relu(self.linear2(x))
-        x = self.linear3(x)
-        x = self.manifold.logmap0(x)
+        x = self.linear2(x)
         return x
 
     def predict(self, x):
         x = self.forward(x)
         return x
     
-    # def one_rnn_transform(self, W, h, U, x, b):
-    #     hyp_x = x
-    #     if self.inputs_geom == 'eucl':
-    #         hyp_x = self.manifold.expmap0(x, self.c)
-
-    #     hyp_b = b
-    #     if self.bias_geom == 'eucl':
-    #         hyp_b = self.manifold.expmap0(b, self.c)
-
-    #     W_otimes_h = self.manifold.mobius_matvec(W, h, self.c)
-    #     U_otimes_x = self.manifold.mobius_matvec(U, hyp_x, self.c)
-    #     Wh_plus_Ux = self.manifold.mobius_add(W_otimes_h, U_otimes_x, self.c)
-    #     result = self.manifold.mobius_add(Wh_plus_Ux, hyp_b, self.c)
-    #     return result
-
 
 class HypLinear(nn.Module):
     """
@@ -61,22 +42,14 @@ class HypLinear(nn.Module):
         self.out_features = out_features
         self.c = c
         self.use_bias = use_bias
-        # self.bias = ManifoldParameter(
-        #     torch.Tensor(out_features), requires_grad=True, c=c, manifold=manifold
-        # )
-        # self.weight = ManifoldParameter(
-        #     torch.Tensor(out_features, in_features),
-        #     requires_grad=True,
-        #     c=c,
-        #     manifold=manifold,
-        # self.bias = nn.Parameter(torch.Tensor(out_features), requires_grad=True)
-        # self.weight = nn.Parameter(
-        #     torch.Tensor(out_features, in_features), requires_grad=True
-        # )
-        self.bias = ManifoldParameter(torch.Tensor(out_features), requires_grad=True, manifold=self.manifold, c=self.c)
-        self.weight = ManifoldParameter(
-            torch.Tensor(out_features, in_features), requires_grad=True, manifold=self.manifold, c=self.c
+        self.bias = ManifoldParameter(
+            torch.Tensor(out_features), requires_grad=True, c=c, manifold=manifold
         )
+        self.weight = ManifoldParameter(
+            torch.Tensor(out_features, in_features),
+            requires_grad=True,
+            c=c,
+            manifold=manifold)
         self.reset_parameters()
 
     def reset_parameters(self):

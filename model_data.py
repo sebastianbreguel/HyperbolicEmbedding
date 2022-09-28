@@ -4,6 +4,9 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
+import matplotlib.pyplot as plt
+import seaborn as sn
 
 # Parameters
 from parameters import (
@@ -45,7 +48,7 @@ def get_model(option: str, dataset: int) -> torch.nn.Module:
         c = 1
         manifold = PoincareBall(c)
 
-    model = HNNLayer(manifold, IN_FEATURES, OUT_FEATURES, c, 1)
+    model = HNNLayer(manifold, inputs, OUT_FEATURES, c, 1)
 
     return model
 
@@ -59,24 +62,20 @@ def get_data(dataset) -> tuple:
     elif dataset == 50:
         url = URL_PREFIX_50
 
-    # df = pd.read_csv(url, header=0)
-    # df = df.drop(df.columns[0], axis=1)
-
-    # X = df.iloc[:, 2:]
-
-    # df = pd.read_csv(URL_PREFIX_30, header=0)
-    # df = df.drop(df.columns[0], axis=1)
-
-    # X = df.iloc[:, 2:]
-    # # columns isPrefix and isNotPrefix
-    # y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
-
-    df = pd.read_csv(URL, header=0)
+    df = pd.read_csv(url, header=0)
     df = df.drop(df.columns[0], axis=1)
 
-    X = df.iloc[:, :IN_FEATURES]
-    # columns isPrefix and isNotPrefix
-    y = df.iloc[:, IN_FEATURES:]
+    X = df.iloc[:, 2:]
+#
+    # # columns isPrefix and isNotPrefix
+    y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
+
+    # df = pd.read_csv(URL, header=0)
+    # df = df.drop(df.columns[0], axis=1)
+
+    # X = df.iloc[:, :IN_FEATURES]
+    # # columns isPrefix and isNotPrefix
+    # y = df.iloc[:, IN_FEATURES:]
 
     ##########################
     #####Train — Validation — Test
@@ -151,3 +150,60 @@ def get_data(dataset) -> tuple:
     test_loader = DataLoader(dataset=test_dataset, batch_size=1)
 
     return train_loader, val_loader, test_loader, y_test
+
+def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
+    if loss == "cross":
+
+        correct = 0
+
+        for i in range(len(y_pred_list)):
+            max_value = max(y_pred_list[i])
+            index_max = y_pred_list[i].index(max_value)
+            max_real = max(y_test[i])
+            index_max_real = np.where(y_test[i] == max_real)[0][0]
+
+            if index_max == index_max_real:
+                correct += 1
+
+        print(
+            f"Accuracy of the network on the {len(y_test)} test data: {round(100 * correct /len(y_pred_list),3)} %"
+        )
+
+        y_pred = []
+        y_true = []
+
+        # iterate over test data
+        for inputs, labels in test_loader:
+            output = model(inputs)  # Feed Network
+
+            output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()
+            y_pred.extend(output)  # Save Prediction
+
+            labels = labels.data.cpu().numpy()
+            y_true.extend(labels)  # Save Truth
+
+        # constant for classes
+        classes = ("Prefix", "Random")
+        # obtain the position of the max
+        new = []
+        # Build confusion matrix
+        for i in y_true:
+            # obtain the index ob the max
+            index = np.where(i == 1)[0][0]
+            new.append(index)
+
+        y_true = new
+        print("Accuracy", accuracy_score(y_true, y_pred))
+        print(f1_score(y_true, y_pred, average=None))
+        cf_matrix = confusion_matrix(y_true, y_pred)
+        print(cf_matrix)
+        df_cm = pd.DataFrame(
+            cf_matrix / np.sum(cf_matrix) * 10,
+            index=[i for i in classes],
+            columns=[i for i in classes],
+        )
+        plt.figure(figsize=(12, 7))
+        sn.heatmap(df_cm, annot=True)
+        plt.savefig(f"output-{loss}.png")
+    elif loss == "mse":
+        print(f"Loss on Test Data: {round(np.linalg.norm(y_pred_list-y_test), 4)}")

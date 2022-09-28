@@ -18,8 +18,8 @@ class PoincareBall(Manifold):
         self.name = "PoincareBall"
         self.min_norm = 1e-15
         self.c = c
-        # print(self.c)
-        self.eps = {torch.float32: 4e-3, torch.float64: 1e-5}
+        print(self.c)
+        self.eps = {torch.float32: 4e-3, torch.float32: 1e-5}
 
     def sqdist(self, p1, p2):
         sqrt_c = self.c**0.5
@@ -113,7 +113,7 @@ class PoincareBall(Manifold):
         res_c = (
             tanh(mx_norm / x_norm * artanh(sqrt_c * x_norm)) * mx / (mx_norm * sqrt_c)
         )
-        cond = (mx == 0).prod(-1, keepdim=True, dtype=torch.uint8).type(torch.BoolTensor)
+        cond = (mx == 0).prod(-1, keepdim=True, dtype=torch.uint8)
         res_0 = torch.zeros(1, dtype=res_c.dtype, device=res_c.device)
         res = torch.where(cond.type(torch.BoolTensor), res_0, res_c)
         return res
