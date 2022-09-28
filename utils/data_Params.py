@@ -19,7 +19,7 @@ K = 3 * LARGE  # Number of changes
 
 URL = "data/Phylogenetics.csv"
 V = 20
-NM = 10000
+NM = 1000
 VOCABULARY = 'abcdefghijklmnopqrstuvwxyz'[:V]
 VOCABULARY = [x for x in VOCABULARY]
 MIN_RANDOM = 0

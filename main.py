@@ -152,7 +152,7 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int) -> None:
     y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
 
 
-    print(f"Loss on Test Data: {np.linalg.norm(y_pred_list-y_test)}")
+    print(f"Loss on Test Data: {round(np.linalg.norm(y_pred_list-y_test), 4)}")
 
     # correct = 0
 
