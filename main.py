@@ -82,7 +82,7 @@ def train_eval(
             stabilize=10,
             betas=(0.9, 0.999),
         )
-    print(f"Running {option_model} Model - {optimizer_option} Optimizer", LEARNING_RATE)
+    # print(f"Running {option_model} Model - {optimizer_option} Optimizer", LEARNING_RATE)
     # print(model)
 
     ##########################
@@ -126,10 +126,10 @@ def train_eval(
 
                 val_epoch_loss += val_loss.item()
 
-        print(
-            f"Epoch {e+0:03}:\tTrain Loss: {train_epoch_loss/len(train_loader):.4f}\tVal Loss: {val_epoch_loss/len(val_loader):.4f}"
-            + f"\tTime: {((perf_counter() - initial)/60):.2f} minutes"
-        )
+        # print(
+        #     f"Epoch {e+0:03}:\tTrain Loss: {train_epoch_loss/len(train_loader):.4f}\tVal Loss: {val_epoch_loss/len(val_loader):.4f}"
+        #     + f"\tTime: {((perf_counter() - initial)/60):.2f} minutes"
+        # )
 
     y_pred_list = []
     with torch.no_grad():
@@ -179,22 +179,22 @@ if "__main__" == __name__:
     task = results.task
     for r in [0.25, 0.5, 0.75]:
         for replace in [0.1, 0.3, 0.5]:
-            print(
-                f"Running {model} Model - {optimizer} Optimizer - {loss} Loss - {task} Task - {dataset} Dataset - {r} Ratio - {replace} Replace"
-            )
-
             generate_data(delete_folder, create_folder, replace, r, task)
 
             for dataset in [10, 30, 50]:
-                print(" DATASET: ", dataset)
                 resultados = []
                 for model in ["euclidean", "hyperbolic"]:
+                    print(
+                        "#"*30+f"\nRunning {model} Model - {optimizer} Optimizer - {loss} Loss - {task} Task - {dataset} Dataset - {r} Ratio - {replace} Replace\n"+ "#"*30
+                    )
+
                     resultados.append([])
                     hidden = [16]
                     HIDDEN = hidden[0]
                     resultados[-1].append(
                         train_eval(model, optimizer, dataset, loss, HIDDEN)
                     )
+                    print("\n\n")
                     # print(hidden, resultados[-1])
             #     plt.scatter(hidden, resultados[-1])
             # plt.show()
