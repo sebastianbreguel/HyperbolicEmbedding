@@ -7,6 +7,7 @@ import random
 from .data_Params import *
 from parameters import SEED
 
+
 def beaty_print(start, initial, value, total, needed):
     end = perf_counter()
     arrows = int(value / total * 10 // 1)
@@ -23,7 +24,8 @@ def beaty_print(start, initial, value, total, needed):
     )
     return start
 
-def data_ganea(replace):
+
+def data_ganea(replace, positivi):
     random.seed(SEED)
     num = NUMBERS
 
@@ -35,9 +37,9 @@ def data_ganea(replace):
     porcent_50 = int(total * 0.5)
     porcent_30 = int(total * 0.3)
     porcent_10 = int(total * 0.1)
-    K1= int(porcent_50 * 0.5)
-    K2= int(porcent_30 * 0.5)
-    K3= int(porcent_10 * 0.5)
+    K1 = int(porcent_50 * 0.5)
+    K2 = int(porcent_30 * 0.5)
+    K3 = int(porcent_10 * 0.5)
 
     positives = 0
     negatives = 0
@@ -50,7 +52,7 @@ def data_ganea(replace):
         b = ""
         d = ""
         e = ""
-        if random.random() < R:
+        if random.random() < positivi:
             positives += 1
 
             # CHANGES OF LETTERS IN THE PREFIX
@@ -126,6 +128,7 @@ def data_ganea(replace):
     df_10 = df_10.drop(["Word", "Prefix"], axis=1).drop_duplicates()
     df_10.to_csv(URL_PREFIX_10)
 
+
 def data_mircea():
 
     #    A
@@ -192,7 +195,7 @@ def data_mircea():
                 g.append(choice(VOCABULARY))
             else:
                 g.append(c[i])
-        
+
         for i in range(V):
 
             a[i] = EMB[a[i]]
@@ -203,12 +206,29 @@ def data_mircea():
             f[i] = EMB[f[i]]
             g[i] = EMB[g[i]]
 
-        dist = [p1, p2, p1 + p3, p1 + p4, p2 + p5, p2 + p6,
-        p1 + p2, p3, p4, p1 + p2 + p5, p1 + p2 + p6,
-        p2 + p1 + p3, p2 + p1 + p4, p5, p6,
-        p3 + p4, p3 + p1 + p2 + p5, p3 + p1 + p2 + p6,
-        p4 + p1 + p2 + p5, p4 + p1 + p2 + p6,
-        p5 + p6]
+        dist = [
+            p1,
+            p2,
+            p1 + p3,
+            p1 + p4,
+            p2 + p5,
+            p2 + p6,
+            p1 + p2,
+            p3,
+            p4,
+            p1 + p2 + p5,
+            p1 + p2 + p6,
+            p2 + p1 + p3,
+            p2 + p1 + p4,
+            p5,
+            p6,
+            p3 + p4,
+            p3 + p1 + p2 + p5,
+            p3 + p1 + p2 + p6,
+            p4 + p1 + p2 + p5,
+            p4 + p1 + p2 + p6,
+            p5 + p6,
+        ]
         dist = [p1, p2, p3, p4, p5, p6]
 
         for i in a:

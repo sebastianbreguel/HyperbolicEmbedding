@@ -29,7 +29,7 @@ class HNNLayer(nn.Module):
 
     def predict(self, x):
         return self.forward(x)
-    
+
 
 class HypLinear(nn.Module):
     """
@@ -50,7 +50,8 @@ class HypLinear(nn.Module):
             torch.Tensor(out_features, in_features),
             requires_grad=True,
             c=c,
-            manifold=manifold)
+            manifold=manifold,
+        )
         self.reset_parameters()
 
     def reset_parameters(self):

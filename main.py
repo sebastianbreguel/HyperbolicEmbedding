@@ -19,7 +19,9 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 
 
-def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str, hidden: int) -> None:
+def train_eval(
+    option_model: str, optimizer_option: str, dataset: int, loss: str, hidden: int
+) -> None:
 
     train_loader, val_loader, test_loader, y_test = get_data(dataset)
 
@@ -123,11 +125,11 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str
                 val_loss = criterion(y_val_pred, y_val_batch)
 
                 val_epoch_loss += val_loss.item()
-        
+
         print(
-                f"Epoch {e+0:03}:\tTrain Loss: {train_epoch_loss/len(train_loader):.4f}\tVal Loss: {val_epoch_loss/len(val_loader):.4f}"
-                + f"\tTime: {((perf_counter() - initial)/60):.2f} minutes"
-                )
+            f"Epoch {e+0:03}:\tTrain Loss: {train_epoch_loss/len(train_loader):.4f}\tVal Loss: {val_epoch_loss/len(val_loader):.4f}"
+            + f"\tTime: {((perf_counter() - initial)/60):.2f} minutes"
+        )
 
     y_pred_list = []
     with torch.no_grad():
@@ -137,7 +139,6 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str
             y_test_pred = model(X_batch)
             y_pred_list.append(y_test_pred.cpu().numpy())
     y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
-
 
     return get_accuracy(loss, y_test, y_pred_list, model, test_loader)
 
@@ -176,20 +177,24 @@ if "__main__" == __name__:
     dataset = results.dataset
     loss = results.loss
     task = results.task
-    print(" Replace: ", replace)
-    print("\n" + "#" * 21)
-    print("## GENERATING DATA ##")
-    print("#" * 21)
-    generate_data(delete_folder, create_folder, replace, task)
+    for r in [0.25, 0.5, 0.75]:
+        for replace in [0.1, 0.3, 0.5]:
+            print(
+                f"Running {model} Model - {optimizer} Optimizer - {loss} Loss - {task} Task - {dataset} Dataset - {r} Ratio - {replace} Replace"
+            )
 
-    for dataset in [10,30,50]:
-        print(" DATASET: ", dataset)
-        resultados = []
-        for model in ["euclidean", "hyperbolic"]:
-            resultados.append([])
-            hidden = [16]
-            HIDDEN = hidden[0]
-            resultados[-1].append(train_eval(model, optimizer, dataset, loss, HIDDEN))
-                # print(hidden, resultados[-1])
+            generate_data(delete_folder, create_folder, replace, r, task)
+
+            for dataset in [10, 30, 50]:
+                print(" DATASET: ", dataset)
+                resultados = []
+                for model in ["euclidean", "hyperbolic"]:
+                    resultados.append([])
+                    hidden = [16]
+                    HIDDEN = hidden[0]
+                    resultados[-1].append(
+                        train_eval(model, optimizer, dataset, loss, HIDDEN)
+                    )
+                    # print(hidden, resultados[-1])
             #     plt.scatter(hidden, resultados[-1])
             # plt.show()

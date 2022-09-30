@@ -19,7 +19,7 @@ from parameters import (
     OUT_FEATURES,
     BATCH_SIZE,
     LARGE,
-    SEED
+    SEED,
 )
 
 # Custom NN and Manifolds
@@ -29,7 +29,7 @@ from NNs import HNNLayer
 
 
 def get_model(option: str, dataset: int, hidden: int) -> torch.nn.Module:
-    inputs = 20 
+    inputs = 20
     outputs = 2
 
     if dataset == 10:
@@ -80,8 +80,6 @@ def get_data(dataset) -> tuple:
         X = df.iloc[:, 2:]
         # # columns isPrefix and isNotPrefix
         y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
-
-
 
     ##########################
     #####Train — Validation — Test
@@ -157,6 +155,7 @@ def get_data(dataset) -> tuple:
 
     return train_loader, val_loader, test_loader, y_test
 
+
 def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
     if loss == "cross":
 
@@ -209,7 +208,11 @@ def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
         plt.figure(figsize=(12, 7))
         sn.heatmap(df_cm, annot=True)
         plt.savefig(f"output-{loss}.png")
-        return accuracy_score(y_true, y_pred)#, f1_score(y_true, y_pred, average=None), cf_matrix
+        return accuracy_score(
+            y_true, y_pred
+        )  # , f1_score(y_true, y_pred, average=None), cf_matrix
     elif loss == "mse":
-        print(f"Loss on Test Data: {round(np.linalg.norm(y_pred_list-y_test)/(0.2 * NM), 4)}")
-        return round(np.linalg.norm(y_pred_list-y_test)/(0.2 * NM), 4)
+        print(
+            f"Loss on Test Data: {round(np.linalg.norm(y_pred_list-y_test)/(0.2 * NM), 4)}"
+        )
+        return round(np.linalg.norm(y_pred_list - y_test) / (0.2 * NM), 4)

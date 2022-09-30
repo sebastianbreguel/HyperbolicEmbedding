@@ -3,7 +3,7 @@ from .functions import data_ganea, data_mircea
 from time import sleep
 
 
-def generate_data(delete_folder, create_folder, replace,task) -> None:
+def generate_data(delete_folder, create_folder, replace, r, task) -> None:
     # Generate the folder
     if delete_folder:
         print("#" * 20, "\nDeleting folder")
@@ -17,11 +17,10 @@ def generate_data(delete_folder, create_folder, replace,task) -> None:
         os.system("mkdir data/Prefix")
         sleep(1)
         print("\nFolder created\n")
-
     # run generate_data.py
     if task == "ganea":
-        
-        data_ganea(replace)
+
+        data_ganea(replace, r)
 
     elif task == "mircea":
         data_mircea()
