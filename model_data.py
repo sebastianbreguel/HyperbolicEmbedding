@@ -19,6 +19,7 @@ from parameters import (
     OUT_FEATURES,
     BATCH_SIZE,
     LARGE,
+    SEED
 )
 
 # Custom NN and Manifolds
@@ -59,6 +60,7 @@ def get_model(option: str, dataset: int, hidden: int) -> torch.nn.Module:
 
 
 def get_data(dataset) -> tuple:
+    np.random.seed(SEED)
 
     if dataset == 10:
         url = URL_PREFIX_10

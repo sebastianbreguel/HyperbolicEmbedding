@@ -4,7 +4,7 @@
 import numpy.random as random
 # GANEA
 
-NG = 10500  # Number of examples
+NG = 40000  # Number of examples
 R = 0.5  # Prefix Positive Samples
 NUM = 9  # Number of OPTIONS
 NUMBERS = [str(i) for i in range(0, NUM + 1)]

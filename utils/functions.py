@@ -5,7 +5,7 @@ from random import choice, sample, seed
 import random
 
 from .data_Params import *
-
+from parameters import SEED
 
 def beaty_print(start, initial, value, total, needed):
     end = perf_counter()
@@ -23,8 +23,8 @@ def beaty_print(start, initial, value, total, needed):
     )
     return start
 
-def data_ganea(replace, Positives):
-    random.seed(18625441)
+def data_ganea(replace):
+    random.seed(SEED)
     num = NUMBERS
 
     lista_50 = [[]] * NG
@@ -39,11 +39,6 @@ def data_ganea(replace, Positives):
     K2= int(porcent_30 * 0.5)
     K3= int(porcent_10 * 0.5)
 
-
-    print(f"Total: {total} | 50%: {porcent_50} | 30%: {porcent_30} | 10%: {porcent_10}")
-    print(f"K: {K} | R: {R} | NG: {NG}")
-    print(f"NUMBERS: {num}")
-    print(f"K -> 50%: {K} | 30%: {K*2/3} | 10%:{K/3}")
     positives = 0
     negatives = 0
     for i in range(NG):
@@ -55,7 +50,7 @@ def data_ganea(replace, Positives):
         b = ""
         d = ""
         e = ""
-        if random.random() < Positives:
+        if random.random() < R:
             positives += 1
 
             # CHANGES OF LETTERS IN THE PREFIX
