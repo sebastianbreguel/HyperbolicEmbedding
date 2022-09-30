@@ -23,9 +23,8 @@ def beaty_print(start, initial, value, total, needed):
     )
     return start
 
-def data_ganea(replace):
+def data_ganea(replace, Positives):
     num = NUMBERS
-    print(replace)
 
     lista_50 = [[]] * NG
     lista_30 = [[]] * NG
@@ -55,8 +54,7 @@ def data_ganea(replace):
         b = ""
         d = ""
         e = ""
-
-        if random.random() < R:
+        if random.random() < Positives:
             positives += 1
 
             # CHANGES OF LETTERS IN THE PREFIX

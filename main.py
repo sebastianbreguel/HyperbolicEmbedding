@@ -175,24 +175,24 @@ if "__main__" == __name__:
     dataset = results.dataset
     loss = results.loss
     task = results.task
-    for i in range(1):
-
-        if gen_data:
+    for r in [0.25,0.5,0.75]:
+        print(" R: ", type(r))
+        for replace in [0.1,0.3,0.5]:
+            print(" Replace: ", replace)
             print("\n" + "#" * 21)
             print("## GENERATING DATA ##")
             print("#" * 21)
-            generate_data(delete_folder, create_folder, replace,task)
-        
-        if make_train_eval:
-            resultados = []
-            epochs = [1, 2, 3, 5, 7, 10, 12, 15, 20, 25, 30]
-            hidden = [20, 21, 25, 30, 40, 42, 50, 70, 84, 100, 140]
-            for model in ["euclidean", "hyperbolic"]:
-                resultados.append([])
-                hidden = [20, 25, 30, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140]
-                for HIDDEN in hidden:
-                    resultados[-1].append(train_eval(model, optimizer, dataset, loss, HIDDEN))
-                plt.scatter(hidden, resultados[-1])
-            plt.show()
+            generate_data(delete_folder, create_folder, replace, r, task)
 
-
+            for dataset in [10,30,50]:
+                print(" DATASET: ", dataset)
+                resultados = []
+                epochs = [1, 2, 3, 5, 7, 10, 12, 15, 20, 25, 30]
+                hidden = [20, 21, 25, 30, 40, 42, 50, 70, 84, 100, 140]
+                for model in ["euclidean", "hyperbolic"]:
+                    resultados.append([])
+                    hidden = [20, 25, 30, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140]
+                    for HIDDEN in hidden:
+                        resultados[-1].append(train_eval(model, optimizer, dataset, loss, HIDDEN))
+                    plt.scatter(hidden, resultados[-1])
+                plt.show()

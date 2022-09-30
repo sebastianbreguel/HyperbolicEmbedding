@@ -29,6 +29,7 @@ from NNs import HNNLayer
 
 def get_model(option: str, dataset: int, hidden: int) -> torch.nn.Module:
     inputs = 20 
+    outputs = 2
 
     if dataset == 10:
         inputs += 2
@@ -40,6 +41,7 @@ def get_model(option: str, dataset: int, hidden: int) -> torch.nn.Module:
         inputs += 10
     elif dataset == 0:
         inputs = 140
+        outputs = 6
 
     manifold = None
     inputs *= LARGE
@@ -51,7 +53,7 @@ def get_model(option: str, dataset: int, hidden: int) -> torch.nn.Module:
         c = 1
         manifold = PoincareBall(c)
 
-    model = HNNLayer(manifold, inputs, OUT_FEATURES, c, 1, hidden)
+    model = HNNLayer(manifold, inputs, outputs, c, 1, hidden)
 
     return model
 
@@ -69,18 +71,15 @@ def get_data(dataset) -> tuple:
 
     df = pd.read_csv(url, header=0)
     df = df.drop(df.columns[0], axis=1)
+    if dataset == 0:
+        X = df.iloc[:, :IN_FEATURES]
+        y = df.iloc[:, IN_FEATURES:]
+    else:
+        X = df.iloc[:, 2:]
+        # # columns isPrefix and isNotPrefix
+        y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
 
-#     X = df.iloc[:, 2:]
-# #
-#     # # columns isPrefix and isNotPrefix
-#     y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
 
-    # df = pd.read_csv(URL, header=0)
-    # df = df.drop(df.columns[0], axis=1)
-
-    X = df.iloc[:, :IN_FEATURES]
-    # columns isPrefix and isNotPrefix
-    y = df.iloc[:, IN_FEATURES:]
 
     ##########################
     #####Train — Validation — Test
