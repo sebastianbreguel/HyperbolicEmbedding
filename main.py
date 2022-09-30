@@ -82,7 +82,7 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str
             betas=(0.9, 0.999),
         )
     print(f"Running {option_model} Model - {optimizer_option} Optimizer", LEARNING_RATE)
-    print(model)
+    # print(model)
 
     ##########################
     #####  Train Model
@@ -125,10 +125,10 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str
 
                 val_epoch_loss += val_loss.item()
         
-        print(
-                f"Epoch {e+0:03}:\tTrain Loss: {train_epoch_loss/len(train_loader):.4f}\tVal Loss: {val_epoch_loss/len(val_loader):.4f}"
-                + f"\tTime: {((perf_counter() - initial)/60):.2f} minutes"
-                )
+        # print(
+        #         f"Epoch {e+0:03}:\tTrain Loss: {train_epoch_loss/len(train_loader):.4f}\tVal Loss: {val_epoch_loss/len(val_loader):.4f}"
+        #         + f"\tTime: {((perf_counter() - initial)/60):.2f} minutes"
+                # )
 
     y_pred_list = []
     with torch.no_grad():
@@ -144,6 +144,8 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str
 
 
 if "__main__" == __name__:
+    # seed torch
+    torch.manual_seed(18625541)
 
     parser = argparse.ArgumentParser()
 
@@ -175,24 +177,25 @@ if "__main__" == __name__:
     dataset = results.dataset
     loss = results.loss
     task = results.task
-    for r in [0.25,0.5,0.75]:
-        print(" R: ", type(r))
-        for replace in [0.1,0.3,0.5]:
-            print(" Replace: ", replace)
-            print("\n" + "#" * 21)
-            print("## GENERATING DATA ##")
-            print("#" * 21)
-            generate_data(delete_folder, create_folder, replace, r, task)
+    r = 0.5
+    print(" R: ", type(r))
+    for replace in [0.1,0.3,0.5]:
+        print(" Replace: ", replace)
+        print("\n" + "#" * 21)
+        print("## GENERATING DATA ##")
+        print("#" * 21)
+        generate_data(delete_folder, create_folder, replace, r, task)
 
-            for dataset in [10,30,50]:
-                print(" DATASET: ", dataset)
-                resultados = []
-                epochs = [1, 2, 3, 5, 7, 10, 12, 15, 20, 25, 30]
-                hidden = [20, 21, 25, 30, 40, 42, 50, 70, 84, 100, 140]
-                for model in ["euclidean", "hyperbolic"]:
-                    resultados.append([])
-                    hidden = [20, 25, 30, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140]
-                    for HIDDEN in hidden:
-                        resultados[-1].append(train_eval(model, optimizer, dataset, loss, HIDDEN))
-                    plt.scatter(hidden, resultados[-1])
-                plt.show()
+        for dataset in [10,30,50]:
+            print(" DATASET: ", dataset)
+            resultados = []
+            epochs = [1, 2, 3, 5, 7, 10, 12, 15, 20, 25, 30]
+            hidden = [20, 21, 25, 30, 40, 42, 50, 70, 84, 100, 140]
+            for model in ["euclidean", "hyperbolic"]:
+                resultados.append([])
+                hidden = [16]
+                HIDDEN = hidden[0]
+                resultados[-1].append(train_eval(model, optimizer, dataset, loss, HIDDEN))
+                # print(hidden, resultados[-1])
+            #     plt.scatter(hidden, resultados[-1])
+            # plt.show()

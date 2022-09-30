@@ -24,6 +24,7 @@ def beaty_print(start, initial, value, total, needed):
     return start
 
 def data_ganea(replace, Positives):
+    random.seed(18625441)
     num = NUMBERS
 
     lista_50 = [[]] * NG
