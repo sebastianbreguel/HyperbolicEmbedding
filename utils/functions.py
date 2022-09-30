@@ -209,12 +209,13 @@ def data_mircea():
             f[i] = EMB[f[i]]
             g[i] = EMB[g[i]]
 
-        dist = ([p1, p2, p1 + p3, p1 + p4, p2 + p5, p2 + p6,
+        dist = [p1, p2, p1 + p3, p1 + p4, p2 + p5, p2 + p6,
         p1 + p2, p3, p4, p1 + p2 + p5, p1 + p2 + p6,
         p2 + p1 + p3, p2 + p1 + p4, p5, p6,
         p3 + p4, p3 + p1 + p2 + p5, p3 + p1 + p2 + p6,
         p4 + p1 + p2 + p5, p4 + p1 + p2 + p6,
-        p5 + p6])
+        p5 + p6]
+        dist = [p1, p2, p3, p4, p5, p6]
 
         for i in a:
             lista[-1].append(i)

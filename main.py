@@ -20,7 +20,7 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 
 
-def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str) -> None:
+def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str, hidden: int) -> None:
 
     train_loader, val_loader, test_loader, y_test = get_data(dataset)
 
@@ -29,7 +29,7 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str
     ##########################
 
     device = torch.device("cpu")
-    model = get_model(option_model, dataset).to(device)
+    model = get_model(option_model, dataset, HIDDEN).to(device)
     # use all cpu cores for torch
 
     # Loss Function
@@ -140,7 +140,7 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str
     y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
 
 
-    get_accuracy(loss, y_test, y_pred_list, model, test_loader)
+    return get_accuracy(loss, y_test, y_pred_list, model, test_loader)
 
 
 if "__main__" == __name__:
@@ -175,7 +175,7 @@ if "__main__" == __name__:
     dataset = results.dataset
     loss = results.loss
     task = results.task
-    for i in range(10):
+    for i in range(1):
 
         if gen_data:
             print("\n" + "#" * 21)
@@ -184,6 +184,15 @@ if "__main__" == __name__:
             generate_data(delete_folder, create_folder, replace,task)
         
         if make_train_eval:
-            train_eval(model, optimizer, dataset, loss)
+            resultados = []
+            epochs = [1, 2, 3, 5, 7, 10, 12, 15, 20, 25, 30]
+            hidden = [20, 21, 25, 30, 40, 42, 50, 70, 84, 100, 140]
+            for model in ["euclidean", "hyperbolic"]:
+                resultados.append([])
+                hidden = [20, 25, 30, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140]
+                for HIDDEN in hidden:
+                    resultados[-1].append(train_eval(model, optimizer, dataset, loss, HIDDEN))
+                plt.scatter(hidden, resultados[-1])
+            plt.show()
 
 

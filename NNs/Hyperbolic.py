@@ -11,23 +11,24 @@ class HNNLayer(nn.Module):
     Hyperbolic neural networks layer.
     """
 
-    def __init__(self, manifold, in_features, out_features, c, use_bias):
+    def __init__(self, manifold, in_features, out_features, c, use_bias, hidden):
         super(HNNLayer, self).__init__()
         self.manifold = manifold
         self.c = c
-        self.linear1 = HypLinear(manifold, in_features, 16, c, use_bias)
-        self.linear2 = HypLinear(manifold, 16, out_features, c, use_bias)
+        self.linear1 = HypLinear(manifold, in_features, hidden, c, use_bias)
+        self.linear2 = HypLinear(manifold, hidden, out_features, c, use_bias)
         self.softmax = nn.Softmax(dim=1)
         self.hyp_Relu = HypAct(manifold, c, c, nn.ReLU())
 
     def forward(self, x):
+        x = self.manifold.expmap0(x)
         x = self.hyp_Relu(self.linear1(x))
         x = self.linear2(x)
+        x = self.manifold.logmap0(x)
         return x
 
     def predict(self, x):
-        x = self.forward(x)
-        return x
+        return self.forward(x)
     
 
 class HypLinear(nn.Module):
@@ -85,9 +86,9 @@ class HypAct(nn.Module):
         self.act = act
 
     def forward(self, x):
-        xt = self.act(self.manifold.logmap0(x))
-        xt = self.manifold.proj_tan0(xt)
-        return self.manifold.proj(self.manifold.expmap0(xt))
+        x = self.act(self.manifold.logmap0(x))
+        x = self.manifold.proj_tan0(x)
+        return self.manifold.proj(self.manifold.expmap0(x))
 
     def extra_repr(self):
         return "c_in={}, c_out={}".format(self.c_in, self.c_out)

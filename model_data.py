@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
 import matplotlib.pyplot as plt
 import seaborn as sn
+from utils.data_Params import NM
 
 # Parameters
 from parameters import (
@@ -26,7 +27,7 @@ from Manifolds.poincare import PoincareBall
 from NNs import HNNLayer
 
 
-def get_model(option: str, dataset: int) -> torch.nn.Module:
+def get_model(option: str, dataset: int, hidden: int) -> torch.nn.Module:
     inputs = 20 
 
     if dataset == 10:
@@ -37,6 +38,8 @@ def get_model(option: str, dataset: int) -> torch.nn.Module:
 
     elif dataset == 50:
         inputs += 10
+    elif dataset == 0:
+        inputs = 140
 
     manifold = None
     inputs *= LARGE
@@ -48,7 +51,7 @@ def get_model(option: str, dataset: int) -> torch.nn.Module:
         c = 1
         manifold = PoincareBall(c)
 
-    model = HNNLayer(manifold, inputs, OUT_FEATURES, c, 1)
+    model = HNNLayer(manifold, inputs, OUT_FEATURES, c, 1, hidden)
 
     return model
 
@@ -61,21 +64,23 @@ def get_data(dataset) -> tuple:
         url = URL_PREFIX_30
     elif dataset == 50:
         url = URL_PREFIX_50
+    elif dataset == 0:
+        url = URL
 
     df = pd.read_csv(url, header=0)
     df = df.drop(df.columns[0], axis=1)
 
-    X = df.iloc[:, 2:]
-#
-    # # columns isPrefix and isNotPrefix
-    y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
+#     X = df.iloc[:, 2:]
+# #
+#     # # columns isPrefix and isNotPrefix
+#     y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
 
     # df = pd.read_csv(URL, header=0)
     # df = df.drop(df.columns[0], axis=1)
 
-    # X = df.iloc[:, :IN_FEATURES]
-    # # columns isPrefix and isNotPrefix
-    # y = df.iloc[:, IN_FEATURES:]
+    X = df.iloc[:, :IN_FEATURES]
+    # columns isPrefix and isNotPrefix
+    y = df.iloc[:, IN_FEATURES:]
 
     ##########################
     #####Train — Validation — Test
@@ -154,20 +159,15 @@ def get_data(dataset) -> tuple:
 def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
     if loss == "cross":
 
-        correct = 0
+        # correct = 0
+        # for i in range(len(y_pred_list)):
+        #     max_value = max(y_pred_list[i])
+        #     index_max = y_pred_list[i].index(max_value)
+        #     max_real = max(y_test[i])
+        #     index_max_real = np.where(y_test[i] == max_real)[0][0]
 
-        for i in range(len(y_pred_list)):
-            max_value = max(y_pred_list[i])
-            index_max = y_pred_list[i].index(max_value)
-            max_real = max(y_test[i])
-            index_max_real = np.where(y_test[i] == max_real)[0][0]
-
-            if index_max == index_max_real:
-                correct += 1
-
-        print(
-            f"Accuracy of the network on the {len(y_test)} test data: {round(100 * correct /len(y_pred_list),3)} %"
-        )
+        #     if index_max == index_max_real:
+        #         correct += 1
 
         y_pred = []
         y_true = []
@@ -193,7 +193,10 @@ def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
             new.append(index)
 
         y_true = new
-        print("Accuracy", accuracy_score(y_true, y_pred))
+        # print("Accuracy", accuracy_score(y_true, y_pred))
+        print(
+            f"Accuracy of the network on the {len(y_test)} test data: {accuracy_score(y_true, y_pred)} %"
+        )
         print(f1_score(y_true, y_pred, average=None))
         cf_matrix = confusion_matrix(y_true, y_pred)
         print(cf_matrix)
@@ -205,5 +208,7 @@ def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
         plt.figure(figsize=(12, 7))
         sn.heatmap(df_cm, annot=True)
         plt.savefig(f"output-{loss}.png")
+        return accuracy_score(y_true, y_pred)#, f1_score(y_true, y_pred, average=None), cf_matrix
     elif loss == "mse":
-        print(f"Loss on Test Data: {round(np.linalg.norm(y_pred_list-y_test), 4)}")
+        print(f"Loss on Test Data: {round(np.linalg.norm(y_pred_list-y_test)/(0.2 * NM), 4)}")
+        return round(np.linalg.norm(y_pred_list-y_test)/(0.2 * NM), 4)
