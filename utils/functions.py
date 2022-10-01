@@ -1,10 +1,24 @@
 import pandas as pd
 import numpy as np
 from time import perf_counter
-from random import choice, sample, seed
-import random
+from random import choice, sample, seed, random
 
-from .data_Params import *
+from .data_Params import (
+    NG,
+    LARGE,
+    NUMBERS,
+    URL_PREFIX_50,
+    URL_PREFIX_30,
+    URL_PREFIX_10,
+    MAX_RANDOM,
+    MIN_RANDOM,
+    ROUND,
+    VOCABULARY,
+    EMB,
+    NM,
+    V,
+    URL,
+)
 from parameters import SEED
 
 
@@ -26,7 +40,7 @@ def beaty_print(start, initial, value, total, needed):
 
 
 def data_ganea(replace, positivi):
-    random.seed(SEED)
+    seed(SEED)
     num = NUMBERS
 
     lista_50 = [[]] * NG
@@ -52,7 +66,7 @@ def data_ganea(replace, positivi):
         b = ""
         d = ""
         e = ""
-        if random.random() < positivi:
+        if random() < positivi:
             positives += 1
 
             # CHANGES OF LETTERS IN THE PREFIX
@@ -75,9 +89,9 @@ def data_ganea(replace, positivi):
                 else:
                     e += a[z]
             #
-            lista_50[i] = [a, b, 1, 0]
-            lista_30[i] = [a, d, 1, 0]
-            lista_10[i] = [a, e, 1, 0]
+            lista_50[i] = [a, b, 0, 1]
+            lista_30[i] = [a, d, 0, 1]
+            lista_10[i] = [a, e, 0, 1]
 
         else:
             negatives += 1
@@ -90,9 +104,9 @@ def data_ganea(replace, positivi):
             for _ in range(porcent_10):
                 e += choice(num)
 
-            lista_50[i] = [a, b, 0, 1]
-            lista_30[i] = [a, d, 0, 1]
-            lista_10[i] = [a, e, 0, 1]
+            lista_50[i] = [a, b, 1, 0]
+            lista_30[i] = [a, d, 1, 0]
+            lista_10[i] = [a, e, 1, 0]
     print(f"Positives: {positives} | Negatives: {negatives}")
 
     df_50 = pd.DataFrame(

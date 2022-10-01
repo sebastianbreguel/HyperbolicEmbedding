@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
+from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, precision_score, recall_score
 import matplotlib.pyplot as plt
 import seaborn as sn
 from utils.data_Params import NM
@@ -16,7 +16,6 @@ from parameters import (
     URL_PREFIX_30,
     URL_PREFIX_50,
     IN_FEATURES,
-    OUT_FEATURES,
     BATCH_SIZE,
     LARGE,
     SEED,
@@ -73,9 +72,11 @@ def get_data(dataset) -> tuple:
 
     df = pd.read_csv(url, header=0)
     df = df.drop(df.columns[0], axis=1)
+
     if dataset == 0:
         X = df.iloc[:, :IN_FEATURES]
         y = df.iloc[:, IN_FEATURES:]
+
     else:
         X = df.iloc[:, 2:]
         # # columns isPrefix and isNotPrefix
@@ -183,7 +184,7 @@ def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
             y_true.extend(labels)  # Save Truth
 
         # constant for classes
-        classes = ("Prefix", "Random")
+        classes = ("Random", "Prefix")
         # obtain the position of the max
         new = []
         # Build confusion matrix
@@ -197,20 +198,33 @@ def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
         print(
             f"Accuracy of the network on the {len(y_test)} test data: {accuracy_score(y_true, y_pred)} %"
         )
-        print(f1_score(y_true, y_pred, average=None))
-        cf_matrix = confusion_matrix(y_true, y_pred)
-        print(cf_matrix)
-        df_cm = pd.DataFrame(
-            cf_matrix / np.sum(cf_matrix) * 10,
-            index=[i for i in classes],
-            columns=[i for i in classes],
-        )
-        plt.figure(figsize=(12, 7))
-        sn.heatmap(df_cm, annot=True)
-        plt.savefig(f"output-{loss}.png")
-        return accuracy_score(
-            y_true, y_pred
-        )  # , f1_score(y_true, y_pred, average=None), cf_matrix
+        # cf_matrix = confusion_matrix(y_true, y_pred)
+        # print(cf_matrix)
+         
+        list_info = [ accuracy_score(y_true, y_pred)]
+         
+        # f1 score for each class
+        # print("F1 score for each class")
+        # for i in range(len(classes)):
+        #     print(f"{classes[i]}: {f1_score(y_true, y_pred, average=None)[i]}")
+
+        # # precision score for each class
+        # print("Precision score for each class")
+        # for i in range(len(classes)):
+        #     print(f"{classes[i]}: {precision_score(y_true, y_pred, average=None, zero_division=1)[i]}")
+        
+        # # recall score for each class
+        # print("Recall score for each class")
+        # for i in range(len(classes)):
+        #     print(f"{classes[i]}: {recall_score(y_true, y_pred, average=None)[i]}")
+
+        # add to list info each data
+        list_info += f1_score(y_true, y_pred, average=None).tolist()
+        list_info += precision_score(y_true, y_pred, average=None, zero_division=1).tolist()
+        list_info += recall_score(y_true, y_pred, average=None).tolist()
+            
+        return list_info
+
     elif loss == "mse":
         print(
             f"Loss on Test Data: {round(np.linalg.norm(y_pred_list-y_test)/(0.2 * NM), 4)}"
