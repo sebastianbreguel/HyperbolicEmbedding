@@ -4,7 +4,13 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, precision_score, recall_score
+from sklearn.metrics import (
+    confusion_matrix,
+    f1_score,
+    accuracy_score,
+    precision_score,
+    recall_score,
+)
 import matplotlib.pyplot as plt
 import seaborn as sn
 from utils.data_Params import NM
@@ -151,24 +157,14 @@ def get_data(dataset) -> tuple:
     train_loader = DataLoader(
         dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True
     )
-    val_loader = DataLoader(dataset=val_dataset, batch_size=1)
-    test_loader = DataLoader(dataset=test_dataset, batch_size=1)
+    val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE, shuffle=True)
+    test_loader = DataLoader(dataset=test_dataset, batch_size=BATCH_SIZE, shuffle=True)
 
     return train_loader, val_loader, test_loader, y_test
 
 
 def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
     if loss == "cross":
-
-        # correct = 0
-        # for i in range(len(y_pred_list)):
-        #     max_value = max(y_pred_list[i])
-        #     index_max = y_pred_list[i].index(max_value)
-        #     max_real = max(y_test[i])
-        #     index_max_real = np.where(y_test[i] == max_real)[0][0]
-
-        #     if index_max == index_max_real:
-        #         correct += 1
 
         y_pred = []
         y_true = []
@@ -194,35 +190,20 @@ def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
             new.append(index)
 
         y_true = new
-        # print("Accuracy", accuracy_score(y_true, y_pred))
         print(
-            f"Accuracy of the network on the {len(y_test)} test data: {accuracy_score(y_true, y_pred)} %"
+            f"Accuracy on the {len(y_test)} test data: {accuracy_score(y_true, y_pred)} %",
+            end=" | ",
         )
-        # cf_matrix = confusion_matrix(y_true, y_pred)
-        # print(cf_matrix)
-         
-        list_info = [ accuracy_score(y_true, y_pred)]
-         
-        # f1 score for each class
-        # print("F1 score for each class")
-        # for i in range(len(classes)):
-        #     print(f"{classes[i]}: {f1_score(y_true, y_pred, average=None)[i]}")
 
-        # # precision score for each class
-        # print("Precision score for each class")
-        # for i in range(len(classes)):
-        #     print(f"{classes[i]}: {precision_score(y_true, y_pred, average=None, zero_division=1)[i]}")
-        
-        # # recall score for each class
-        # print("Recall score for each class")
-        # for i in range(len(classes)):
-        #     print(f"{classes[i]}: {recall_score(y_true, y_pred, average=None)[i]}")
+        list_info = [accuracy_score(y_true, y_pred)]
 
         # add to list info each data
         list_info += f1_score(y_true, y_pred, average=None).tolist()
-        list_info += precision_score(y_true, y_pred, average=None, zero_division=1).tolist()
+        list_info += precision_score(
+            y_true, y_pred, average=None, zero_division=1
+        ).tolist()
         list_info += recall_score(y_true, y_pred, average=None).tolist()
-            
+
         return list_info
 
     elif loss == "mse":

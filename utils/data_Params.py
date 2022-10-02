@@ -4,7 +4,7 @@
 
 # GANEA
 
-NG = 20000  # Number of examples
+NG = 35000  # Number of examples
 R = 0.5  # Prefix Positive Samples
 NUM = 9  # Number of OPTIONS
 NUMBERS = [str(i) for i in range(0, NUM + 1)]

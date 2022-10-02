@@ -1,4 +1,3 @@
-from tkinter import W
 from model_data import get_data, get_model, get_accuracy
 import torch
 from parameters import EPOCHS, LEARNING_RATE, EPS, SEED
@@ -94,8 +93,9 @@ def train_eval(
         train_epoch_loss = 0
         model.train()
         for X_train_batch, y_train_batch in train_loader:
-            X_train_batch, y_train_batch = X_train_batch.to(device), y_train_batch.to(
-                device
+            X_train_batch, y_train_batch = (
+                X_train_batch.to(device),
+                y_train_batch.to(device),
             )
             optimizer.zero_grad()
 
@@ -114,8 +114,9 @@ def train_eval(
 
             model.eval()
             for X_val_batch, y_val_batch in val_loader:
-                X_val_batch, y_val_batch = X_val_batch.to(device), y_val_batch.to(
-                    device
+                X_val_batch, y_val_batch = (
+                    X_val_batch.to(device),
+                    y_val_batch.to(device),
                 )
                 y_val_pred = model(X_val_batch)
 
@@ -128,9 +129,7 @@ def train_eval(
         #     + f"\tTime: {((perf_counter() - initial)/60):.2f} minutes"
         # )
 
-        losses.append(
-            train_epoch_loss / len(train_loader)
-        )
+        losses.append(train_epoch_loss / len(train_loader))
         losses.append(val_epoch_loss / len(val_loader))
 
     y_pred_list = []
@@ -141,7 +140,6 @@ def train_eval(
             y_test_pred = model(X_batch)
             y_pred_list.append(y_test_pred.cpu().numpy())
     y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
-
 
     info = get_accuracy(loss, y_test, y_pred_list, model, test_loader)
     final = info + losses
@@ -165,7 +163,7 @@ if "__main__" == __name__:
     )
     parser.add_argument("--model", action="store", help="Model to use")
     parser.add_argument("--optimizer", action="store", help="Optimizer to use")
-    parser.add_argument("--replace", type=bool, help="", default=False)
+    parser.add_argument("--replace", type=float, help="", default=0.5)
     parser.add_argument("--dataset", type=int, help="", default=10)
     parser.add_argument("--loss", action="store", help="Loss to use")
     parser.add_argument("--task", action="store", help="task to use")
@@ -184,46 +182,54 @@ if "__main__" == __name__:
     id = 0
     HIDDEN = 16
     # create a csv names datas
-    initial = ["id", "model", "optimizer", "loss", "task", "dataset", "Ratio", "Replace", "Accuracy", "F1 Prefix", "F1 random", "Recall Prefix", "Recall random", "Precision Prefix", "Precision random"]
+    start = perf_counter()
+    initial = [
+        "id",
+        "model",
+        "optimizer",
+        "loss",
+        "task",
+        "dataset",
+        "Ratio",
+        "Replace",
+        "Accuracy",
+        "F1 Prefix",
+        "F1 random",
+        "Recall Prefix",
+        "Recall random",
+        "Precision Prefix",
+        "Precision random",
+    ]
     for i in range(EPOCHS):
         initial.append(f"Train Loss {i}")
         initial.append(f"Val Loss {i}")
-    print(initial)
-    with open("data.csv", "w") as f:
+
+    with open(f"data_{replace}.csv", "w") as f:
         writter = csv.writer(f)
         writter.writerow(initial)
 
         for r in [0.5, 0.25, 0.75]:
-            for replace in [0.1, 0.3, 0.5]:
-                generate_data(delete_folder, create_folder, replace, r, task)
-                print("gen data")
+            generate_data(delete_folder, create_folder, replace, r, task)
+            print("gen data")
 
-                for dataset in [10, 30, 50]:
-                    for model in ["euclidean", "hyperbolic"]:
-                        print(
-                            "#" * 30
-                            + f"\nRunning {model} Model - {optimizer} Optimizer - {loss} Loss - {task} Task - {dataset} Dataset - {r} Ratio - {replace} Replace\n"
-                            + "#" * 30
-                        )
-                        info = [id, model, optimizer, loss, task, dataset, r, replace]
-                        data = []
+            for dataset in [10, 30, 50]:
+                for model in ["euclidean", "hyperbolic"]:
+                    print(
+                        "#" * 30
+                        + f"\nRunning {model} Model - {optimizer} Optimizer - {loss} Loss - {task} Task - {dataset} Dataset - {r} Ratio - {replace} Replace\n"
+                        + "#" * 30
+                    )
+                    info = [id, model, optimizer, loss, task, dataset, r, replace]
 
-                        for i in range(1):
-                            print(f"ready {i}")
+                    for i in range(25):
+                        print(f"{id}) ", end=" ")
 
-                            data.append(
-                                train_eval(model, optimizer, dataset, loss, HIDDEN)
-                            )
-                        #obtain the mean of every column
-                        data = np.array(data, dtype=object)
-                        # data mean
+                        data = train_eval(model, optimizer, dataset, loss, HIDDEN)
 
-                        data = data.mean( axis=0)
-                        # pass data to a list
-                        data = data.tolist()
-                        # add the id and the info to the data
                         data = info + data
+
                         writter.writerow(data)
 
+                        print(f"{round((perf_counter()-start)/60,2)} minutes")
 
                         id += 1
