@@ -48,7 +48,6 @@ def copy_or_set_(dest, source):
         return dest.set_(source)
 
 
-
 class RiemannianAdam(OptimMixin, torch.optim.Adam):
     r"""
     Riemannian Adam with the same API as :class:`torch.optim.Adam`.
@@ -135,8 +134,11 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
                     grad = manifold.egrad2rgrad(point, grad)
                     exp_avg.mul_(betas[0]).add_(grad, alpha=1 - betas[0])
                     print(betas[1])
-                    print(exp_avg_sq.mul_(betas[1]).shape, "hola",
-                        manifold.inner(point, grad).shape )
+                    print(
+                        exp_avg_sq.mul_(betas[1]).shape,
+                        "hola",
+                        manifold.inner(point, grad).shape,
+                    )
                     exp_avg_sq.mul_(betas[1]).add_(
                         manifold.inner(point, grad), alpha=1 - betas[1]
                     )

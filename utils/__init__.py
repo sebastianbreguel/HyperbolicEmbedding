@@ -1,1 +1,1 @@
-from .general import generate_data
+from .generate import generate_data

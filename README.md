@@ -2,54 +2,101 @@
 
 This is a repository to investigate how to generate music based in Hyperbolic Embeddings
 
-To create the dataset :
+```bash
+main.py
+|__📂utils
+|   |__📜functions.py
+|   |__📜generate.py
+|   |__📜model_data.py
+|   |__📜parameters.py
+|
+|__📂NNs
+|   |__ 📜hyperbolic.py      #have the neuronal network for both manfiolds
+|
+|__📂Optimizer
+|   |__ 📜Radam.py           #not ready
+|
+|__📂Manifolds
+|   |__📜base.py
+|   |__📜Euclidean.py
+|   |__📜poincare.py
+|
+|__📂data
+|   |__📜data_10.csv
+|   |__📜data_30.csv
+|   |__📜data_50.csv
+|   |__📜Phylogenetics.csv    # For mircea experiment
+|
+|_📂Analisis
+   |__📜Analisis.ipynb
 
-```sh
-python3 main.py --gen_data --replace
 ```
 
-```sh
-python main.py --gen_data --replace
+# Usage
+
+#### Arguments to create data
+
+```bash
+--generate_data : Generate data from midi files
+--create_folder : Create folder to save data
+--task: Task to train, could be ganea(classification) or mircea(regression)
+--replace: if task 'ganea'-> Make prefix with noise
 ```
 
-To run the model:
+#### Arguments to run model
 
-- Euclidean Adam:
-
-```sh
-python3 main.py --make_train_eval --model euclidean --optimizer Adam
+```bash
+--train_eval : Train and evaluate the model
+--model: Model to train, colud be euclidean or hyperbolic
+--optimizer: Optimizer to train, could be SGD or Adam
+--loss: Loss to train, could be mse or cross
+--dataset: determinate the large of the prefix
+        - 0: if task mircea
+        - 10, 30 o 50: if task ganea
 ```
 
-```sh
-python main.py --make_train_eval --model euclidean --optimizer Adam
+### Examples
+
+1. Run model euclidean with dataset 10 on task ganea
+
+```python
+python main.py --train_eval --model euclidean --task ganea --loss cross --dataset 10
+
 ```
 
-- Euclidean RiemannianAdam:
+2. Run model hyperbolic with dataset 10 on task ganea
 
-```sh
-python3 main.py --make_train_eval --model euclidean --optimizer RiemannianAdam
+```python
+python main.py --train_eval --model hyperbolic --task ganea --loss cross --dataset 10
 ```
 
-```sh
-python main.py --make_train_eval --model euclidean --optimizer RiemannianAdam
+3. Run model euclidean with dataset 0 on task ganea
+
+```python
+python main.py --train_eval --model euclidean --task mircea --loss mse --dataset 0
+
 ```
 
-- Hyperbolic Adam:
+4. **_run and create data_**
 
-```sh
-python3 main.py --make_train_eval --model hyperbolic --optimizer Adam
+```python
+python main.py --generate_data --create_folder --task ganea --replace --train_eval --model euclidean --task ganea --loss cross --dataset 10
 ```
 
-```sh
-python main.py --make_train_eval --model hyperbolic --optimizer Adam
-```
+#### TODO
 
-- Hyperbolic RiemannianAdam:
+- [ ] Add more datasets
+- [ ] Implement Riemannian Adam
+- [ ] Implement Riemannian SGD
+- [ ] Expand to RNN
 
-```sh
-python3 main.py --make_train_eval --model hyperbolic --optimizer RiemannianAdam
-```
+## References
 
-```sh
-python main.py --make_train_eval --model hyperbolic --optimizer RiemannianAdam
-```
+- Hyperbolic Neural Networks: [paper](https://arxiv.org/abs/1805.09112)-[github](https://github.com/dalab/hyperbolic_nn)
+- Codes for Network Embedding: [github](https://github.com/chenweize1998/fully-hyperbolic-nn/tree/main/gcn)
+- Poincaré Embeddings for Learning Hierarchical Representations: [paper](https://papers.nips.cc/paper/2017/hash/59dfa2df42d9e3d41f5b02bfc32229dd-Abstract.html) - [github](https://github.com/facebookresearch/poincare-embeddings)
+
+## Usefull
+
+- [Hyperbolic Algorithms](https://github.com/drewwilimitis/hyperbolic-learning)
+- [Hyperbolic Embedding](https://github.com/prokopevaleksey/poincare-embeddings)

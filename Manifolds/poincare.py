@@ -18,7 +18,6 @@ class PoincareBall(Manifold):
         self.name = "PoincareBall"
         self.min_norm = 1e-15
         self.c = c
-        print(self.c)
         self.eps = {torch.float32: 4e-3, torch.float32: 1e-5}
 
     def sqdist(self, p1, p2):
@@ -33,20 +32,15 @@ class PoincareBall(Manifold):
         x_sqnorm = torch.sum(x.data.pow(2), dim=-1, keepdim=True)
         return 2 / (1.0 - self.c * x_sqnorm).clamp_min(self.min_norm)
 
-
-
     def transp(self, x: torch.Tensor, y: torch.Tensor, v: torch.Tensor, *, dim=-1):
         return self.ptransp(x, y, v)
-
 
     def retr(self, x: torch.Tensor, u: torch.Tensor, *, dim=-1) -> torch.Tensor:
         # always assume u is scaled properly
         approx = x + u
         return self.proj(approx)
 
-    def retr_transp(
-        self, x: torch.Tensor, u: torch.Tensor, v: torch.Tensor, *, dim=-1
-    ) :
+    def retr_transp(self, x: torch.Tensor, u: torch.Tensor, v: torch.Tensor, *, dim=-1):
         y = self.retr(x, u, dim=dim)
         v_transp = self.transp(x, y, v, dim=dim)
         return y, v_transp
@@ -139,8 +133,8 @@ class PoincareBall(Manifold):
             v = u
         lambda_x = self._lambda_x(x)
         aux = lambda_x.pow(2) * (u * v).sum(dim=-1, keepdim=keepdim)
-        print("holiwi",aux)
-        if len(aux.shape)==1:
+        print("holiwi", aux)
+        if len(aux.shape) == 1:
             return aux
         return aux.squeeze()
         # return lambda_x**2 * (u * v).sum(dim=-1, keepdim=keepdim)

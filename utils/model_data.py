@@ -4,21 +4,29 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
+from sklearn.metrics import (
+    confusion_matrix,
+    f1_score,
+    accuracy_score,
+    precision_score,
+    recall_score,
+)
 import matplotlib.pyplot as plt
 import seaborn as sn
-from utils.data_Params import NM
 
 # Parameters
-from parameters import (
+from utils.parameters import (
     URL,
     URL_PREFIX_10,
+    URL_PREFIX_20,
     URL_PREFIX_30,
+    URL_PREFIX_40,
     URL_PREFIX_50,
     IN_FEATURES,
-    OUT_FEATURES,
     BATCH_SIZE,
+    NM,
     LARGE,
+    SEED,
 )
 
 # Custom NN and Manifolds
@@ -28,18 +36,10 @@ from NNs import HNNLayer
 
 
 def get_model(option: str, dataset: int, hidden: int) -> torch.nn.Module:
-    inputs = 20 
+    inputs = 20 + int(dataset * 0.2)
     outputs = 2
 
-    if dataset == 10:
-        inputs += 2
-
-    elif dataset == 30:
-        inputs += 6
-
-    elif dataset == 50:
-        inputs += 10
-    elif dataset == 0:
+    if dataset == 0:
         inputs = 140
         outputs = 6
 
@@ -58,28 +58,37 @@ def get_model(option: str, dataset: int, hidden: int) -> torch.nn.Module:
     return model
 
 
-def get_data(dataset) -> tuple:
+def get_data(dataset, replace) -> tuple:
+    np.random.seed(SEED)
 
     if dataset == 10:
-        url = URL_PREFIX_10
+        url = URL_PREFIX_10 + "_" + str(replace) + ".csv"
+    elif dataset == 20:
+        url = URL_PREFIX_20 + "_" + str(replace) + ".csv"
+
     elif dataset == 30:
-        url = URL_PREFIX_30
+        url = URL_PREFIX_30 + "_" + str(replace) + ".csv"
+
+    elif dataset == 40:
+        url = URL_PREFIX_40 + "_" + str(replace) + ".csv"
+
     elif dataset == 50:
-        url = URL_PREFIX_50
+        url = URL_PREFIX_50 + "_" + str(replace) + ".csv"
+
     elif dataset == 0:
         url = URL
 
     df = pd.read_csv(url, header=0)
     df = df.drop(df.columns[0], axis=1)
+
     if dataset == 0:
         X = df.iloc[:, :IN_FEATURES]
         y = df.iloc[:, IN_FEATURES:]
+
     else:
         X = df.iloc[:, 2:]
         # # columns isPrefix and isNotPrefix
         y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
-
-
 
     ##########################
     #####Train — Validation — Test
@@ -148,25 +157,16 @@ def get_data(dataset) -> tuple:
     ##########################
 
     train_loader = DataLoader(
-        dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True
+        dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0
     )
-    val_loader = DataLoader(dataset=val_dataset, batch_size=1)
-    test_loader = DataLoader(dataset=test_dataset, batch_size=1)
+    val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE, shuffle=True)
+    test_loader = DataLoader(dataset=test_dataset, batch_size=BATCH_SIZE, shuffle=True)
 
     return train_loader, val_loader, test_loader, y_test
 
-def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
+
+def get_info(loss, y_test, y_pred_list, model, test_loader):
     if loss == "cross":
-
-        # correct = 0
-        # for i in range(len(y_pred_list)):
-        #     max_value = max(y_pred_list[i])
-        #     index_max = y_pred_list[i].index(max_value)
-        #     max_real = max(y_test[i])
-        #     index_max_real = np.where(y_test[i] == max_real)[0][0]
-
-        #     if index_max == index_max_real:
-        #         correct += 1
 
         y_pred = []
         y_true = []
@@ -182,8 +182,6 @@ def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
             y_true.extend(labels)  # Save Truth
 
         # constant for classes
-        classes = ("Prefix", "Random")
-        # obtain the position of the max
         new = []
         # Build confusion matrix
         for i in y_true:
@@ -192,22 +190,55 @@ def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
             new.append(index)
 
         y_true = new
-        # print("Accuracy", accuracy_score(y_true, y_pred))
         print(
-            f"Accuracy of the network on the {len(y_test)} test data: {accuracy_score(y_true, y_pred)} %"
+            f"Accuracy on the {len(y_test)} test data: {accuracy_score(y_true, y_pred)} %",
+            end=" | ",
         )
-        print(f1_score(y_true, y_pred, average=None))
-        cf_matrix = confusion_matrix(y_true, y_pred)
-        print(cf_matrix)
-        df_cm = pd.DataFrame(
-            cf_matrix / np.sum(cf_matrix) * 10,
-            index=[i for i in classes],
-            columns=[i for i in classes],
-        )
-        plt.figure(figsize=(12, 7))
-        sn.heatmap(df_cm, annot=True)
-        plt.savefig(f"output-{loss}.png")
-        return accuracy_score(y_true, y_pred)#, f1_score(y_true, y_pred, average=None), cf_matrix
+
+        list_info = [round(accuracy_score(y_true, y_pred), 3)]
+        # add to list info each data
+        list_info += f1_score(y_true, y_pred, average=None).tolist()
+        list_info += precision_score(
+            y_true, y_pred, average=None, zero_division=1
+        ).tolist()
+        list_info += recall_score(y_true, y_pred, average=None).tolist()
+
+        return list_info
+
     elif loss == "mse":
-        print(f"Loss on Test Data: {round(np.linalg.norm(y_pred_list-y_test)/(0.2 * NM), 4)}")
-        return round(np.linalg.norm(y_pred_list-y_test)/(0.2 * NM), 4)
+        print(
+            f"Loss on Test Data: {round(np.linalg.norm(y_pred_list-y_test)/(0.2 * NM), 4)}"
+        )
+        return round(np.linalg.norm(y_pred_list - y_test) / (0.2 * NM), 4)
+
+
+def get_accuracy(loss, y_test, model, test_loader):
+
+    y_pred = []
+    y_true = []
+
+    # iterate over test data
+
+    with torch.no_grad():
+        for inputs, labels in test_loader:
+            output = model(inputs)  # Feed Network
+
+            output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()
+            y_pred.extend(output)  # Save Prediction
+
+            labels = labels.data.cpu().numpy()
+            y_true.extend(labels)  # Save Truth
+
+    if loss == "cross":
+        new = []
+        # Build confusion matrix
+        for i in y_true:
+            # obtain the index ob the max
+            index = np.where(i == 1)[0][0]
+            new.append(index)
+
+        y_true = new
+
+        return accuracy_score(y_true, y_pred)
+    else:
+        return round(np.linalg.norm(y_pred - y_test) / (0.2 * NM), 4)

@@ -1,10 +1,28 @@
 import pandas as pd
 import numpy as np
 from time import perf_counter
-from random import choice, sample, seed
-import random
+from random import choice, sample, seed, random
 
-from .data_Params import *
+from parameters import (
+    NG,
+    LARGE,
+    NUMBERS,
+    URL_PREFIX_50,
+    URL_PREFIX_40,
+    URL_PREFIX_30,
+    URL_PREFIX_20,
+    URL_PREFIX_10,
+    MAX_RANDOM,
+    MIN_RANDOM,
+    ROUND,
+    VOCABULARY,
+    EMB,
+    NM,
+    V,
+    SEED,
+    URL,
+    WORD_LARGE,
+)
 
 
 def beaty_print(start, initial, value, total, needed):
@@ -23,8 +41,67 @@ def beaty_print(start, initial, value, total, needed):
     )
     return start
 
-def data_ganea(replace, Positives):
-    random.seed(18625441)
+
+def prefixWord(porcent, K, previus):
+    new_word = ""
+
+    r = sample(range(porcent), K)
+    for i in range(porcent):
+        if i in r:
+            new_word += choice(NUMBERS)
+        else:
+            new_word += previus[i]
+    return new_word
+
+
+def processdf(porcentaje, df, url):
+    for i in range(WORD_LARGE):
+        df[f"word-{i}"] = df["Word"].apply(lambda x: str(x)[i])
+
+    for i in range(porcentaje):
+        df[f"prefix-{i}"] = df["Prefix"].apply(lambda x: str(x)[i])
+
+    df = df.drop(["Word", "Prefix"], axis=1).drop_duplicates()
+    df.to_csv(url)
+
+
+def generate_df(porcentaje, url, positivi, replace, words_bank):
+
+    lista = [[]] * NG
+    # amount of the random/Prefix
+    porcent = int(porcentaje * WORD_LARGE)
+    # letter to change
+    K = int(porcent * replace)
+    print(f"{K}-{porcent}")
+
+    for i in range(NG):
+        a = words_bank[i]
+        if random() < positivi:
+            b = prefixWord(porcent, K, a)
+            lista[i] = [a, b, 0, 1]
+
+        else:
+            b = "".join(sample(NUMBERS, porcent))
+            lista[i] = [a, b, 1, 0]
+
+    df = pd.DataFrame(lista, columns=["Word", "Prefix", "isPrefix", "isNotPrefix"])
+    processdf(porcent, df, url)
+
+
+def data_ganea(replace: float, positivi: float) -> None:
+    seed(SEED)
+    words_bank = []
+    for _ in range(NG):
+        words_bank.append("".join(sample(NUMBERS, WORD_LARGE)))
+
+    generate_df(0.5, f"{URL_PREFIX_50}_{replace}.csv", positivi, replace, words_bank)
+    generate_df(0.4, f"{URL_PREFIX_40}_{replace}.csv", positivi, replace, words_bank)
+    generate_df(0.3, f"{URL_PREFIX_30}_{replace}.csv", positivi, replace, words_bank)
+    generate_df(0.2, f"{URL_PREFIX_20}_{replace}.csv", positivi, replace, words_bank)
+    generate_df(0.1, f"{URL_PREFIX_10}_{replace}.csv", positivi, replace, words_bank)
+
+
+def data_ganea1(replace, Positives):
     num = NUMBERS
 
     lista_50 = [[]] * NG
@@ -35,15 +112,11 @@ def data_ganea(replace, Positives):
     porcent_50 = int(total * 0.5)
     porcent_30 = int(total * 0.3)
     porcent_10 = int(total * 0.1)
-    K1= int(porcent_50 * 0.5)
-    K2= int(porcent_30 * 0.5)
-    K3= int(porcent_10 * 0.5)
-
+    K1 = int(porcent_50 * replace)
+    K2 = int(porcent_30 * replace)
+    K3 = int(porcent_10 * replace)
 
     print(f"Total: {total} | 50%: {porcent_50} | 30%: {porcent_30} | 10%: {porcent_10}")
-    print(f"K: {K} | R: {R} | NG: {NG}")
-    print(f"NUMBERS: {num}")
-    print(f"K -> 50%: {K} | 30%: {K*2/3} | 10%:{K/3}")
     positives = 0
     negatives = 0
     for i in range(NG):
@@ -55,7 +128,7 @@ def data_ganea(replace, Positives):
         b = ""
         d = ""
         e = ""
-        if random.random() < Positives:
+        if random() < Positives:
             positives += 1
 
             # CHANGES OF LETTERS IN THE PREFIX
@@ -131,6 +204,7 @@ def data_ganea(replace, Positives):
     df_10 = df_10.drop(["Word", "Prefix"], axis=1).drop_duplicates()
     df_10.to_csv(URL_PREFIX_10)
 
+
 def data_mircea():
 
     #    A
@@ -197,7 +271,7 @@ def data_mircea():
                 g.append(choice(VOCABULARY))
             else:
                 g.append(c[i])
-        
+
         for i in range(V):
 
             a[i] = EMB[a[i]]
@@ -208,12 +282,29 @@ def data_mircea():
             f[i] = EMB[f[i]]
             g[i] = EMB[g[i]]
 
-        dist = [p1, p2, p1 + p3, p1 + p4, p2 + p5, p2 + p6,
-        p1 + p2, p3, p4, p1 + p2 + p5, p1 + p2 + p6,
-        p2 + p1 + p3, p2 + p1 + p4, p5, p6,
-        p3 + p4, p3 + p1 + p2 + p5, p3 + p1 + p2 + p6,
-        p4 + p1 + p2 + p5, p4 + p1 + p2 + p6,
-        p5 + p6]
+        dist = [
+            p1,
+            p2,
+            p1 + p3,
+            p1 + p4,
+            p2 + p5,
+            p2 + p6,
+            p1 + p2,
+            p3,
+            p4,
+            p1 + p2 + p5,
+            p1 + p2 + p6,
+            p2 + p1 + p3,
+            p2 + p1 + p4,
+            p5,
+            p6,
+            p3 + p4,
+            p3 + p1 + p2 + p5,
+            p3 + p1 + p2 + p6,
+            p4 + p1 + p2 + p5,
+            p4 + p1 + p2 + p6,
+            p5 + p6,
+        ]
         dist = [p1, p2, p3, p4, p5, p6]
 
         for i in a:

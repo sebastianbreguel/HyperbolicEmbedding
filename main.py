@@ -1,28 +1,28 @@
-from tkinter import E
-from model_data import get_data, get_model, get_accuracy
+from utils.model_data import get_data, get_model, get_accuracy, get_info
 import torch
-from parameters import EPOCHS, LEARNING_RATE, EPS
-import numpy as np
+from utils.parameters import EPOCHS, LEARNING_RATE, EPS, SEED
 import torch.nn as nn
 import torch.nn.functional as F
+import csv
+import numpy as np
 
 # from Optimizer import RiemannianAdam
 from Manifolds.base import ManifoldParameter
-
-from geoopt.optim import RiemannianAdam, RiemannianSGD
+from geoopt.optim import RiemannianAdam
 from utils import generate_data
 import argparse
 from time import perf_counter
-from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
-from time import perf_counter, time
-import pandas as pd
-import seaborn as sn
-import matplotlib.pyplot as plt
 
 
-def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str, hidden: int) -> None:
+def train_eval(
+    option_model: str,
+    optimizer_option: str,
+    dataset: int,
+    loss: str,
+    replace,
+) -> None:
 
-    train_loader, val_loader, test_loader, y_test = get_data(dataset)
+    train_loader, val_loader, test_loader, y_test = get_data(dataset, replace)
 
     ##########################
     #####    MODEL
@@ -81,7 +81,7 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str
             stabilize=10,
             betas=(0.9, 0.999),
         )
-    print(f"Running {option_model} Model - {optimizer_option} Optimizer", LEARNING_RATE)
+    # print(f"Running {option_model} Model - {optimizer_option} Optimizer", LEARNING_RATE)
     # print(model)
 
     ##########################
@@ -90,14 +90,19 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str
 
     torch.autograd.set_detect_anomaly(True)
     initial = perf_counter()
-    print("Begin training.")
+
+    train_losses = []
+    val_losses = []
+    train_accuracy = []
+    test_accuracy = []
     for e in range(1, EPOCHS + 1):
         # TRAINING
         train_epoch_loss = 0
         model.train()
         for X_train_batch, y_train_batch in train_loader:
-            X_train_batch, y_train_batch = X_train_batch.to(device), y_train_batch.to(
-                device
+            X_train_batch, y_train_batch = (
+                X_train_batch.to(device),
+                y_train_batch.to(device),
             )
             optimizer.zero_grad()
 
@@ -108,6 +113,10 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str
 
             optimizer.step()
             train_epoch_loss += train_loss.item()
+            # calculate the train accuracy
+
+        acc = get_accuracy(loss, y_test, model, train_loader)
+        train_accuracy.append(acc)
 
         # VALIDATION
         with torch.no_grad():
@@ -116,19 +125,25 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str
 
             model.eval()
             for X_val_batch, y_val_batch in val_loader:
-                X_val_batch, y_val_batch = X_val_batch.to(device), y_val_batch.to(
-                    device
+                X_val_batch, y_val_batch = (
+                    X_val_batch.to(device),
+                    y_val_batch.to(device),
                 )
                 y_val_pred = model(X_val_batch)
 
                 val_loss = criterion(y_val_pred, y_val_batch)
 
                 val_epoch_loss += val_loss.item()
-        
+
+            # obtain the accuracy
+            acc = get_accuracy(loss, y_test, model, test_loader)
+            test_accuracy.append(acc)
+
         # print(
-        #         f"Epoch {e+0:03}:\tTrain Loss: {train_epoch_loss/len(train_loader):.4f}\tVal Loss: {val_epoch_loss/len(val_loader):.4f}"
-        #         + f"\tTime: {((perf_counter() - initial)/60):.2f} minutes"
-                # )
+        #     f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.5f} | Val Loss: {val_epoch_loss/len(val_loader):.5f} | Accuracy: {acc:.5f}"
+        # )
+        train_losses.append(train_epoch_loss / len(train_loader))
+        val_losses.append(val_epoch_loss / len(val_loader))
 
     y_pred_list = []
     with torch.no_grad():
@@ -139,13 +154,13 @@ def train_eval(option_model: str, optimizer_option: str, dataset: int, loss: str
             y_pred_list.append(y_test_pred.cpu().numpy())
     y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
 
-
-    return get_accuracy(loss, y_test, y_pred_list, model, test_loader)
+    info = get_info(loss, y_test, y_pred_list, model, test_loader)
+    final = info + train_losses + val_losses + train_accuracy + test_accuracy
+    return final
 
 
 if "__main__" == __name__:
     # seed torch
-    torch.manual_seed(18625541)
 
     parser = argparse.ArgumentParser()
 
@@ -154,14 +169,11 @@ if "__main__" == __name__:
         "--make_train_eval", action="store_true", help="Train and evaluate model"
     )
     parser.add_argument(
-        "--delete_folder", action="store_true", help="Delete data folder"
-    )
-    parser.add_argument(
         "--create_folder", action="store_true", help="Create data folder"
     )
     parser.add_argument("--model", action="store", help="Model to use")
     parser.add_argument("--optimizer", action="store", help="Optimizer to use")
-    parser.add_argument("--replace", type=bool, help="", default=False)
+    parser.add_argument("--replace", type=float, help="", default=0.5)
     parser.add_argument("--dataset", type=int, help="", default=10)
     parser.add_argument("--loss", action="store", help="Loss to use")
     parser.add_argument("--task", action="store", help="task to use")
@@ -169,7 +181,6 @@ if "__main__" == __name__:
     results = parser.parse_args()
     gen_data = results.gen_data
     make_train_eval = results.make_train_eval
-    delete_folder = results.delete_folder
     create_folder = results.create_folder
     model = results.model
     optimizer = results.optimizer
@@ -177,25 +188,64 @@ if "__main__" == __name__:
     dataset = results.dataset
     loss = results.loss
     task = results.task
-    r = 0.5
-    print(" R: ", type(r))
-    for replace in [0.1,0.3,0.5]:
-        print(" Replace: ", replace)
-        print("\n" + "#" * 21)
-        print("## GENERATING DATA ##")
-        print("#" * 21)
-        generate_data(delete_folder, create_folder, replace, r, task)
 
-        for dataset in [10,30,50]:
-            print(" DATASET: ", dataset)
-            resultados = []
-            epochs = [1, 2, 3, 5, 7, 10, 12, 15, 20, 25, 30]
-            hidden = [20, 21, 25, 30, 40, 42, 50, 70, 84, 100, 140]
-            for model in ["euclidean", "hyperbolic"]:
-                resultados.append([])
-                hidden = [16]
-                HIDDEN = hidden[0]
-                resultados[-1].append(train_eval(model, optimizer, dataset, loss, HIDDEN))
-                # print(hidden, resultados[-1])
-            #     plt.scatter(hidden, resultados[-1])
-            # plt.show()
+    id = 0
+    HIDDEN = 16
+    # create a csv names datas
+    start = perf_counter()
+    initial = [
+        "id",
+        "model",
+        "optimizer",
+        "loss",
+        "task",
+        "dataset",
+        "Ratio",
+        "Replace",
+        "Accuracy",
+        "F1 Prefix",
+        "F1 random",
+        "Recall Prefix",
+        "Recall random",
+        "Precision Prefix",
+        "Precision random",
+    ]
+    for i in range(EPOCHS):
+        initial.append(f"Train Loss {i}")
+
+    for i in range(EPOCHS):
+        initial.append(f"Val Loss {i}")
+
+    for i in range(EPOCHS):
+        initial.append(f"test Accuracy {i}")
+    for i in range(EPOCHS):
+        initial.append(f"train Accuracy {i}")
+
+    with open(f"data_{replace}.csv", "w") as f:
+        writter = csv.writer(f)
+        writter.writerow(initial)
+
+        for r in [0.5, 0.25, 0.75]:
+            generate_data(create_folder, replace, r, task)
+            print("gen data")
+            for dataset in [50, 30, 10]:
+                for model in ["euclidean", "hyperbolic"]:
+                    print(
+                        "#" * 30
+                        + f"\nRunning {model} Model - {optimizer} Optimizer - {loss} Loss - {task} Task - {dataset} Dataset - {r} Ratio - {replace} Replace\n"
+                        + "#" * 30
+                    )
+                    info = [id, model, optimizer, loss, task, dataset, r, replace]
+
+                    for i in range(30):
+                        print(f"{id}) ", end=" ")
+
+                        data = train_eval(model, optimizer, dataset, loss, replace)
+
+                        data = info + data
+
+                        writter.writerow(data)
+
+                        print(f"{round((perf_counter()-start)/60,2)} minutes")
+
+                        id += 1
