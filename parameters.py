@@ -5,7 +5,7 @@ from utils.data_Params import *
 ##########################
 EPS = 1e-3
 EPOCHS = 30
-BATCH_SIZE = 32
+BATCH_SIZE = 64
 LEARNING_RATE = 0.003
 IN_FEATURES = 140
 OUT_FEATURES = 2

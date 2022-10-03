@@ -197,7 +197,7 @@ def get_info(loss, y_test, y_pred_list, model, test_loader):
             end=" | ",
         )
 
-        list_info = [accuracy_score(y_true, y_pred)]
+        list_info = [round(accuracy_score(y_true, y_pred),3)]
         # add to list info each data
         list_info += f1_score(y_true, y_pred, average=None).tolist()
         list_info += precision_score(

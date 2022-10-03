@@ -89,7 +89,8 @@ def train_eval(
 
     train_losses = []
     val_losses = []
-    accuracy = []
+    train_accuracy = []
+    test_accuracy = []
     for e in range(1, EPOCHS + 1):
         # TRAINING
         train_epoch_loss = 0
@@ -108,6 +109,10 @@ def train_eval(
 
             optimizer.step()
             train_epoch_loss += train_loss.item()
+            # calculate the train accuracy
+        
+        acc = get_accuracy(loss, y_test, model, train_loader)
+        train_accuracy.append(acc)
 
         # VALIDATION
         with torch.no_grad():
@@ -128,7 +133,7 @@ def train_eval(
 
             # obtain the accuracy
             acc = get_accuracy(loss, y_test, model, test_loader)
-            accuracy.append(acc)
+            test_accuracy.append(acc)
 
         # print(
         #     f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.5f} | Val Loss: {val_epoch_loss/len(val_loader):.5f} | Accuracy: {acc:.5f}"
@@ -146,7 +151,7 @@ def train_eval(
     y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
 
     info = get_info(loss, y_test, y_pred_list, model, test_loader)
-    final = info + train_losses + val_losses + accuracy
+    final = info + train_losses + val_losses + train_accuracy + test_accuracy
     return final
 
 
@@ -212,17 +217,18 @@ if "__main__" == __name__:
         initial.append(f"Val Loss {i}")
 
     for i in range(EPOCHS):
-        initial.append(f"Accuracy {i}")
-
-    with open(f"data_{replace}.csv", "w") as f:
+        initial.append(f"test Accuracy {i}")
+    for i in range(EPOCHS):
+        initial.append(f"train Accuracy {i}")
+    
+    with open(f"data_{dataset}.csv", "w") as f:
         writter = csv.writer(f)
         writter.writerow(initial)
 
         for r in [0.5, 0.25, 0.75]:
             generate_data(delete_folder, create_folder, replace, r, task)
             print("gen data")
-
-            for dataset in [50, 40, 30, 20, 10]:
+            for replace in [0.5,0.3,0.1]:
                 for model in ["euclidean", "hyperbolic"]:
                     print(
                         "#" * 30
@@ -231,7 +237,7 @@ if "__main__" == __name__:
                     )
                     info = [id, model, optimizer, loss, task, dataset, r, replace]
 
-                    for i in range(2):
+                    for i in range(30):
                         print(f"{id}) ", end=" ")
 
                         data = train_eval(model, optimizer, dataset, loss, HIDDEN)
