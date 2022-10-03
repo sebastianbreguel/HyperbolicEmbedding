@@ -3,13 +3,8 @@ from .functions import data_ganea, data_mircea
 from time import sleep
 
 
-def generate_data(delete_folder, create_folder, replace, r, task) -> None:
+def generate_data( create_folder, replace, r, task) -> None:
     # Generate the folder
-    if delete_folder:
-        print("#" * 20, "\nDeleting folder")
-        os.system("rm -rf data")
-        sleep(1)
-        print("Folder deleted\n")
 
     if create_folder:
         print("Creating folder")

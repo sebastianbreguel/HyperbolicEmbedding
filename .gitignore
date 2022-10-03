@@ -3,3 +3,10 @@
 data
 **/.DS_Store
 *.png
+data_0.1.csv
+analisis/task1
+*.ipynb_checkpoint
+
+*.csv
+
+analysis.ipynb

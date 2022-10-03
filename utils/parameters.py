@@ -1,10 +1,24 @@
+
+##########################
+#####    Model Params
+##########################
+EPS = 1e-3
+EPOCHS = 15
+BATCH_SIZE = 32
+LEARNING_RATE = 0.003
+IN_FEATURES = 140
+OUT_FEATURES = 2
+SEED = 0
+
+
+
 ##########################
 #####    Data Params
 ##########################
 
 # GANEA
 
-NG = 45000  # Number of examples
+NG = 40000  # Number of examples
 R = 0.5  # Prefix Positive Samples
 NUM = 9  # Number of OPTIONS
 NUMBERS = [str(i) for i in range(0, NUM + 1)] * 4
@@ -14,7 +28,6 @@ URL_PREFIX_30 = "data/Prefix/Prefix_30"
 URL_PREFIX_20 = "data/Prefix/Prefix_20"
 URL_PREFIX_10 = "data/Prefix/Prefix_10"
 LARGE = 1
-K = 3 * LARGE  # Nuof changes
 WORD_LARGE = 20
 
 # MIRCEA

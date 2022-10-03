@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.init as init
 import math
-from utils.data_Params import *
 from Manifolds.base import ManifoldParameter
 import torch.nn.functional as F
 

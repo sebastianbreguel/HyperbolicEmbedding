@@ -1,6 +1,6 @@
-from model_data import get_data, get_model, get_accuracy, get_info
+from utils.model_data import get_data, get_model, get_accuracy, get_info
 import torch
-from parameters import EPOCHS, LEARNING_RATE, EPS, SEED
+from utils.parameters import EPOCHS, LEARNING_RATE, EPS, SEED
 import torch.nn as nn
 import torch.nn.functional as F
 import csv
@@ -19,7 +19,6 @@ def train_eval(
     optimizer_option: str,
     dataset: int,
     loss: str,
-    hidden: int,
     replace,
 ) -> None:
 
@@ -170,9 +169,6 @@ if "__main__" == __name__:
         "--make_train_eval", action="store_true", help="Train and evaluate model"
     )
     parser.add_argument(
-        "--delete_folder", action="store_true", help="Delete data folder"
-    )
-    parser.add_argument(
         "--create_folder", action="store_true", help="Create data folder"
     )
     parser.add_argument("--model", action="store", help="Model to use")
@@ -185,7 +181,6 @@ if "__main__" == __name__:
     results = parser.parse_args()
     gen_data = results.gen_data
     make_train_eval = results.make_train_eval
-    delete_folder = results.delete_folder
     create_folder = results.create_folder
     model = results.model
     optimizer = results.optimizer
@@ -231,7 +226,7 @@ if "__main__" == __name__:
         writter.writerow(initial)
 
         for r in [0.5, 0.25, 0.75]:
-            generate_data(delete_folder, create_folder, replace, r, task)
+            generate_data( create_folder, replace, r, task)
             print("gen data")
             for dataset in [50, 30, 10]:
                 for model in ["euclidean", "hyperbolic"]:
@@ -246,7 +241,7 @@ if "__main__" == __name__:
                         print(f"{id}) ", end=" ")
 
                         data = train_eval(
-                            model, optimizer, dataset, loss, HIDDEN, replace
+                            model, optimizer, dataset, loss, replace
                         )
 
                         data = info + data

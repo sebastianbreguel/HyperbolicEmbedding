@@ -3,7 +3,7 @@ import numpy as np
 from time import perf_counter
 from random import choice, sample, seed, random
 
-from .data_Params import (
+from parameters import (
     NG,
     LARGE,
     NUMBERS,
@@ -19,10 +19,10 @@ from .data_Params import (
     EMB,
     NM,
     V,
+    SEED,
     URL,
     WORD_LARGE,
 )
-from parameters import SEED
 
 
 def beaty_print(start, initial, value, total, needed):

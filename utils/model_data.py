@@ -13,10 +13,9 @@ from sklearn.metrics import (
 )
 import matplotlib.pyplot as plt
 import seaborn as sn
-from utils.data_Params import NM
 
 # Parameters
-from parameters import (
+from utils.parameters import (
     URL,
     URL_PREFIX_10,
     URL_PREFIX_20,
@@ -25,6 +24,7 @@ from parameters import (
     URL_PREFIX_50,
     IN_FEATURES,
     BATCH_SIZE,
+    NM,
     LARGE,
     SEED,
 )
@@ -182,8 +182,6 @@ def get_info(loss, y_test, y_pred_list, model, test_loader):
             y_true.extend(labels)  # Save Truth
 
         # constant for classes
-        classes = ("Random", "Prefix")
-        # obtain the position of the max
         new = []
         # Build confusion matrix
         for i in y_true:
