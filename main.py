@@ -15,10 +15,15 @@ from time import perf_counter
 
 
 def train_eval(
-    option_model: str, optimizer_option: str, dataset: int, loss: str, hidden: int
+    option_model: str,
+    optimizer_option: str,
+    dataset: int,
+    loss: str,
+    hidden: int,
+    replace,
 ) -> None:
 
-    train_loader, val_loader, test_loader, y_test = get_data(dataset)
+    train_loader, val_loader, test_loader, y_test = get_data(dataset, replace)
 
     ##########################
     #####    MODEL
@@ -110,7 +115,7 @@ def train_eval(
             optimizer.step()
             train_epoch_loss += train_loss.item()
             # calculate the train accuracy
-        
+
         acc = get_accuracy(loss, y_test, model, train_loader)
         train_accuracy.append(acc)
 
@@ -220,15 +225,15 @@ if "__main__" == __name__:
         initial.append(f"test Accuracy {i}")
     for i in range(EPOCHS):
         initial.append(f"train Accuracy {i}")
-    
-    with open(f"data_{dataset}.csv", "w") as f:
+
+    with open(f"data_{replace}.csv", "w") as f:
         writter = csv.writer(f)
         writter.writerow(initial)
 
         for r in [0.5, 0.25, 0.75]:
             generate_data(delete_folder, create_folder, replace, r, task)
             print("gen data")
-            for replace in [0.5,0.3,0.1]:
+            for dataset in [50, 30, 10]:
                 for model in ["euclidean", "hyperbolic"]:
                     print(
                         "#" * 30
@@ -240,7 +245,9 @@ if "__main__" == __name__:
                     for i in range(30):
                         print(f"{id}) ", end=" ")
 
-                        data = train_eval(model, optimizer, dataset, loss, HIDDEN)
+                        data = train_eval(
+                            model, optimizer, dataset, loss, HIDDEN, replace
+                        )
 
                         data = info + data
 

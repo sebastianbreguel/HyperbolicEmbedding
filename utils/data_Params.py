@@ -4,15 +4,15 @@
 
 # GANEA
 
-NG = 35000  # Number of examples
+NG = 45000  # Number of examples
 R = 0.5  # Prefix Positive Samples
 NUM = 9  # Number of OPTIONS
 NUMBERS = [str(i) for i in range(0, NUM + 1)] * 4
-URL_PREFIX_50 = "data/Prefix/Prefix_50.csv"
-URL_PREFIX_40 = "data/Prefix/Prefix_40.csv"
-URL_PREFIX_30 = "data/Prefix/Prefix_30.csv"
-URL_PREFIX_20 = "data/Prefix/Prefix_20.csv"
-URL_PREFIX_10 = "data/Prefix/Prefix_10.csv"
+URL_PREFIX_50 = "data/Prefix/Prefix_50"
+URL_PREFIX_40 = "data/Prefix/Prefix_40"
+URL_PREFIX_30 = "data/Prefix/Prefix_30"
+URL_PREFIX_20 = "data/Prefix/Prefix_20"
+URL_PREFIX_10 = "data/Prefix/Prefix_10"
 LARGE = 1
 K = 3 * LARGE  # Nuof changes
 WORD_LARGE = 20

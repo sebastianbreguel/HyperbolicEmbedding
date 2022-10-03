@@ -58,22 +58,22 @@ def get_model(option: str, dataset: int, hidden: int) -> torch.nn.Module:
     return model
 
 
-def get_data(dataset) -> tuple:
+def get_data(dataset, replace) -> tuple:
     np.random.seed(SEED)
 
     if dataset == 10:
-        url = URL_PREFIX_10
+        url = URL_PREFIX_10 + "_" + str(replace) + ".csv"
     elif dataset == 20:
-        url = URL_PREFIX_20
+        url = URL_PREFIX_20 + "_" + str(replace) + ".csv"
 
     elif dataset == 30:
-        url = URL_PREFIX_30
+        url = URL_PREFIX_30 + "_" + str(replace) + ".csv"
 
     elif dataset == 40:
-        url = URL_PREFIX_40
+        url = URL_PREFIX_40 + "_" + str(replace) + ".csv"
 
     elif dataset == 50:
-        url = URL_PREFIX_50
+        url = URL_PREFIX_50 + "_" + str(replace) + ".csv"
 
     elif dataset == 0:
         url = URL
@@ -197,7 +197,7 @@ def get_info(loss, y_test, y_pred_list, model, test_loader):
             end=" | ",
         )
 
-        list_info = [round(accuracy_score(y_true, y_pred),3)]
+        list_info = [round(accuracy_score(y_true, y_pred), 3)]
         # add to list info each data
         list_info += f1_score(y_true, y_pred, average=None).tolist()
         list_info += precision_score(

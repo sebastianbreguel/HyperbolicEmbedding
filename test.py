@@ -3,46 +3,47 @@ import torch.nn as nn
 import torchvision.transforms as transforms
 import torchvision.datasets as dsets
 
-'''
+"""
 STEP 1: LOADING DATASET
-'''
+"""
 
-train_dataset = dsets.MNIST(root='./data', 
-                            train=True, 
-                            transform=transforms.ToTensor(),
-                            download=True)
+train_dataset = dsets.MNIST(
+    root="./data", train=True, transform=transforms.ToTensor(), download=True
+)
 
-test_dataset = dsets.MNIST(root='./data', 
-                           train=False, 
-                           transform=transforms.ToTensor())
+test_dataset = dsets.MNIST(root="./data", train=False, transform=transforms.ToTensor())
 
-'''
+"""
 STEP 2: MAKING DATASET ITERABLE
-'''
+"""
 
 batch_size = 100
 n_iters = 3000
 num_epochs = n_iters / (len(train_dataset) / batch_size)
 num_epochs = int(num_epochs)
 
-train_loader = torch.utils.data.DataLoader(dataset=train_dataset, 
-                                           batch_size=batch_size, 
-                                           shuffle=True,
-                                             num_workers=2,
-                                                pin_memory=True)
+train_loader = torch.utils.data.DataLoader(
+    dataset=train_dataset,
+    batch_size=batch_size,
+    shuffle=True,
+    num_workers=2,
+    pin_memory=True,
+)
 
-test_loader = torch.utils.data.DataLoader(dataset=test_dataset, 
-                                          batch_size=batch_size, 
-                                          shuffle=False)
+test_loader = torch.utils.data.DataLoader(
+    dataset=test_dataset, batch_size=batch_size, shuffle=False
+)
 
-'''
+"""
 STEP 3: CREATE MODEL CLASS
-'''
+"""
+
+
 class FeedforwardNeuralNetModel(nn.Module):
     def __init__(self, input_dim, hidden_dim, output_dim):
         super(FeedforwardNeuralNetModel, self).__init__()
         # Linear function 1: 784 --> 100
-        self.fc1 = nn.Linear(input_dim, hidden_dim) 
+        self.fc1 = nn.Linear(input_dim, hidden_dim)
         # Non-linearity 1
         self.relu1 = nn.ReLU()
 
@@ -57,7 +58,7 @@ class FeedforwardNeuralNetModel(nn.Module):
         self.relu3 = nn.ReLU()
 
         # Linear function 4 (readout): 100 --> 10
-        self.fc4 = nn.Linear(hidden_dim, output_dim)  
+        self.fc4 = nn.Linear(hidden_dim, output_dim)
 
     def forward(self, x):
         # Linear function 1
@@ -78,10 +79,12 @@ class FeedforwardNeuralNetModel(nn.Module):
         # Linear function 4 (readout)
         out = self.fc4(out)
         return out
-'''
+
+
+"""
 STEP 4: INSTANTIATE MODEL CLASS
-'''
-input_dim = 28*28
+"""
+input_dim = 28 * 28
 hidden_dim = 100
 output_dim = 10
 
@@ -94,22 +97,22 @@ model = FeedforwardNeuralNetModel(input_dim, hidden_dim, output_dim)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 model.to(device)
 
-'''
+"""
 STEP 5: INSTANTIATE LOSS CLASS
-'''
+"""
 criterion = nn.CrossEntropyLoss()
 
 
-'''
+"""
 STEP 6: INSTANTIATE OPTIMIZER CLASS
-'''
+"""
 learning_rate = 0.1
 
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
-'''
+"""
 STEP 7: TRAIN THE MODEL
-'''
+"""
 iter = 0
 for epoch in range(num_epochs):
     for i, (images, labels) in enumerate(train_loader):
@@ -117,7 +120,7 @@ for epoch in range(num_epochs):
         #######################
         #  USE GPU FOR MODEL  #
         #######################
-        images = images.view(-1, 28*28).requires_grad_().to(device)
+        images = images.view(-1, 28 * 28).requires_grad_().to(device)
         labels = labels.to(device)
 
         # Clear gradients w.r.t. parameters
@@ -138,7 +141,7 @@ for epoch in range(num_epochs):
         iter += 1
 
         if iter % 500 == 0:
-            # Calculate Accuracy         
+            # Calculate Accuracy
             correct = 0
             total = 0
             # Iterate through test dataset
@@ -146,7 +149,7 @@ for epoch in range(num_epochs):
                 #######################
                 #  USE GPU FOR MODEL  #
                 #######################
-                images = images.view(-1, 28*28).requires_grad_().to(device)
+                images = images.view(-1, 28 * 28).requires_grad_().to(device)
 
                 # Forward pass only to get logits/output
                 outputs = model(images)
@@ -169,4 +172,8 @@ for epoch in range(num_epochs):
             accuracy = 100 * correct / total
 
             # Print Loss
-            print('Iteration: {}. Loss: {}. Accuracy: {}'.format(iter, loss.item(), accuracy))
+            print(
+                "Iteration: {}. Loss: {}. Accuracy: {}".format(
+                    iter, loss.item(), accuracy
+                )
+            )
