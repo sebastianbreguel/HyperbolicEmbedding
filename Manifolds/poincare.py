@@ -21,12 +21,12 @@ class PoincareBall(Manifold):
         self.eps = {torch.float32: 4e-3, torch.float32: 1e-5}
 
     def sqdist(self, p1, p2):
-        sqrt_c = self.c ** 0.5
+        sqrt_c = self.c**0.5
         dist_c = artanh(
             sqrt_c * self.mobius_add(-p1, p2, dim=-1).norm(dim=-1, p=2, keepdim=False)
         )
         dist = dist_c * 2 / sqrt_c
-        return dist ** 2
+        return dist**2
 
     def _lambda_x(self, x):
         x_sqnorm = torch.sum(x.data.pow(2), dim=-1, keepdim=True)
@@ -52,7 +52,7 @@ class PoincareBall(Manifold):
 
     def proj(self, x):
         norm = torch.clamp_min(x.norm(dim=-1, keepdim=True, p=2), self.min_norm)
-        maxnorm = (1 - self.eps[x.dtype]) / (self.c ** 0.5)
+        maxnorm = (1 - self.eps[x.dtype]) / (self.c**0.5)
         cond = norm > maxnorm
         projected = x / norm * maxnorm
         return torch.where(cond, projected, x)
@@ -64,7 +64,7 @@ class PoincareBall(Manifold):
         return u
 
     def expmap(self, u, p):
-        sqrt_c = self.c ** 0.5
+        sqrt_c = self.c**0.5
         u_norm = u.norm(dim=-1, p=2, keepdim=True).clamp_min(self.min_norm)
         second_term = (
             tanh(sqrt_c / 2 * self._lambda_x(p) * u_norm) * u / (sqrt_c * u_norm)
@@ -76,17 +76,17 @@ class PoincareBall(Manifold):
         sub = self.mobius_add(-p1, p2)
         sub_norm = sub.norm(dim=-1, p=2, keepdim=True).clamp_min(self.min_norm)
         lam = self._lambda_x(p1)
-        sqrt_c = self.c ** 0.5
+        sqrt_c = self.c**0.5
         return 2 / sqrt_c / lam * artanh(sqrt_c * sub_norm) * sub / sub_norm
 
     def expmap0(self, u):
-        sqrt_c = self.c ** 0.5
+        sqrt_c = self.c**0.5
         u_norm = torch.clamp_min(u.norm(dim=-1, p=2, keepdim=True), self.min_norm)
         gamma_1 = tanh(sqrt_c * u_norm) * u / (sqrt_c * u_norm)
         return gamma_1
 
     def logmap0(self, p):
-        sqrt_c = self.c ** 0.5
+        sqrt_c = self.c**0.5
         p_norm = p.norm(dim=-1, p=2, keepdim=True).clamp_min(self.min_norm)
         scale = 1.0 / sqrt_c * artanh(sqrt_c * p_norm) / p_norm
         return scale * p
@@ -96,11 +96,11 @@ class PoincareBall(Manifold):
         y2 = y.pow(2).sum(dim=dim, keepdim=True)
         xy = (x * y).sum(dim=dim, keepdim=True)
         num = (1 + 2 * self.c * xy + self.c * y2) * x + (1 - self.c * x2) * y
-        denom = 1 + 2 * self.c * xy + self.c ** 2 * x2 * y2
+        denom = 1 + 2 * self.c * xy + self.c**2 * x2 * y2
         return num / denom.clamp_min(self.min_norm)
 
     def mobius_matvec(self, m, x):
-        sqrt_c = self.c ** 0.5
+        sqrt_c = self.c**0.5
         x_norm = x.norm(dim=-1, keepdim=True, p=2).clamp_min(self.min_norm)
         mx = x @ m.transpose(-1, -2)
         mx_norm = mx.norm(dim=-1, keepdim=True, p=2).clamp_min(self.min_norm)
@@ -122,7 +122,7 @@ class PoincareBall(Manifold):
         uv = (u * v).sum(dim=dim, keepdim=True)
         uw = (u * w).sum(dim=dim, keepdim=True)
         vw = (v * w).sum(dim=dim, keepdim=True)
-        c2 = self.c ** 2
+        c2 = self.c**2
         a = -c2 * uw * v2 + self.c * vw + 2 * c2 * uv * vw
         b = -c2 * vw * u2 - self.c * uw
         d = 1 + 2 * self.c * uv + c2 * u2 * v2
@@ -155,6 +155,6 @@ class PoincareBall(Manifold):
 
     def to_hyperboloid(self, x):
         K = 1.0 / self.c
-        sqrtK = K ** 0.5
+        sqrtK = K**0.5
         sqnorm = torch.norm(x, p=2, dim=1, keepdim=True) ** 2
         return sqrtK * torch.cat([K + sqnorm, 2 * sqrtK * x], dim=1) / (K - sqnorm)

@@ -8,7 +8,9 @@ from .data_Params import (
     LARGE,
     NUMBERS,
     URL_PREFIX_50,
+    URL_PREFIX_40,
     URL_PREFIX_30,
+    URL_PREFIX_20,
     URL_PREFIX_10,
     MAX_RANDOM,
     MIN_RANDOM,
@@ -18,6 +20,7 @@ from .data_Params import (
     NM,
     V,
     URL,
+    WORD_LARGE,
 )
 from parameters import SEED
 
@@ -39,108 +42,61 @@ def beaty_print(start, initial, value, total, needed):
     return start
 
 
-def data_ganea(replace, positivi):
-    seed(SEED)
-    num = NUMBERS
+def prefixWord(porcent, K, previus):
+    new_word = ""
 
-    lista_50 = [[]] * NG
-    lista_30 = [[]] * NG
-    lista_10 = [[]] * NG
+    r = sample(range(porcent), K)
+    for i in range(porcent):
+        if i in r:
+            new_word += choice(NUMBERS)
+        else:
+            new_word += previus[i]
+    return new_word
 
-    total = 20 * LARGE
-    porcent_50 = int(total * 0.5)
-    porcent_30 = int(total * 0.3)
-    porcent_10 = int(total * 0.1)
-    K1 = int(porcent_50 * 0.5)
-    K2 = int(porcent_30 * 0.5)
-    K3 = int(porcent_10 * 0.5)
 
-    positives = 0
-    negatives = 0
+def processdf(porcentaje, df, url):
+    for i in range(WORD_LARGE):
+        df[f"word-{i}"] = df["Word"].apply(lambda x: str(x)[i])
+        if i < porcentaje:
+            df[f"prefix-{i}"] = df["Prefix"].apply(lambda x: str(x)[i])
+
+    df = df.drop(["Word", "Prefix"], axis=1).drop_duplicates()
+    df.to_csv(url)
+
+
+def generate_df(porcentaje, url, positivi, replace, word_bank):
+
+    lista = [[]] * NG
+    # amount of the random/Prefix
+    porcent = int(porcentaje * WORD_LARGE)
+    # letter to change
+    K = int(porcent * replace)
+
     for i in range(NG):
-
-        a = ""
-        for _ in range(total):
-            a += choice(num)
-
-        b = ""
-        d = ""
-        e = ""
+        a = word_bank[i]
         if random() < positivi:
-            positives += 1
-
-            # CHANGES OF LETTERS IN THE PREFIX
-            r = sample(range(porcent_50), K1)
-            for z in range(porcent_50):
-                if z in r and replace:
-                    b += choice(num)
-                else:
-                    b += a[z]
-            r = sample(range(porcent_30), K2)
-            for z in range(porcent_30):
-                if z in r and replace:
-                    d += choice(num)
-                else:
-                    d += a[z]
-            r = sample(range(porcent_10), K3)
-            for z in range(porcent_10):
-                if z in r and replace:
-                    e += choice(num)
-                else:
-                    e += a[z]
-            #
-            lista_50[i] = [a, b, 0, 1]
-            lista_30[i] = [a, d, 0, 1]
-            lista_10[i] = [a, e, 0, 1]
+            b = prefixWord(porcent, K, a)
+            lista[i] = [a, b, 0, 1]
 
         else:
-            negatives += 1
-            for _ in range(porcent_50):
-                b += choice(num)
+            b = "".join(sample(NUMBERS, porcent))
+            lista[i] = [a, b, 1, 0]
 
-            for _ in range(porcent_30):
-                d += choice(num)
+    df = pd.DataFrame(lista, columns=["Word", "Prefix", "isPrefix", "isNotPrefix"])
+    processdf(porcent, df, url)
 
-            for _ in range(porcent_10):
-                e += choice(num)
 
-            lista_50[i] = [a, b, 1, 0]
-            lista_30[i] = [a, d, 1, 0]
-            lista_10[i] = [a, e, 1, 0]
-    print(f"Positives: {positives} | Negatives: {negatives}")
+def data_ganea(replace: float, positivi: float) -> None:
+    seed(SEED)
+    word_bank = []
+    for _ in range(NG):
+        word_bank.append("".join(sample(NUMBERS, WORD_LARGE)))
 
-    df_50 = pd.DataFrame(
-        lista_50, columns=["Word", "Prefix", "isPrefix", "isNotPrefix"]
-    )
-    df_30 = pd.DataFrame(
-        lista_30, columns=["Word", "Prefix", "isPrefix", "isNotPrefix"]
-    )
-    df_10 = pd.DataFrame(
-        lista_10, columns=["Word", "Prefix", "isPrefix", "isNotPrefix"]
-    )
-
-    for i in range(total):
-        df_50[f"word-{i}"] = df_50["Word"].apply(lambda x: str(x)[i])
-        df_30[f"word-{i}"] = df_30["Word"].apply(lambda x: str(x)[i])
-        df_10[f"word-{i}"] = df_10["Word"].apply(lambda x: str(x)[i])
-
-    for i in range(porcent_50):
-        df_50[f"prefix-{i}"] = df_50["Prefix"].apply(lambda x: str(x)[i])
-
-    for i in range(porcent_30):
-        df_30[f"prefix-{i}"] = df_30["Prefix"].apply(lambda x: str(x)[i])
-
-    for i in range(porcent_10):
-        df_10[f"prefix-{i}"] = df_10["Prefix"].apply(lambda x: str(x)[i])
-
-    df_50 = df_50.drop(["Word", "Prefix"], axis=1).drop_duplicates()
-    df_50.to_csv(URL_PREFIX_50)
-
-    df_30 = df_30.drop(["Word", "Prefix"], axis=1).drop_duplicates()
-    df_30.to_csv(URL_PREFIX_30)
-
-    df_10 = df_10.drop(["Word", "Prefix"], axis=1).drop_duplicates()
-    df_10.to_csv(URL_PREFIX_10)
+    generate_df(0.5, URL_PREFIX_50, positivi, replace, word_bank)
+    generate_df(0.4, URL_PREFIX_40, positivi, replace, word_bank)
+    generate_df(0.3, URL_PREFIX_30, positivi, replace, word_bank)
+    generate_df(0.2, URL_PREFIX_20, positivi, replace, word_bank)
+    generate_df(0.1, URL_PREFIX_10, positivi, replace, word_bank)
 
 
 def data_mircea():

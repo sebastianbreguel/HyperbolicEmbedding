@@ -19,7 +19,9 @@ from utils.data_Params import NM
 from parameters import (
     URL,
     URL_PREFIX_10,
+    URL_PREFIX_20,
     URL_PREFIX_30,
+    URL_PREFIX_40,
     URL_PREFIX_50,
     IN_FEATURES,
     BATCH_SIZE,
@@ -34,18 +36,10 @@ from NNs import HNNLayer
 
 
 def get_model(option: str, dataset: int, hidden: int) -> torch.nn.Module:
-    inputs = 20
+    inputs = 20 + int(dataset * 0.2)
     outputs = 2
 
-    if dataset == 10:
-        inputs += 2
-
-    elif dataset == 30:
-        inputs += 6
-
-    elif dataset == 50:
-        inputs += 10
-    elif dataset == 0:
+    if dataset == 0:
         inputs = 140
         outputs = 6
 
@@ -69,10 +63,18 @@ def get_data(dataset) -> tuple:
 
     if dataset == 10:
         url = URL_PREFIX_10
+    elif dataset == 20:
+        url = URL_PREFIX_20
+
     elif dataset == 30:
         url = URL_PREFIX_30
+
+    elif dataset == 40:
+        url = URL_PREFIX_40
+
     elif dataset == 50:
         url = URL_PREFIX_50
+
     elif dataset == 0:
         url = URL
 
@@ -155,7 +157,7 @@ def get_data(dataset) -> tuple:
     ##########################
 
     train_loader = DataLoader(
-        dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True
+        dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0
     )
     val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE, shuffle=True)
     test_loader = DataLoader(dataset=test_dataset, batch_size=BATCH_SIZE, shuffle=True)
@@ -163,7 +165,7 @@ def get_data(dataset) -> tuple:
     return train_loader, val_loader, test_loader, y_test
 
 
-def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
+def get_info(loss, y_test, y_pred_list, model, test_loader):
     if loss == "cross":
 
         y_pred = []
@@ -196,7 +198,6 @@ def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
         )
 
         list_info = [accuracy_score(y_true, y_pred)]
-
         # add to list info each data
         list_info += f1_score(y_true, y_pred, average=None).tolist()
         list_info += precision_score(
@@ -211,3 +212,35 @@ def get_accuracy(loss, y_test, y_pred_list, model, test_loader):
             f"Loss on Test Data: {round(np.linalg.norm(y_pred_list-y_test)/(0.2 * NM), 4)}"
         )
         return round(np.linalg.norm(y_pred_list - y_test) / (0.2 * NM), 4)
+
+
+def get_accuracy(loss, y_test, model, test_loader):
+
+    y_pred = []
+    y_true = []
+
+    # iterate over test data
+
+    with torch.no_grad():
+        for inputs, labels in test_loader:
+            output = model(inputs)  # Feed Network
+
+            output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()
+            y_pred.extend(output)  # Save Prediction
+
+            labels = labels.data.cpu().numpy()
+            y_true.extend(labels)  # Save Truth
+
+    if loss == "cross":
+        new = []
+        # Build confusion matrix
+        for i in y_true:
+            # obtain the index ob the max
+            index = np.where(i == 1)[0][0]
+            new.append(index)
+
+        y_true = new
+
+        return accuracy_score(y_true, y_pred)
+    else:
+        return round(np.linalg.norm(y_pred - y_test) / (0.2 * NM), 4)

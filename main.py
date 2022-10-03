@@ -1,4 +1,4 @@
-from model_data import get_data, get_model, get_accuracy
+from model_data import get_data, get_model, get_accuracy, get_info
 import torch
 from parameters import EPOCHS, LEARNING_RATE, EPS, SEED
 import torch.nn as nn
@@ -87,7 +87,9 @@ def train_eval(
     torch.autograd.set_detect_anomaly(True)
     initial = perf_counter()
 
-    losses = []
+    train_losses = []
+    val_losses = []
+    accuracy = []
     for e in range(1, EPOCHS + 1):
         # TRAINING
         train_epoch_loss = 0
@@ -124,13 +126,15 @@ def train_eval(
 
                 val_epoch_loss += val_loss.item()
 
-        # print(
-        #     f"Epoch {e+0:03}:\tTrain Loss: {train_epoch_loss/len(train_loader):.4f}\tVal Loss: {val_epoch_loss/len(val_loader):.4f}"
-        #     + f"\tTime: {((perf_counter() - initial)/60):.2f} minutes"
-        # )
+            # obtain the accuracy
+            acc = get_accuracy(loss, y_test, model, test_loader)
+            accuracy.append(acc)
 
-        losses.append(train_epoch_loss / len(train_loader))
-        losses.append(val_epoch_loss / len(val_loader))
+        # print(
+        #     f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.5f} | Val Loss: {val_epoch_loss/len(val_loader):.5f} | Accuracy: {acc:.5f}"
+        # )
+        train_losses.append(train_epoch_loss / len(train_loader))
+        val_losses.append(val_epoch_loss / len(val_loader))
 
     y_pred_list = []
     with torch.no_grad():
@@ -141,8 +145,8 @@ def train_eval(
             y_pred_list.append(y_test_pred.cpu().numpy())
     y_pred_list = [a.squeeze().tolist() for a in y_pred_list]
 
-    info = get_accuracy(loss, y_test, y_pred_list, model, test_loader)
-    final = info + losses
+    info = get_info(loss, y_test, y_pred_list, model, test_loader)
+    final = info + train_losses + val_losses + accuracy
     return final
 
 
@@ -179,6 +183,7 @@ if "__main__" == __name__:
     dataset = results.dataset
     loss = results.loss
     task = results.task
+
     id = 0
     HIDDEN = 16
     # create a csv names datas
@@ -202,7 +207,12 @@ if "__main__" == __name__:
     ]
     for i in range(EPOCHS):
         initial.append(f"Train Loss {i}")
+
+    for i in range(EPOCHS):
         initial.append(f"Val Loss {i}")
+
+    for i in range(EPOCHS):
+        initial.append(f"Accuracy {i}")
 
     with open(f"data_{replace}.csv", "w") as f:
         writter = csv.writer(f)
@@ -212,7 +222,7 @@ if "__main__" == __name__:
             generate_data(delete_folder, create_folder, replace, r, task)
             print("gen data")
 
-            for dataset in [10, 30, 50]:
+            for dataset in [50, 40, 30, 20, 10]:
                 for model in ["euclidean", "hyperbolic"]:
                     print(
                         "#" * 30
@@ -221,7 +231,7 @@ if "__main__" == __name__:
                     )
                     info = [id, model, optimizer, loss, task, dataset, r, replace]
 
-                    for i in range(25):
+                    for i in range(2):
                         print(f"{id}) ", end=" ")
 
                         data = train_eval(model, optimizer, dataset, loss, HIDDEN)
