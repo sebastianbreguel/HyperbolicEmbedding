@@ -89,3 +89,14 @@ python main.py --generate_data --create_folder --task ganea --replace --train_ev
 - [ ] Implement Riemannian Adam
 - [ ] Implement Riemannian SGD
 - [ ] Expand to RNN
+
+## References
+
+- Hyperbolic Neural Networks: [paper](https://arxiv.org/abs/1805.09112)-[github](https://github.com/dalab/hyperbolic_nn)
+- Codes for Network Embedding: [github](https://github.com/chenweize1998/fully-hyperbolic-nn/tree/main/gcn)
+- Poincaré Embeddings for Learning Hierarchical Representations: [paper](https://papers.nips.cc/paper/2017/hash/59dfa2df42d9e3d41f5b02bfc32229dd-Abstract.html) - [github](https://github.com/facebookresearch/poincare-embeddings)
+
+## Usefull
+
+- [Hyperbolic Algorithms](https://github.com/drewwilimitis/hyperbolic-learning)
+- [Hyperbolic Embedding](https://github.com/prokopevaleksey/poincare-embeddings)

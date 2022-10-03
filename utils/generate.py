@@ -3,7 +3,7 @@ from .functions import data_ganea, data_mircea
 from time import sleep
 
 
-def generate_data( create_folder, replace, r, task) -> None:
+def generate_data(create_folder, replace, r, task) -> None:
     # Generate the folder
 
     if create_folder:

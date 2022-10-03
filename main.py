@@ -226,7 +226,7 @@ if "__main__" == __name__:
         writter.writerow(initial)
 
         for r in [0.5, 0.25, 0.75]:
-            generate_data( create_folder, replace, r, task)
+            generate_data(create_folder, replace, r, task)
             print("gen data")
             for dataset in [50, 30, 10]:
                 for model in ["euclidean", "hyperbolic"]:
@@ -240,9 +240,7 @@ if "__main__" == __name__:
                     for i in range(30):
                         print(f"{id}) ", end=" ")
 
-                        data = train_eval(
-                            model, optimizer, dataset, loss, replace
-                        )
+                        data = train_eval(model, optimizer, dataset, loss, replace)
 
                         data = info + data
 
