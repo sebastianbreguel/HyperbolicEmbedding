@@ -65,7 +65,6 @@ def get_data(dataset, replace) -> tuple:
     elif dataset == 30:
         url = URL_PREFIX_30 + "_" + str(replace) + ".csv"
 
-
     elif dataset == 50:
         url = URL_PREFIX_50 + "_" + str(replace) + ".csv"
 

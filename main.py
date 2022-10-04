@@ -227,7 +227,7 @@ if "__main__" == __name__:
 
     generate_data(create_folder, replace, 0.5, task)
     print("gen data")
-    for dataset in [ 30]:
+    for dataset in [30]:
         for model in ["euclidean", "hyperbolic"]:
             print(
                 "#" * 30
