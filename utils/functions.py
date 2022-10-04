@@ -3,14 +3,12 @@ import numpy as np
 from time import perf_counter
 from random import choice, sample, seed, random
 
-from parameters import (
+from utils.parameters import (
     NG,
     LARGE,
     NUMBERS,
     URL_PREFIX_50,
-    URL_PREFIX_40,
     URL_PREFIX_30,
-    URL_PREFIX_20,
     URL_PREFIX_10,
     MAX_RANDOM,
     MIN_RANDOM,
@@ -95,9 +93,7 @@ def data_ganea(replace: float, positivi: float) -> None:
         words_bank.append("".join(sample(NUMBERS, WORD_LARGE)))
 
     generate_df(0.5, f"{URL_PREFIX_50}_{replace}.csv", positivi, replace, words_bank)
-    generate_df(0.4, f"{URL_PREFIX_40}_{replace}.csv", positivi, replace, words_bank)
     generate_df(0.3, f"{URL_PREFIX_30}_{replace}.csv", positivi, replace, words_bank)
-    generate_df(0.2, f"{URL_PREFIX_20}_{replace}.csv", positivi, replace, words_bank)
     generate_df(0.1, f"{URL_PREFIX_10}_{replace}.csv", positivi, replace, words_bank)
 
 
