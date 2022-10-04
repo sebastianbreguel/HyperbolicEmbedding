@@ -18,9 +18,7 @@ import seaborn as sn
 from utils.parameters import (
     URL,
     URL_PREFIX_10,
-    URL_PREFIX_20,
     URL_PREFIX_30,
-    URL_PREFIX_40,
     URL_PREFIX_50,
     IN_FEATURES,
     BATCH_SIZE,
@@ -63,14 +61,9 @@ def get_data(dataset, replace) -> tuple:
 
     if dataset == 10:
         url = URL_PREFIX_10 + "_" + str(replace) + ".csv"
-    elif dataset == 20:
-        url = URL_PREFIX_20 + "_" + str(replace) + ".csv"
 
     elif dataset == 30:
         url = URL_PREFIX_30 + "_" + str(replace) + ".csv"
-
-    elif dataset == 40:
-        url = URL_PREFIX_40 + "_" + str(replace) + ".csv"
 
     elif dataset == 50:
         url = URL_PREFIX_50 + "_" + str(replace) + ".csv"

@@ -139,9 +139,9 @@ def train_eval(
             acc = get_accuracy(loss, y_test, model, test_loader)
             test_accuracy.append(acc)
 
-        # print(
-        #     f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.5f} | Val Loss: {val_epoch_loss/len(val_loader):.5f} | Accuracy: {acc:.5f}"
-        # )
+        print(
+            f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.3f} | Val Loss: {val_epoch_loss/len(val_loader):.3f} | Accuracy: {acc:.3f}"
+        )
         train_losses.append(train_epoch_loss / len(train_loader))
         val_losses.append(val_epoch_loss / len(val_loader))
 
@@ -221,31 +221,30 @@ if "__main__" == __name__:
     for i in range(EPOCHS):
         initial.append(f"train Accuracy {i}")
 
-    with open(f"data_{replace}.csv", "w") as f:
-        writter = csv.writer(f)
-        writter.writerow(initial)
+    # with open(f"data_{replace}.csv", "w") as f:
+    #     writter = csv.writer(f)
+    #     writter.writerow(initial)
 
-        for r in [0.5, 0.25, 0.75]:
-            generate_data(create_folder, replace, r, task)
-            print("gen data")
-            for dataset in [50, 30, 10]:
-                for model in ["euclidean", "hyperbolic"]:
-                    print(
-                        "#" * 30
-                        + f"\nRunning {model} Model - {optimizer} Optimizer - {loss} Loss - {task} Task - {dataset} Dataset - {r} Ratio - {replace} Replace\n"
-                        + "#" * 30
-                    )
-                    info = [id, model, optimizer, loss, task, dataset, r, replace]
+    generate_data(create_folder, replace, 0.5, task)
+    print("gen data")
+    for dataset in [30]:
+        for model in ["euclidean", "hyperbolic"]:
+            print(
+                "#" * 30
+                + f"\nRunning {model} Model - {optimizer} Optimizer - {loss} Loss - {task} Task - {dataset} Dataset  - {replace} Replace\n"
+                + "#" * 30
+            )
+            info = [id, model, optimizer, loss, task, dataset, replace]
 
-                    for i in range(30):
-                        print(f"{id}) ", end=" ")
+            for i in range(30):
+                print(f"{id}) ", end=" ")
 
-                        data = train_eval(model, optimizer, dataset, loss, replace)
+                data = train_eval(model, optimizer, dataset, loss, replace)
 
-                        data = info + data
+                data = info + data
 
-                        writter.writerow(data)
+                # writter.writerow(data)
 
-                        print(f"{round((perf_counter()-start)/60,2)} minutes")
+                print(f"{round((perf_counter()-start)/60,2)} minutes")
 
-                        id += 1
+                id += 1
