@@ -1,5 +1,6 @@
 """Hyperbolic layers."""
 import math
+import numpy as np
 
 import torch
 import torch.nn as nn
@@ -7,6 +8,7 @@ import torch.nn.functional as F
 import torch.nn.init as init
 from torch.nn.modules.module import Module
 from manifolds.base import ManifoldParameter
+from manifolds.math_utils import arsinh
 
 
 def get_dim_act_curv(args):
@@ -80,8 +82,6 @@ class HypLinear(nn.Module):
             c=c,
             manifold=manifold,
         )
-        print(type(self.bias))
-        print(type(self.weight))
         self.reset_parameters()
 
     def reset_parameters(self):
@@ -90,7 +90,7 @@ class HypLinear(nn.Module):
 
     def forward(self, x):
         drop_weight = F.dropout(self.weight, self.dropout, training=self.training)
-        mv = self.manifold.mobius_matvec(self.weight, x)
+        mv = self.manifold.mobius_matvec(drop_weight, x)
         res = self.manifold.proj(mv)
         if self.use_bias:
             bias = self.manifold.proj_tan0(self.bias.view(1, -1))

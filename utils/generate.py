@@ -20,5 +20,5 @@ def generate_data(create_folder, replace, r, task) -> None:
     elif task == "mircea":
         data_mircea()
 
-    # line = "\n" + "#" * 20
-    # print("# Data Generated #")
+    line = "\n" + "#" * 20
+    print("# Data Generated #")

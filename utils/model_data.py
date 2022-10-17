@@ -51,14 +51,13 @@ def get_model(option: str, dataset: int) -> torch.nn.Module:
         c = 1
         manifold = PoincareBall(c)
 
-    model = HNNLayer(manifold, inputs, outputs, c, 1, 10)
+    model = HNNLayer(manifold, inputs, outputs, c, 1, 16)
 
     return model
 
 
 def get_data(dataset, replace) -> tuple:
     np.random.seed(SEED)
-    print(replace)
 
     if dataset == 10:
         url = URL_PREFIX_10 + "_" + str(replace) + ".csv"
@@ -85,7 +84,6 @@ def get_data(dataset, replace) -> tuple:
         X = df.iloc[:, 2:]
         # # columns isPrefix and isNotPrefix
         y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
-    print(X, y)
 
     ##########################
     #####Train — Validation — Test

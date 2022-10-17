@@ -37,7 +37,6 @@ class Artanh(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, grad_output):
-        # print("tabluuu?")
         (input,) = ctx.saved_tensors
         return grad_output / (1 - input**2)
 

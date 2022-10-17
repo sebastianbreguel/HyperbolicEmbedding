@@ -192,5 +192,4 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
             manifold = p.manifold
             exp_avg = state["exp_avg"]
             p.copy_(manifold.proj(p))
-            print("hola")
             exp_avg.copy_(proju(p, exp_avg))

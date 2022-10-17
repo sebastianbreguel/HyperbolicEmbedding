@@ -8,6 +8,7 @@ import torch.nn.functional as F
 from layers.hyp_layers import HNNLayer, HypLinear, HypAct
 import layers.hyp_layers as hyp_layers
 from layers.layers import Linear, get_dim_act
+from layers.hyp_Softmax import HyperbolicMLR
 
 
 class Encoder(nn.Module):
@@ -89,13 +90,14 @@ class HNNLayer(nn.Module):
         self.linear2 = HypLinear(manifold, hidden, out_features, c, 0, use_bias)
         self.softmax = nn.Softmax(dim=1)
         self.hyp_Relu = HypAct(manifold, c, c, nn.LeakyReLU())
-        self.layers = nn.Sequential(*[self.linear1, self.hyp_Relu, self.linear2])
+        self.hypSoftmax = HyperbolicMLR(manifold, 2, 2, c)
 
     def forward(self, x):
         x = self.manifold.proj(self.manifold.expmap0(x))
         x = self.hyp_Relu(self.linear1(x))
         x = self.linear2(x)
-        x = self.manifold.logmap0(x)
+        # x = self.manifold.logmap0(x)
+        x = self.hypSoftmax(x)
         return x
 
     def predict(self, x):
