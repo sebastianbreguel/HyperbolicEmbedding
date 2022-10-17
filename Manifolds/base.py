@@ -2,18 +2,18 @@
 
 """Base manifold."""
 
-from torch.nn import Parameter
+from torch.nn import Parameter, Module
 from geoopt import ManifoldTensor
 
 
-class Manifold(object):
+class Manifold(Module):
     """
     Abstract class to define operations on a manifold.
     """
 
     def __init__(self):
         super().__init__()
-        self.eps = 10e-8
+        self.eps = 10e-4
 
     def sqdist(self, p1, p2):
         """Squared distance between pairs of points."""
@@ -76,7 +76,7 @@ class Manifold(object):
         raise NotImplementedError
 
 
-class ManifoldParameter(Parameter):
+class ManifoldParameter(ManifoldTensor, Parameter):
     """
     Subclass of torch.nn.Parameter for Riemannian optimization.
     """
@@ -85,7 +85,6 @@ class ManifoldParameter(Parameter):
         return Parameter.__new__(cls, data, requires_grad)
 
     def __init__(self, data, requires_grad, manifold, c):
-        Parameter.__init__(data, requires_grad)
         self.c = c
         self.manifold = manifold
 

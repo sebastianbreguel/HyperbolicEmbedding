@@ -28,12 +28,12 @@ from utils.parameters import (
 )
 
 # Custom NN and Manifolds
-from Manifolds.euclidean import Euclidean
-from Manifolds.poincare import PoincareBall
+from manifolds.euclidean import Euclidean
+from manifolds.poincare import PoincareBall
 from NNs import HNNLayer
 
 
-def get_model(option: str, dataset: int, hidden: int) -> torch.nn.Module:
+def get_model(option: str, dataset: int) -> torch.nn.Module:
     inputs = 20 + int(dataset * 0.2)
     outputs = 2
 
@@ -51,13 +51,14 @@ def get_model(option: str, dataset: int, hidden: int) -> torch.nn.Module:
         c = 1
         manifold = PoincareBall(c)
 
-    model = HNNLayer(manifold, inputs, outputs, c, 1, hidden)
+    model = HNNLayer(manifold, inputs, outputs, c, 1, 10)
 
     return model
 
 
 def get_data(dataset, replace) -> tuple:
     np.random.seed(SEED)
+    print(replace)
 
     if dataset == 10:
         url = URL_PREFIX_10 + "_" + str(replace) + ".csv"
@@ -73,6 +74,8 @@ def get_data(dataset, replace) -> tuple:
 
     df = pd.read_csv(url, header=0)
     df = df.drop(df.columns[0], axis=1)
+    # df shuffle
+    df = df.sample(frac=1).reset_index(drop=True)
 
     if dataset == 0:
         X = df.iloc[:, :IN_FEATURES]
@@ -82,6 +85,7 @@ def get_data(dataset, replace) -> tuple:
         X = df.iloc[:, 2:]
         # # columns isPrefix and isNotPrefix
         y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
+    print(X, y)
 
     ##########################
     #####Train — Validation — Test
@@ -205,7 +209,7 @@ def get_info(loss, y_test, y_pred_list, model, test_loader):
         return round(np.linalg.norm(y_pred_list - y_test) / (0.2 * NM), 4)
 
 
-def get_accuracy(loss, y_test, model, test_loader):
+def get_accuracy(loss, y_test, model, test_loader, device):
 
     y_pred = []
     y_true = []
@@ -214,6 +218,8 @@ def get_accuracy(loss, y_test, model, test_loader):
 
     with torch.no_grad():
         for inputs, labels in test_loader:
+            # pass to device
+            inputs, labels = inputs.to(device), labels.to(device)
             output = model(inputs)  # Feed Network
 
             output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()

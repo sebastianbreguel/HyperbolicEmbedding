@@ -1,6 +1,7 @@
 """Euclidean manifold."""
 
 from .base import Manifold
+import torch
 
 
 class Euclidean(Manifold):
@@ -56,13 +57,27 @@ class Euclidean(Manifold):
         w.data.uniform_(-irange, irange)
         return w
 
-    def inner(self, p, u, v=None, keepdim=False):
-        if v is None:
-            v = u
-        return (u * v).sum(dim=-1, keepdim=keepdim)
-
     def ptransp(self, x, y, v):
         return v
 
     def ptransp0(self, x, v):
         return x + v
+
+    def retr(self, x, u):
+        return x + u
+
+    def retr_transp(self, x, u, v):
+        y = self.retr(x, u)
+        v_tranps = self.ptransp(x, y, v)
+        return y, v_tranps
+
+    def component_inner(
+        self, x: torch.Tensor, u: torch.Tensor, v: torch.Tensor = None
+    ) -> torch.Tensor:
+        # it is possible to factorize the manifold
+        if v is None:
+            inner = u.pow(2)
+        else:
+            inner = u * v
+        target_shape = torch.broadcast_shapes(x.shape, inner.shape)
+        return inner.expand(target_shape)

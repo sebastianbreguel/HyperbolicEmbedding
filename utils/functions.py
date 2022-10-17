@@ -13,6 +13,7 @@ from utils.parameters import (
     MAX_RANDOM,
     MIN_RANDOM,
     ROUND,
+    POSITIVE,
     VOCABULARY,
     EMB,
     NM,
@@ -74,7 +75,7 @@ def generate_df(porcentaje, url, positivi, replace, words_bank):
 
     for i in range(NG):
         a = words_bank[i]
-        if random() < positivi:
+        if random() < POSITIVE:
             b = prefixWord(porcent, K, a)
             lista[i] = [a, b, 0, 1]
 

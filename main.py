@@ -3,15 +3,13 @@ import torch
 from utils.parameters import EPOCHS, LEARNING_RATE, EPS, SEED
 import torch.nn as nn
 import torch.nn.functional as F
-import csv
-import numpy as np
 
-# from Optimizer import RiemannianAdam
-from Manifolds.base import ManifoldParameter
-from geoopt.optim import RiemannianAdam
+from Optimizer import RiemannianAdam
+from manifolds.base import ManifoldParameter
+
+# from geoopt.optim import RiemannianAdam
 from utils import generate_data
 import argparse
-from time import perf_counter
 
 
 def train_eval(
@@ -23,13 +21,14 @@ def train_eval(
 ) -> None:
 
     train_loader, val_loader, test_loader, y_test = get_data(dataset, replace)
+    print(y_test)
 
     ##########################
     #####    MODEL
     ##########################
 
     device = torch.device("cpu")
-    model = get_model(option_model, dataset, HIDDEN).to(device)
+    model = get_model(option_model, dataset).to(device)
     # use all cpu cores for torch
 
     # Loss Function
@@ -81,15 +80,23 @@ def train_eval(
             stabilize=10,
             betas=(0.9, 0.999),
         )
-    # print(f"Running {option_model} Model - {optimizer_option} Optimizer", LEARNING_RATE)
-    # print(model)
+
+    # elif optimizer_option == "RSGD":
+    #     optimizer = RiemannianSGD(
+    #         optimizer_grouped_parameters,
+    #         lr=LEARNING_RATE,
+    #         stabilize=10,
+    #         momentum=0.9,
+    #     )
+
+    print(f"Running {option_model} Model - {optimizer_option} Optimizer", LEARNING_RATE)
+    print(model, device)
 
     ##########################
     #####  Train Model
     ##########################
 
-    torch.autograd.set_detect_anomaly(True)
-    initial = perf_counter()
+    # torch.autograd.set_detect_anomaly(True)
 
     train_losses = []
     val_losses = []
@@ -107,16 +114,19 @@ def train_eval(
             optimizer.zero_grad()
 
             y_train_pred = model(X_train_batch)
+            # print("holaaaaa\n\na")
             train_loss = criterion(y_train_pred, y_train_batch)
-
+            # print(y_train_pred,"wewewewe\n\na")
             train_loss.backward()
+            # print("wwwwwwwww\n\na")
 
             optimizer.step()
+            # print("xxxxx\n\na")
             train_epoch_loss += train_loss.item()
             # calculate the train accuracy
 
-        acc = get_accuracy(loss, y_test, model, train_loader)
-        train_accuracy.append(acc)
+        acc1 = get_accuracy(loss, y_test, model, train_loader, device)
+        train_accuracy.append(acc1)
 
         # VALIDATION
         with torch.no_grad():
@@ -136,11 +146,12 @@ def train_eval(
                 val_epoch_loss += val_loss.item()
 
             # obtain the accuracy
-            acc = get_accuracy(loss, y_test, model, test_loader)
+            acc = get_accuracy(loss, y_test, model, test_loader, device)
             test_accuracy.append(acc)
+            acc2 = get_accuracy(loss, y_test, model, val_loader, device)
 
         print(
-            f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.3f} | Val Loss: {val_epoch_loss/len(val_loader):.3f} | Accuracy: {acc:.3f}"
+            f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.3f} | Val Loss: {val_epoch_loss/len(val_loader):.3f} | Train accuracy:{acc1:.3f} | Val Accuracy: {acc2:.3f} | Test Accuracy: {acc:.3f}"
         )
         train_losses.append(train_epoch_loss / len(train_loader))
         val_losses.append(val_epoch_loss / len(val_loader))
@@ -161,6 +172,7 @@ def train_eval(
 
 if "__main__" == __name__:
     # seed torch
+    torch.manual_seed(0)
 
     parser = argparse.ArgumentParser()
 
@@ -189,62 +201,10 @@ if "__main__" == __name__:
     loss = results.loss
     task = results.task
 
-    id = 0
-    HIDDEN = 16
-    # create a csv names datas
-    start = perf_counter()
-    initial = [
-        "id",
-        "model",
-        "optimizer",
-        "loss",
-        "task",
-        "dataset",
-        "Ratio",
-        "Replace",
-        "Accuracy",
-        "F1 Prefix",
-        "F1 random",
-        "Recall Prefix",
-        "Recall random",
-        "Precision Prefix",
-        "Precision random",
-    ]
-    for i in range(EPOCHS):
-        initial.append(f"Train Loss {i}")
+    if gen_data:
+        print("Generating data")
+        generate_data(create_folder, replace, dataset, task)
 
-    for i in range(EPOCHS):
-        initial.append(f"Val Loss {i}")
-
-    for i in range(EPOCHS):
-        initial.append(f"test Accuracy {i}")
-    for i in range(EPOCHS):
-        initial.append(f"train Accuracy {i}")
-
-    # with open(f"data_{replace}.csv", "w") as f:
-    #     writter = csv.writer(f)
-    #     writter.writerow(initial)
-
-    generate_data(create_folder, replace, 0.5, task)
-    print("gen data")
-    for dataset in [30]:
-        for model in ["euclidean", "hyperbolic"]:
-            print(
-                "#" * 30
-                + f"\nRunning {model} Model - {optimizer} Optimizer - {loss} Loss - {task} Task - {dataset} Dataset  - {replace} Replace\n"
-                + "#" * 30
-            )
-            info = [id, model, optimizer, loss, task, dataset, replace]
-
-            for i in range(30):
-                print(f"{id}) ", end=" ")
-
-                data = train_eval(model, optimizer, dataset, loss, replace)
-
-                data = info + data
-
-                # writter.writerow(data)
-
-                print(f"{round((perf_counter()-start)/60,2)} minutes")
-
-                id += 1
+    if make_train_eval:
+        print("Training and evaluating model")
+        train_eval(model, optimizer, dataset, loss, replace)

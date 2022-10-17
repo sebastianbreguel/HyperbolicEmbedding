@@ -2,8 +2,8 @@
 #####    Model Params
 ##########################
 EPS = 1e-3
-EPOCHS = 15
-BATCH_SIZE = 32
+EPOCHS = 100
+BATCH_SIZE = 32 * 32
 LEARNING_RATE = 0.003
 IN_FEATURES = 140
 OUT_FEATURES = 2
@@ -16,8 +16,8 @@ SEED = 0
 
 # GANEA
 
-NG = 4000  # Number of examples
-R = 0.5  # Prefix Positive Samples
+NG = 100000  # Number of examples
+POSITIVE = 0.5  # Prefix Positive Samples
 NUM = 9  # Number of OPTIONS
 NUMBERS = [str(i) for i in range(0, NUM + 1)] * 4
 URL_PREFIX_50 = "data/Prefix/Prefix_50"

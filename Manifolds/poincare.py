@@ -4,6 +4,7 @@ import torch
 
 from .base import Manifold
 from .math_utils import artanh, tanh
+import itertools
 
 
 class PoincareBall(Manifold):
@@ -128,17 +129,6 @@ class PoincareBall(Manifold):
         d = 1 + 2 * self.c * uv + c2 * u2 * v2
         return w + 2 * (a * u + b * v) / d.clamp_min(self.min_norm)
 
-    def inner(self, x, u, v=None, keepdim=False):
-        if v is None:
-            v = u
-        lambda_x = self._lambda_x(x)
-        aux = lambda_x.pow(2) * (u * v).sum(dim=-1, keepdim=keepdim)
-        print("holiwi", aux)
-        if len(aux.shape) == 1:
-            return aux
-        return aux.squeeze()
-        # return lambda_x**2 * (u * v).sum(dim=-1, keepdim=keepdim)
-
     def ptransp(self, x, y, u):
         lambda_x = self._lambda_x(x)
         lambda_y = self._lambda_x(y)
@@ -158,3 +148,22 @@ class PoincareBall(Manifold):
         sqrtK = K**0.5
         sqnorm = torch.norm(x, p=2, dim=1, keepdim=True) ** 2
         return sqrtK * torch.cat([K + sqnorm, 2 * sqrtK * x], dim=1) / (K - sqnorm)
+
+    def inner(
+        self,
+        x: torch.Tensor,
+        u: torch.Tensor,
+        v: torch.Tensor = None,
+        *,
+        keepdim=False,
+        dim=-1,
+    ) -> torch.Tensor:
+        if v is None:
+            v = u
+
+        return self._lambda_x(x) ** 2 * (u * v).sum(dim=dim, keepdim=keepdim)
+
+    def component_inner(
+        self, x: torch.Tensor, u: torch.Tensor, v: torch.Tensor = None
+    ) -> torch.Tensor:
+        return self.inner(x, u, v, keepdim=True)
