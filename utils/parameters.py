@@ -2,7 +2,7 @@
 #####    Model Params
 ##########################
 EPS = 1e-3
-EPOCHS = 100
+EPOCHS = 1024
 BATCH_SIZE = 32 * 32
 LEARNING_RATE = 0.003
 IN_FEATURES = 140

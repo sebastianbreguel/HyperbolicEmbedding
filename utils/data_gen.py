@@ -1,9 +1,10 @@
+import os
+from time import sleep
 import pandas as pd
 import numpy as np
 from time import perf_counter
 from random import choice, sample, seed, random
-
-from utils.parameters import (
+from .parameters import (
     NG,
     LARGE,
     NUMBERS,
@@ -24,21 +25,26 @@ from utils.parameters import (
 )
 
 
-def beaty_print(start, initial, value, total, needed):
-    end = perf_counter()
-    arrows = int(value / total * 10 // 1)
-    arrows = "-" + "-" * (arrows) + ">" + " " * (10 - arrows)
-    if needed:
-        print(f"\n\nLAST: {(end - start):.2f} seconds")
-        start = perf_counter()
-    stringa = f"{int(value)}/{int(total)}"
-    print(
-        "{:>17}".format(stringa)
-        + f"{arrows}"
-        + "{:>5}".format(((value / total * 1000) // 1) / 10)
-        + f"% |total time:{((end - initial)/60):.2f} minutes"
-    )
-    return start
+
+def generate_data(create_folder, replace, r, task) -> None:
+    # Generate the folder
+
+    if create_folder:
+        print("Creating folder")
+        os.system("mkdir data")
+        os.system("mkdir data/Prefix")
+        sleep(1)
+        print("\nFolder created\n")
+    # run generate_data.py
+    if task == "ganea":
+
+        data_ganea(replace, r)
+
+    elif task == "mircea":
+        data_mircea()
+
+    print("# Data Generated #")
+
 
 
 def prefixWord(porcent, K, previus):

@@ -1,6 +1,6 @@
-from utils.model_data import get_data, get_model, get_accuracy, get_info
+from utils import get_data, get_model, get_accuracy, get_info, getMNIST
 import torch
-from utils.parameters import EPOCHS, LEARNING_RATE, SEED
+from utils import EPOCHS, LEARNING_RATE, SEED
 from utils import generate_data, obtain_loss, obtain_optimizer, train_model, val_process
 
 import argparse
@@ -14,7 +14,8 @@ def train_eval(
     replace,
 ) -> None:
 
-    train_loader, val_loader, test_loader, y_test = get_data(dataset, replace)
+    # train_loader, val_loader, test_loader, y_test = get_data(dataset, replace)
+    train_loader, test_loader = getMNIST()
 
     ##########################
     #####    MODEL
@@ -31,35 +32,80 @@ def train_eval(
     optimizer = obtain_optimizer(optimizer_option, model)
 
     print(f"Running {option_model} Model - {optimizer_option} Optimizer", LEARNING_RATE)
-
+    print(model)
     ##########################
     #####  Train Model
     ##########################
 
     torch.autograd.set_detect_anomaly(True)
-    for e in range(1, EPOCHS + 1):
-        # TRAINING
-        train_epoch_loss = train_model(
-            model, train_loader, criterion, optimizer, device
+    iter = 0
+    for epoch in range(EPOCHS):
+        partial = 0
+        total_partial = 0
+
+        for i, (images, labels) in enumerate(train_loader):
+            # Load images with gradient accumulation capabilities
+            # print(images.shape, images)
+            images, labels = images.to(device), labels.to(device)
+            images = images.view(-1, 15).requires_grad_()
+            # pass images to device
+            # print(images)
+
+            # Clear gradients w.r.t. parameters
+            optimizer.zero_grad()
+
+            # Forward pass to get output/logits
+
+            outputs = model(images)
+            # Calculate Loss: softmax --> cross entropy loss
+            loss = criterion(outputs, labels)
+            _, predicted = torch.max(outputs.data, 1)
+            partial += (predicted == labels).sum()
+            total_partial += labels.size(0)
+
+            # Getting gradients w.r.t. parameters
+            loss.backward()
+
+            # Updating parameters
+            optimizer.step()
+
+        iter += 1
+
+        correct = 0
+        total = 0
+        # Calculate Accuracy
+        # Iterate through test dataset
+        for images, labels in test_loader:
+            # Load images with gradient accumulation capabilities
+            # print(images.shape, images)
+            images = images.view(-1, 15).requires_grad_()
+            # print(images.shape)
+
+            # Forward pass only to get logits/output
+            outputs = model(images)
+
+            # Get predictions from the maximum value
+            _, predicted = torch.max(outputs.data, 1)
+
+            # Total number of labels
+            total += labels.size(0)
+
+            # Total correct predictions
+            correct += (predicted == labels).sum()
+
+        accuracy = 100 * correct / total
+
+        # Print Loss
+        print("training accuracy: {} ".format(partial / total_partial * 100))
+
+        print(
+            "Iteration: {}. Loss: {}. Accuracy: {}".format(iter, loss.item(), accuracy)
         )
-
-        # VALIDATION
-        with torch.no_grad():
-            val_epoch_loss = val_process(model, val_loader, criterion, device)
-
-        if e % 10 == 0:
-            test_acc = get_accuracy(loss, y_test, model, test_loader, device)
-            val_acc = get_accuracy(loss, y_test, model, val_loader, device)
-            train_acc = get_accuracy(loss, y_test, model, train_loader, device)
-
-            print(
-                f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.3f} | Val Loss: {val_epoch_loss/len(val_loader):.3f} | Train accuracy:{train_acc:.3f} | Val Accuracy: {val_acc:.3f} | Test Accuracy: {test_acc:.3f}"
-            )
 
 
 if "__main__" == __name__:
     # seed torch
-    # torch.manual_seed(SEED)
+    torch.manual_seed(SEED)
 
     parser = argparse.ArgumentParser()
 

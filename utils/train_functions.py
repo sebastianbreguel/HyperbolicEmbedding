@@ -95,3 +95,70 @@ def train_model(model, train_loader, criterion, optimizer, device):
         train_epoch_loss += train_loss.item()
 
     return train_epoch_loss
+
+
+def trainMNIST(model, train_loader, test_loader, criterion, optimizer, device):
+    train_epoch_loss = 0
+    model.train()
+    for epoch in range(100):
+        partial = 0
+        total_partial = 0
+
+        for i, (images, labels) in enumerate(train_loader):
+            # Load images with gradient accumulation capabilities
+            # print(images.shape, images)
+            images, labels = images.to(device), labels.to(device)
+            images = images.view(-1, 32).requires_grad_()
+            # pass images to device
+            # print(images)
+
+            # Clear gradients w.r.t. parameters
+            optimizer.zero_grad()
+
+            # Forward pass to get output/logits
+            outputs = model(images)
+
+            # Calculate Loss: softmax --> cross entropy loss
+            loss = criterion(outputs, labels)
+            _, predicted = torch.max(outputs.data, 1)
+            partial += (predicted == labels).sum()
+            total_partial += labels.size(0)
+
+            # Getting gradients w.r.t. parameters
+            loss.backward()
+
+            # Updating parameters
+            optimizer.step()
+
+        correct = 0
+        total = 0
+        # Calculate Accuracy
+        # Iterate through test dataset
+        for images, labels in test_loader:
+            # Load images with gradient accumulation capabilities
+            # print(images.shape, images)
+            images = images.view(-1, 32).requires_grad_()
+            # print(images.shape)
+
+            # Forward pass only to get logits/output
+            outputs = model(images)
+
+            # Get predictions from the maximum value
+            _, predicted = torch.max(outputs.data, 1)
+
+            # Total number of labels
+            total += labels.size(0)
+
+            # Total correct predictions
+            correct += (predicted == labels).sum()
+
+        accuracy = 100 * correct / total
+
+        # Print Loss
+        print("training accuracy: {} ".format(partial / total_partial * 100))
+
+        print(
+            "Iteration: {}. Loss: {}. Accuracy: {}".format(epoch, loss.item(), accuracy)
+        )
+
+    return train_epoch_loss

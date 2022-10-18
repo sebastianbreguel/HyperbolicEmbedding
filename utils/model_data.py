@@ -10,6 +10,7 @@ from sklearn.metrics import (
     precision_score,
     recall_score,
 )
+
 # Parameters
 from utils.parameters import (
     URL,
@@ -25,6 +26,29 @@ from utils.parameters import (
 
 from manifolds import Euclidean, PoincareBall
 from models import Ganea
+import torch.nn as nn
+import torchvision.transforms as transforms
+import torchvision.datasets as dsets
+import umap
+import torch
+from torch.utils.data import Dataset, DataLoader
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import (
+    f1_score,
+    accuracy_score,
+    precision_score,
+    recall_score,
+)
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
+import seaborn as sn
+import torch.nn as nn
+import torchvision.transforms as transforms
+import torchvision.datasets as dsets
+import umap
 
 
 def get_model(option: str, dataset: int) -> torch.nn.Module:
@@ -45,7 +69,7 @@ def get_model(option: str, dataset: int) -> torch.nn.Module:
         c = 1
         manifold = PoincareBall(c)
 
-    model = Ganea(manifold, inputs, outputs, c, 1, 16)
+    model = Ganea(manifold, 15, 10, c, 1, 64)
 
     return model
 
@@ -233,3 +257,47 @@ def get_accuracy(loss, y_test, model, test_loader, device):
         return accuracy_score(y_true, y_pred)
     else:
         return round(np.linalg.norm(y_pred - y_test) / (0.2 * NM), 4)
+
+
+def getMNIST() -> tuple:
+
+    train_dataset = dsets.MNIST(
+        root="./data", train=True, transform=transforms.ToTensor(), download=True
+    )
+
+    test_dataset = dsets.MNIST(
+        root="./data", train=False, transform=transforms.ToTensor()
+    )
+    # umap
+
+    # X_train = train_dataset.data.numpy()
+    # df = pd.DataFrame(X_train.reshape(X_train.shape[0], -1))
+    # reducer = umap.UMAP(random_state=42, n_components=15)
+    # X_train = torch.from_numpy(reducer.fit_transform(df))
+    # train_dataset.data = X_train
+
+    # X_test = test_dataset.data.numpy()
+    # df = pd.DataFrame(X_test.reshape(X_test.shape[0], -1))
+    # X_test = torch.from_numpy(reducer.transform(df))
+    # test_dataset.data = X_test
+
+    # # to csv
+
+    # pd.DataFrame(X_train).to_csv("dataProb/train.csv", index=False)
+    # pd.DataFrame(X_test).to_csv("dataProb/test.csv", index=False)
+
+    X_train = pd.read_csv("dataProb/train.csv", header=0).to_numpy()
+    train_dataset.data = torch.from_numpy(X_train)
+
+    X_test = pd.read_csv("dataProb/test.csv", header=0).to_numpy()
+    test_dataset.data = torch.from_numpy(X_test)
+
+    train_loader = torch.utils.data.DataLoader(
+        dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True
+    )
+
+    test_loader = torch.utils.data.DataLoader(
+        dataset=test_dataset, batch_size=BATCH_SIZE, shuffle=False
+    )
+
+    return train_loader, test_loader

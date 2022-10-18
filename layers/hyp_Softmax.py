@@ -12,7 +12,6 @@ import torch.nn.init as init
 from manifolds import artanh, arsinh
 
 
-
 class HyperbolicMLR(nn.Module):
     """Performs softmax classification in Hyperbolic space."""
 
@@ -44,6 +43,7 @@ class HyperbolicMLR(nn.Module):
         nn.init.kaiming_uniform_(self.a_vals, a=np.sqrt(5))
         nn.init.kaiming_uniform_(self.p_vals, a=np.sqrt(5))
 
+
 def tensor_dot(x, y):
     """Performs a tensor dot product."""
     res = torch.einsum("ij,kj->ik", (x, y))
@@ -63,7 +63,6 @@ def mobius_addition_batch(x, y, c):
     denom = denom_part1 + denom_part2
     res = num / (denom.unsqueeze(2) + 1e-5)
     return res
-
 
 
 def hyperbolic_softmax(x, a, p, c):
