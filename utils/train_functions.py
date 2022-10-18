@@ -5,7 +5,7 @@ from utils.parameters import LEARNING_RATE
 import torch.nn as nn
 
 from optimizer import RiemannianAdam
-from manifolds.base import ManifoldParameter
+from manifolds import ManifoldParameter
 
 
 def obtain_loss(option):

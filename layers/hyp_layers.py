@@ -85,7 +85,8 @@ class HypLinear(nn.Module):
         self.reset_parameters()
 
     def reset_parameters(self):
-        init.xavier_uniform_(self.weight, gain=math.sqrt(2))
+        init.kaiming_uniform_(self.weight, a=np.sqrt(5))
+        # init.xavier_uniform_(self.weight, ga  in=math.sqrt(2))
         init.constant_(self.bias, 0)
 
     def forward(self, x):

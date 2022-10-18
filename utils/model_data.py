@@ -5,15 +5,11 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
-    confusion_matrix,
     f1_score,
     accuracy_score,
     precision_score,
     recall_score,
 )
-import matplotlib.pyplot as plt
-import seaborn as sn
-
 # Parameters
 from utils.parameters import (
     URL,
@@ -27,10 +23,8 @@ from utils.parameters import (
     SEED,
 )
 
-# Custom NN and Manifolds
-from manifolds.euclidean import Euclidean
-from manifolds.poincare import PoincareBall
-from NNs import HNNLayer
+from manifolds import Euclidean, PoincareBall
+from models import Ganea
 
 
 def get_model(option: str, dataset: int) -> torch.nn.Module:
@@ -51,7 +45,7 @@ def get_model(option: str, dataset: int) -> torch.nn.Module:
         c = 1
         manifold = PoincareBall(c)
 
-    model = HNNLayer(manifold, inputs, outputs, c, 1, 16)
+    model = Ganea(manifold, inputs, outputs, c, 1, 16)
 
     return model
 

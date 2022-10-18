@@ -37,7 +37,6 @@ def train_eval(
     ##########################
 
     torch.autograd.set_detect_anomaly(True)
-
     for e in range(1, EPOCHS + 1):
         # TRAINING
         train_epoch_loss = train_model(
@@ -48,18 +47,19 @@ def train_eval(
         with torch.no_grad():
             val_epoch_loss = val_process(model, val_loader, criterion, device)
 
-        test_acc = get_accuracy(loss, y_test, model, test_loader, device)
-        val_acc = get_accuracy(loss, y_test, model, val_loader, device)
-        train_acc = get_accuracy(loss, y_test, model, train_loader, device)
+        if e % 10 == 0:
+            test_acc = get_accuracy(loss, y_test, model, test_loader, device)
+            val_acc = get_accuracy(loss, y_test, model, val_loader, device)
+            train_acc = get_accuracy(loss, y_test, model, train_loader, device)
 
-        print(
-            f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.3f} | Val Loss: {val_epoch_loss/len(val_loader):.3f} | Train accuracy:{train_acc:.3f} | Val Accuracy: {val_acc:.3f} | Test Accuracy: {test_acc:.3f}"
-        )
+            print(
+                f"Epoch {e+0:03}: | Train Loss: {train_epoch_loss/len(train_loader):.3f} | Val Loss: {val_epoch_loss/len(val_loader):.3f} | Train accuracy:{train_acc:.3f} | Val Accuracy: {val_acc:.3f} | Test Accuracy: {test_acc:.3f}"
+            )
 
 
 if "__main__" == __name__:
     # seed torch
-    torch.manual_seed(SEED)
+    # torch.manual_seed(SEED)
 
     parser = argparse.ArgumentParser()
 
@@ -93,5 +93,6 @@ if "__main__" == __name__:
         generate_data(create_folder, replace, dataset, task)
 
     if make_train_eval:
-        print("Training and evaluating model")
-        train_eval(model, optimizer, dataset, loss, replace)
+        for i in range(10):
+            print("Training and evaluating model {} time".format(i))
+            train_eval(model, optimizer, dataset, loss, replace)
