@@ -40,64 +40,41 @@ def train_eval(
     torch.autograd.set_detect_anomaly(True)
     iter = 0
     for epoch in range(EPOCHS):
+
         partial = 0
         total_partial = 0
+        model.train()
 
         for i, (images, labels) in enumerate(train_loader):
-            # Load images with gradient accumulation capabilities
-            # print(images.shape, images)
+
             images, labels = images.to(device), labels.to(device)
             images = images.view(-1, 15).requires_grad_()
-            # pass images to device
-            # print(images)
-
-            # Clear gradients w.r.t. parameters
             optimizer.zero_grad()
-
-            # Forward pass to get output/logits
-
             outputs = model(images)
-            # Calculate Loss: softmax --> cross entropy loss
             loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
+
             _, predicted = torch.max(outputs.data, 1)
             partial += (predicted == labels).sum()
             total_partial += labels.size(0)
-
-            # Getting gradients w.r.t. parameters
-            loss.backward()
-
-            # Updating parameters
-            optimizer.step()
-
         iter += 1
 
         correct = 0
         total = 0
-        # Calculate Accuracy
-        # Iterate through test dataset
-        for images, labels in test_loader:
-            # Load images with gradient accumulation capabilities
-            # print(images.shape, images)
-            images = images.view(-1, 15).requires_grad_()
-            # print(images.shape)
 
-            # Forward pass only to get logits/output
+        for images, labels in test_loader:
+
+            images = images.view(-1, 15).requires_grad_()
             outputs = model(images)
 
-            # Get predictions from the maximum value
             _, predicted = torch.max(outputs.data, 1)
-
-            # Total number of labels
             total += labels.size(0)
-
-            # Total correct predictions
             correct += (predicted == labels).sum()
 
         accuracy = 100 * correct / total
 
-        # Print Loss
         print("training accuracy: {} ".format(partial / total_partial * 100))
-
         print(
             "Iteration: {}. Loss: {}. Accuracy: {}".format(iter, loss.item(), accuracy)
         )
