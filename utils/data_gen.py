@@ -25,7 +25,6 @@ from .parameters import (
 )
 
 
-
 def generate_data(create_folder, replace, r, task) -> None:
     # Generate the folder
 
@@ -44,7 +43,6 @@ def generate_data(create_folder, replace, r, task) -> None:
         data_mircea()
 
     print("# Data Generated #")
-
 
 
 def prefixWord(porcent, K, previus):
