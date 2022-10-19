@@ -6,7 +6,6 @@ This is a repository to investigate how to generate music based in Hyperbolic Em
 main.py
 |
 |__📂utils                              # utils function to create, get, process and run data/metrics/models
-|   |__📜data_generate.py
 |   |__📜model_data.py
 |   |__📜parameters.py
 |   |__📜run.py
@@ -30,6 +29,9 @@ main.py
 |__📂Optimizer
 |   |__ 📜Radam.py
 |
+|__📂data                               # Data to use in the project
+|   |__📜data_gen.py
+|   |__📜data_main.py
 |
 |_📂analisis                            # jupyter notebooks where we analize the results
 |  |
@@ -40,14 +42,6 @@ main.py
 |  |   |
 |  |   |__📂Second
 |  |   |   |__📜analisis2.ipynb
-|  |   |
-|  |   |
-|  |   |__📂Third
-|  |   |   |__📜Ganea_10.csv
-|  |   |x
-|  |   |__📂Fourth
-|  |   |   |__📜Ganea_10.csv
-
 
 ```
 

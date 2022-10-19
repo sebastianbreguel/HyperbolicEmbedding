@@ -3,7 +3,7 @@
 ##########################
 EPS = 1e-3
 EPOCHS = 60
-BATCH_SIZE = 64
+BATCH_SIZE = 64 * 64
 LEARNING_RATE = 0.003
 IN_FEATURES = 140
 OUT_FEATURES = 2
@@ -17,14 +17,15 @@ USE_BIAS = True
 
 # GANEA
 
-NG = 50_000  # Number of examples
+NG = 20_000  # Number of examples
+WORDS = 1_000
 POSITIVE = 0.5  # Prefix Positive Samples
 NUM = 9  # Number of OPTIONS
 NUMBERS = [str(i) for i in range(0, NUM + 1)] * 4
 URL_PREFIX_50 = "data/Prefix/Prefix_50"
 URL_PREFIX_30 = "data/Prefix/Prefix_30"
 URL_PREFIX_10 = "data/Prefix/Prefix_10"
-LARGE = 1
+LARGE = 2
 WORD_LARGE = 20
 
 # MIRCEA

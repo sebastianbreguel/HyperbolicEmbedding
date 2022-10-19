@@ -5,7 +5,6 @@ import torchvision.datasets as dsets
 
 import numpy as np
 import pandas as pd
-import umap
 
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
@@ -163,23 +162,6 @@ def getMNIST() -> tuple:
     test_dataset = dsets.MNIST(
         root="./data", train=False, transform=transforms.ToTensor()
     )
-    # umap
-
-    # X_train = train_dataset.data.numpy()
-    # df = pd.DataFrame(X_train.reshape(X_train.shape[0], -1))
-    # reducer = umap.UMAP(random_state=42, n_components=DIMENTIONS)
-    # X_train = torch.from_numpy(reducer.fit_transform(df))
-    # train_dataset.data = X_train
-
-    # X_test = test_dataset.data.numpy()
-    # df = pd.DataFrame(X_test.reshape(X_test.shape[0], -1))
-    # X_test = torch.from_numpy(reducer.transform(df))
-    # test_dataset.data = X_test
-
-    # # to csv
-
-    # pd.DataFrame(X_train).to_csv("data/MNIST/train.csv", index=False)
-    # pd.DataFrame(X_test).to_csv("data/MNIST/test.csv", index=False)
 
     X_train = pd.read_csv("data/MNIST/train.csv", header=0).to_numpy()
     train_dataset.data = torch.from_numpy(X_train)
