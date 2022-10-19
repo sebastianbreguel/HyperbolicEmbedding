@@ -1,13 +1,14 @@
 from utils import get_data, get_model, get_metrics, getMNIST
 import torch
 from utils import EPOCHS, LEARNING_RATE, SEED
-from utils import  obtain_loss, obtain_optimizer
+from utils import obtain_loss, obtain_optimizer
 from utils.parameters import LARGE
 
 import argparse
 from utils import run_model, run_MNIST
 
 print(__name__)
+
 
 def train_eval(
     option_model: str,
@@ -50,12 +51,12 @@ def train_eval(
             optimizer,
             y_test,
         )
+
+
 print(__name__)
 
 if "__main__" == __name__:
-    print("AAAAA")
-    # seed torch
-    torch.manual_seed(SEED)
+    # torch.manual_seed(SEED)
 
     parser = argparse.ArgumentParser()
 
@@ -73,7 +74,6 @@ if "__main__" == __name__:
     dataset = results.dataset
     loss = results.loss
     task = results.task
-    print(LARGE)
 
     for i in range(10):
         print("Training and evaluating model {} time".format(i))

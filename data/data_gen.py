@@ -1,4 +1,3 @@
-from tkinter import W
 import torchvision.transforms as transforms
 import torchvision.datasets as dsets
 import torch
@@ -11,7 +10,7 @@ from random import choice, sample, seed, random
 import umap
 
 from utils.parameters import (
-    NG,
+    NGS,
     NUMBERS,
     DIMENTIONS,
     URL_PREFIX_50,
@@ -28,19 +27,19 @@ from utils.parameters import (
     SEED,
     URL,
     WORD_LARGE,
+    WORDS,
     LARGE,
 )
 
 
 def generate_data(create_folder, replace, task) -> None:
-    # Generate the folder
 
     if create_folder:
         print("Creating folder")
         os.system("mkdir Prefix")
         sleep(1)
         print("\nFolder created\n")
-    # run generate_data.py
+
     if task == "ganea":
 
         data_ganea(replace)
@@ -67,12 +66,12 @@ def prefixWord(porcent, replaced, previus):
 
 def generate_df(porcentaje, url, replace, words_bank):
 
-    lista = [[]] * NG
+    lista = [[]] * NGS
     porcent = int(porcentaje * WORD_LARGE)
     K = int(porcent * replace)
     print(f"{K}-{porcent}")
 
-    for i in range(NG):
+    for i in range(NGS):
         a = choice(words_bank)
         if random() < POSITIVE:
             b = prefixWord(porcent, K, a)
@@ -84,8 +83,8 @@ def generate_df(porcentaje, url, replace, words_bank):
 
     df = pd.DataFrame(lista, columns=["Word", "Prefix", "isPrefix", "isNotPrefix"])
     print(df)
-    print(LARGE, NG)
-    for i in range(WORD_LARGE*LARGE):
+    print(LARGE, NGS)
+    for i in range(WORD_LARGE * LARGE):
         df[f"word-{i}"] = df["Word"].apply(lambda x: str(x)[i])
 
     for i in range(porcent):
@@ -100,8 +99,9 @@ def generate_df(porcentaje, url, replace, words_bank):
 def data_ganea(replace: float) -> None:
     seed(SEED)
     words_bank = []
-    for _ in range(1000):
-        words_bank.append("".join(sample(NUMBERS, WORD_LARGE*LARGE)))
+    print(LARGE, WORDS)
+    for _ in range(WORDS):
+        words_bank.append("".join(sample(NUMBERS, WORD_LARGE * LARGE)))
 
     generate_df(0.5, f"{URL_PREFIX_50}_{replace}.csv", replace, words_bank)
     generate_df(0.3, f"{URL_PREFIX_30}_{replace}.csv", replace, words_bank)

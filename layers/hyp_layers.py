@@ -1,5 +1,4 @@
 """Hyperbolic layers."""
-import math
 import numpy as np
 import torch
 import torch.nn as nn
@@ -8,6 +7,8 @@ import torch.nn.init as init
 from torch.nn.modules.module import Module
 from manifolds.base import ManifoldParameter
 from utils.parameters import USE_BIAS
+
+print(USE_BIAS, "HOLAA")
 
 
 def get_dim_act_curv(args):

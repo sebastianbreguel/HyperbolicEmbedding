@@ -3,12 +3,12 @@
 ##########################
 EPS = 1e-3
 EPOCHS = 60
-BATCH_SIZE = 64 * 64
-LEARNING_RATE = 0.003
+BATCH_SIZE = 128 * 4
+LEARNING_RATE = 0.0065
 IN_FEATURES = 140
 OUT_FEATURES = 2
 SEED = 0
-USE_BIAS = True
+USE_BIAS = False
 
 
 ##########################
@@ -17,7 +17,7 @@ USE_BIAS = True
 
 # GANEA
 
-NG = 20_000  # Number of examples
+NGS = 50_000  # Number of examples
 WORDS = 1_000
 POSITIVE = 0.5  # Prefix Positive Samples
 NUM = 9  # Number of OPTIONS

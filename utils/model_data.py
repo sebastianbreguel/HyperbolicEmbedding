@@ -5,7 +5,7 @@ import torchvision.datasets as dsets
 
 import numpy as np
 import pandas as pd
-
+from data import generate_data
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 
@@ -31,8 +31,8 @@ def get_model(option: str, dataset: int, task: str) -> torch.nn.Module:
         outputs = 10
 
     elif task == "ganea":
-        inputs = 20 + int(dataset * 0.2)
-        inputs *= LARGE
+        inputs = 20 * LARGE + int(dataset * 0.2)
+        print(dataset, inputs)
         outputs = 2
 
     elif task == "mircea":
