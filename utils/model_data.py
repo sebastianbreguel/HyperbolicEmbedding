@@ -1,17 +1,17 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
+import torchvision.transforms as transforms
+import torchvision.datasets as dsets
+
 import numpy as np
 import pandas as pd
+import umap
+
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import (
-    f1_score,
-    accuracy_score,
-    precision_score,
-    recall_score,
-)
 
-# Parameters
+from manifolds import Euclidean, PoincareBall
+from models import HNN
 from utils.parameters import (
     URL,
     URL_PREFIX_10,
@@ -19,48 +19,26 @@ from utils.parameters import (
     URL_PREFIX_50,
     IN_FEATURES,
     BATCH_SIZE,
-    NM,
+    DIMENTIONS,
     LARGE,
     SEED,
 )
 
-from manifolds import Euclidean, PoincareBall
-from models import Ganea
-import torch.nn as nn
-import torchvision.transforms as transforms
-import torchvision.datasets as dsets
-import umap
-import torch
-from torch.utils.data import Dataset, DataLoader
-import numpy as np
-import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import (
-    f1_score,
-    accuracy_score,
-    precision_score,
-    recall_score,
-)
-from sklearn.manifold import TSNE
-import matplotlib.pyplot as plt
-import seaborn as sn
-import torch.nn as nn
-import torchvision.transforms as transforms
-import torchvision.datasets as dsets
-import umap
 
+def get_model(option: str, dataset: int, task: str) -> torch.nn.Module:
 
-def get_model(option: str, dataset: int) -> torch.nn.Module:
-    inputs = 20 + int(dataset * 0.2)
-    outputs = 2
+    if task == "MNIST":
+        inputs = DIMENTIONS
+        outputs = 10
 
-    if dataset == 0:
+    elif task == "ganea":
+        inputs = 20 + int(dataset * 0.2)
+        inputs *= LARGE
+        outputs = 2
+
+    elif task == "mircea":
         inputs = 140
         outputs = 6
-
-    manifold = None
-    inputs *= LARGE
 
     c = 0
     if option == "euclidean":
@@ -69,38 +47,36 @@ def get_model(option: str, dataset: int) -> torch.nn.Module:
         c = 1
         manifold = PoincareBall(c)
 
-    model = Ganea(manifold, 15, 10, c, 1, 64)
+    model = HNN(manifold, inputs, outputs, c, 64)
 
     return model
 
 
-def get_data(dataset, replace) -> tuple:
+def get_data(dataset, replace, task) -> tuple:
     np.random.seed(SEED)
 
-    if dataset == 10:
-        url = URL_PREFIX_10 + "_" + str(replace) + ".csv"
-
-    elif dataset == 30:
-        url = URL_PREFIX_30 + "_" + str(replace) + ".csv"
-
-    elif dataset == 50:
-        url = URL_PREFIX_50 + "_" + str(replace) + ".csv"
-
-    elif dataset == 0:
+    if task == "mircea":
         url = URL
 
-    df = pd.read_csv(url, header=0)
-    df = df.drop(df.columns[0], axis=1)
-    # df shuffle
-    df = df.sample(frac=1).reset_index(drop=True)
+    else:
+        if dataset == 10:
+            url = URL_PREFIX_10 + "_" + str(replace) + ".csv"
 
-    if dataset == 0:
+        elif dataset == 30:
+            url = URL_PREFIX_30 + "_" + str(replace) + ".csv"
+
+        elif dataset == 50:
+            url = URL_PREFIX_50 + "_" + str(replace) + ".csv"
+
+    df = pd.read_csv(url, header=0)
+    df = df.drop(df.columns[0], axis=1).sample(frac=1).reset_index(drop=True)
+
+    if task == "mircea":
         X = df.iloc[:, :IN_FEATURES]
         y = df.iloc[:, IN_FEATURES:]
 
     else:
         X = df.iloc[:, 2:]
-        # # columns isPrefix and isNotPrefix
         y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
 
     ##########################
@@ -178,87 +154,6 @@ def get_data(dataset, replace) -> tuple:
     return train_loader, val_loader, test_loader, y_test
 
 
-def get_info(loss, y_test, y_pred_list, model, test_loader):
-    if loss == "cross":
-
-        y_pred = []
-        y_true = []
-
-        # iterate over test data
-        for inputs, labels in test_loader:
-            output = model(inputs)  # Feed Network
-
-            output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()
-            y_pred.extend(output)  # Save Prediction
-
-            labels = labels.data.cpu().numpy()
-            y_true.extend(labels)  # Save Truth
-
-        # constant for classes
-        new = []
-        # Build confusion matrix
-        for i in y_true:
-            # obtain the index ob the max
-            index = np.where(i == 1)[0][0]
-            new.append(index)
-
-        y_true = new
-        print(
-            f"Accuracy on the {len(y_test)} test data: {accuracy_score(y_true, y_pred)} %",
-            end=" | ",
-        )
-
-        list_info = [round(accuracy_score(y_true, y_pred), 3)]
-        # add to list info each data
-        list_info += f1_score(y_true, y_pred, average=None).tolist()
-        list_info += precision_score(
-            y_true, y_pred, average=None, zero_division=1
-        ).tolist()
-        list_info += recall_score(y_true, y_pred, average=None).tolist()
-
-        return list_info
-
-    elif loss == "mse":
-        print(
-            f"Loss on Test Data: {round(np.linalg.norm(y_pred_list-y_test)/(0.2 * NM), 4)}"
-        )
-        return round(np.linalg.norm(y_pred_list - y_test) / (0.2 * NM), 4)
-
-
-def get_accuracy(loss, y_test, model, test_loader, device):
-
-    y_pred = []
-    y_true = []
-
-    # iterate over test data
-
-    with torch.no_grad():
-        for inputs, labels in test_loader:
-            # pass to device
-            inputs, labels = inputs.to(device), labels.to(device)
-            output = model(inputs)  # Feed Network
-
-            output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()
-            y_pred.extend(output)  # Save Prediction
-
-            labels = labels.data.cpu().numpy()
-            y_true.extend(labels)  # Save Truth
-
-    if loss == "cross":
-        new = []
-        # Build confusion matrix
-        for i in y_true:
-            # obtain the index ob the max
-            index = np.where(i == 1)[0][0]
-            new.append(index)
-
-        y_true = new
-
-        return accuracy_score(y_true, y_pred)
-    else:
-        return round(np.linalg.norm(y_pred - y_test) / (0.2 * NM), 4)
-
-
 def getMNIST() -> tuple:
 
     train_dataset = dsets.MNIST(
@@ -272,7 +167,7 @@ def getMNIST() -> tuple:
 
     # X_train = train_dataset.data.numpy()
     # df = pd.DataFrame(X_train.reshape(X_train.shape[0], -1))
-    # reducer = umap.UMAP(random_state=42, n_components=15)
+    # reducer = umap.UMAP(random_state=42, n_components=DIMENTIONS)
     # X_train = torch.from_numpy(reducer.fit_transform(df))
     # train_dataset.data = X_train
 
@@ -283,13 +178,13 @@ def getMNIST() -> tuple:
 
     # # to csv
 
-    # pd.DataFrame(X_train).to_csv("dataProb/train.csv", index=False)
-    # pd.DataFrame(X_test).to_csv("dataProb/test.csv", index=False)
+    # pd.DataFrame(X_train).to_csv("data/MNIST/train.csv", index=False)
+    # pd.DataFrame(X_test).to_csv("data/MNIST/test.csv", index=False)
 
-    X_train = pd.read_csv("dataProb/train.csv", header=0).to_numpy()
+    X_train = pd.read_csv("data/MNIST/train.csv", header=0).to_numpy()
     train_dataset.data = torch.from_numpy(X_train)
 
-    X_test = pd.read_csv("dataProb/test.csv", header=0).to_numpy()
+    X_test = pd.read_csv("data/MNIST/test.csv", header=0).to_numpy()
     test_dataset.data = torch.from_numpy(X_test)
 
     train_loader = torch.utils.data.DataLoader(

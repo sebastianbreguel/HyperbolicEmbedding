@@ -1,9 +1,10 @@
-from utils import get_data, get_model, get_accuracy, get_info, getMNIST
+from utils import get_data, get_model, get_metrics, getMNIST
 import torch
 from utils import EPOCHS, LEARNING_RATE, SEED
-from utils import generate_data, obtain_loss, obtain_optimizer, train_model, val_process
+from utils import generate_data, obtain_loss, obtain_optimizer
 
 import argparse
+from utils import run_model, run_MNIST
 
 
 def train_eval(
@@ -14,69 +15,37 @@ def train_eval(
     replace,
 ) -> None:
 
-    # train_loader, val_loader, test_loader, y_test = get_data(dataset, replace)
-    train_loader, test_loader = getMNIST()
+    if task == "MNIST":
+        train_loader, test_loader = getMNIST()
 
-    ##########################
-    #####    MODEL
-    ##########################
+    else:
+        train_loader, val_loader, test_loader, y_test = get_data(dataset, replace, task)
 
     device = torch.device("cpu")
-    model = get_model(option_model, dataset).to(device)
-    # use all cpu cores for torch
+    model = get_model(option_model, dataset, task).to(device)
 
-    # Loss Function
     criterion = obtain_loss(loss)
 
-    # Optimizer
     optimizer = obtain_optimizer(optimizer_option, model)
 
     print(f"Running {option_model} Model - {optimizer_option} Optimizer", LEARNING_RATE)
-    print(model)
-    ##########################
-    #####  Train Model
-    ##########################
 
     torch.autograd.set_detect_anomaly(True)
-    iter = 0
-    for epoch in range(EPOCHS):
 
-        partial = 0
-        total_partial = 0
-        model.train()
+    if task == "MNIST":
+        run_MNIST(model, device, train_loader, test_loader, criterion, optimizer)
 
-        for i, (images, labels) in enumerate(train_loader):
-
-            images, labels = images.to(device), labels.to(device)
-            images = images.view(-1, 15).requires_grad_()
-            optimizer.zero_grad()
-            outputs = model(images)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
-
-            _, predicted = torch.max(outputs.data, 1)
-            partial += (predicted == labels).sum()
-            total_partial += labels.size(0)
-        iter += 1
-
-        correct = 0
-        total = 0
-
-        for images, labels in test_loader:
-
-            images = images.view(-1, 15).requires_grad_()
-            outputs = model(images)
-
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum()
-
-        accuracy = 100 * correct / total
-
-        print("training accuracy: {} ".format(partial / total_partial * 100))
-        print(
-            "Iteration: {}. Loss: {}. Accuracy: {}".format(iter, loss.item(), accuracy)
+    else:
+        run_model(
+            model,
+            device,
+            loss,
+            train_loader,
+            val_loader,
+            test_loader,
+            criterion,
+            optimizer,
+            y_test,
         )
 
 
@@ -113,7 +82,7 @@ if "__main__" == __name__:
 
     if gen_data:
         print("Generating data")
-        generate_data(create_folder, replace, dataset, task)
+        generate_data(create_folder, replace, task)
 
     if make_train_eval:
         for i in range(10):

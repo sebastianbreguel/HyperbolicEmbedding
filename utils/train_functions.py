@@ -1,5 +1,5 @@
 import torch.nn as nn
-from .model_data import get_accuracy
+from .stadistic_util import get_accuracy
 import torch
 from utils.parameters import LEARNING_RATE
 import torch.nn as nn

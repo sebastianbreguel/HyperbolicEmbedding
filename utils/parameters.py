@@ -2,12 +2,13 @@
 #####    Model Params
 ##########################
 EPS = 1e-3
-EPOCHS = 1024
-BATCH_SIZE = 32 * 32
+EPOCHS = 60
+BATCH_SIZE = 64
 LEARNING_RATE = 0.003
 IN_FEATURES = 140
 OUT_FEATURES = 2
 SEED = 0
+USE_BIAS = True
 
 
 ##########################
@@ -40,3 +41,8 @@ ROUND = 5
 EMB = {}
 for i, e in enumerate(VOCABULARY):
     EMB[e] = i
+
+
+# MNIST
+
+DIMENTIONS = 15

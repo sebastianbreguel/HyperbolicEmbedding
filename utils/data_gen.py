@@ -25,7 +25,7 @@ from .parameters import (
 )
 
 
-def generate_data(create_folder, replace, r, task) -> None:
+def generate_data(create_folder, replace, task) -> None:
     # Generate the folder
 
     if create_folder:
@@ -37,7 +37,7 @@ def generate_data(create_folder, replace, r, task) -> None:
     # run generate_data.py
     if task == "ganea":
 
-        data_ganea(replace, r)
+        data_ganea(replace)
 
     elif task == "mircea":
         data_mircea()
@@ -45,10 +45,10 @@ def generate_data(create_folder, replace, r, task) -> None:
     print("# Data Generated #")
 
 
-def prefixWord(porcent, K, previus):
+def prefixWord(porcent, replaced, previus):
     new_word = ""
 
-    r = sample(range(porcent), K)
+    r = sample(range(porcent), replaced)
     for i in range(porcent):
         if i in r:
             new_word += choice(NUMBERS)
@@ -68,7 +68,7 @@ def processdf(porcentaje, df, url):
     df.to_csv(url)
 
 
-def generate_df(porcentaje, url, positivi, replace, words_bank):
+def generate_df(porcentaje, url, replace, words_bank):
 
     lista = [[]] * NG
     # amount of the random/Prefix
@@ -91,15 +91,15 @@ def generate_df(porcentaje, url, positivi, replace, words_bank):
     processdf(porcent, df, url)
 
 
-def data_ganea(replace: float, positivi: float) -> None:
+def data_ganea(replace: float) -> None:
     seed(SEED)
     words_bank = []
     for _ in range(NG):
         words_bank.append("".join(sample(NUMBERS, WORD_LARGE)))
 
-    generate_df(0.5, f"{URL_PREFIX_50}_{replace}.csv", positivi, replace, words_bank)
-    generate_df(0.3, f"{URL_PREFIX_30}_{replace}.csv", positivi, replace, words_bank)
-    generate_df(0.1, f"{URL_PREFIX_10}_{replace}.csv", positivi, replace, words_bank)
+    generate_df(0.5, f"{URL_PREFIX_50}_{replace}.csv", replace, words_bank)
+    generate_df(0.3, f"{URL_PREFIX_30}_{replace}.csv", replace, words_bank)
+    generate_df(0.1, f"{URL_PREFIX_10}_{replace}.csv", replace, words_bank)
 
 
 def data_ganea1(replace, Positives):

@@ -7,17 +7,17 @@ from layers import Linear, HypLinear, HypAct, HyperbolicMLR
 from torch.nn import Linear
 
 
-class Ganea(nn.Module):
+class HNN(nn.Module):
     """
     Hyperbolic neural networks layer.
     """
 
-    def __init__(self, manifold, in_features, out_features, c, use_bias, hidden):
-        super(Ganea, self).__init__()
+    def __init__(self, manifold, in_features, out_features, c, hidden):
+        super(HNN, self).__init__()
         self.manifold = manifold
         self.c = c
-        self.linear1 = HypLinear(manifold, in_features, hidden, c, 0, use_bias)
-        self.linear2 = HypLinear(manifold, hidden, out_features, c, 0, use_bias)
+        self.linear1 = HypLinear(manifold, in_features, hidden, c, 0)
+        self.linear2 = HypLinear(manifold, hidden, out_features, c, 0)
 
         self.softmax = nn.Softmax(dim=1)
         if self.c == 1:
@@ -28,7 +28,7 @@ class Ganea(nn.Module):
 
     def forward(self, x):
         x = self.manifold.proj(self.manifold.expmap0(x))
-        x = self.hyp_Leaky_Relu(self.linear1(x))
+        x = self.hyp_Relu(self.linear1(x))
         x = self.linear2(x)
         x = self.softmax(x)
         return x
