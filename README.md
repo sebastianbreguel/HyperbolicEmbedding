@@ -4,46 +4,59 @@ This is a repository to investigate how to generate music based in Hyperbolic Em
 
 ```bash
 main.py
-|__📂utils
-|   |__📜functions.py
-|   |__📜generate.py
+|
+|__📂utils                              # utils function to create, get, process and run data/metrics/models
 |   |__📜model_data.py
 |   |__📜parameters.py
+|   |__📜run.py
+|   |__📜stadistic_util.py
+|   |__📜train_functions.py
 |
-|__📂NNs
-|   |__ 📜hyperbolic.py      #have the neuronal network for both manfiolds
-|
-|__📂Optimizer
-|   |__ 📜Radam.py           #not ready
-|
-|__📂Manifolds
+|__📂manifolds                          # Manifolds to use in the project
 |   |__📜base.py
 |   |__📜Euclidean.py
+|   |__📜math_util.py
 |   |__📜poincare.py
 |
-|__📂data
-|   |__📜data_10.csv
-|   |__📜data_30.csv
-|   |__📜data_50.csv
-|   |__📜Phylogenetics.csv    # For mircea experiment
+|__📂layers                             # Manifold Layers
+|   |__📜layers.py
+|   |__📜hyp_layers.py
+|   |__📜hyp_softmax.py
 |
-|_📂Analisis
-   |__📜Analisis.ipynb
+|__📂models                             # NN for the project
+|   |__ ganeaPrefix.py
+|
+|__📂Optimizer
+|   |__ 📜Radam.py
+|
+|__📂data                               # Data to use in the project
+|   |__📜data_gen.py
+|   |__📜data_main.py
+|
+|_📂analisis                            # jupyter notebooks where we analize the results
+|  |
+|  |__📂 Ganea
+|  |   |__📂First
+|  |   |   |__📜analisis.ipynb
+|  |   |
+|  |   |
+|  |   |__📂Second
+|  |   |   |__📜analisis2.ipynb
 
 ```
 
 # Usage
 
-#### Arguments to create data
+## Arguments to create data
 
 ```bash
 --generate_data : Generate data from midi files
 --create_folder : Create folder to save data
---task: Task to train, could be ganea(classification) or mircea(regression)
+--task: Task to train, could be ganea/MNIST(classification) or mircea(regression)
 --replace: if task 'ganea'-> Make prefix with noise
 ```
 
-#### Arguments to run model
+## Arguments to run model
 
 ```bash
 --train_eval : Train and evaluate the model
@@ -57,27 +70,27 @@ main.py
 
 ### Examples
 
-1. Run model euclidean with dataset 10 on task ganea
+1: Run model euclidean with dataset 10 on task ganea
 
 ```python
 python main.py --train_eval --model euclidean --task ganea --loss cross --dataset 10
 
 ```
 
-2. Run model hyperbolic with dataset 10 on task ganea
+2: Run model hyperbolic with dataset 10 on task ganea
 
 ```python
 python main.py --train_eval --model hyperbolic --task ganea --loss cross --dataset 10
 ```
 
-3. Run model euclidean with dataset 0 on task ganea
+3: Run model euclidean with dataset 0 on task ganea
 
 ```python
 python main.py --train_eval --model euclidean --task mircea --loss mse --dataset 0
 
 ```
 
-4. **_run and create data_**
+4: **_run and create data_**
 
 ```python
 python main.py --generate_data --create_folder --task ganea --replace --train_eval --model euclidean --task ganea --loss cross --dataset 10
@@ -85,8 +98,8 @@ python main.py --generate_data --create_folder --task ganea --replace --train_ev
 
 #### TODO
 
-- [ ] Add more datasets
-- [ ] Implement Riemannian Adam
+- [x] Add more datasets
+- [x] Implement Riemannian Adam
 - [ ] Implement Riemannian SGD
 - [ ] Expand to RNN
 

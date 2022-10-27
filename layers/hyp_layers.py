@@ -1,14 +1,14 @@
 """Hyperbolic layers."""
-import math
 import numpy as np
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.nn.init as init
 from torch.nn.modules.module import Module
 from manifolds.base import ManifoldParameter
-from manifolds.math_utils import arsinh
+from utils.parameters import USE_BIAS
+
+print(USE_BIAS, "HOLAA")
 
 
 def get_dim_act_curv(args):
@@ -63,14 +63,14 @@ class HypLinear(nn.Module):
     Hyperbolic linear layer.
     """
 
-    def __init__(self, manifold, in_features, out_features, c, dropout, use_bias):
+    def __init__(self, manifold, in_features, out_features, c, dropout):
         super(HypLinear, self).__init__()
         self.manifold = manifold
         self.in_features = in_features
         self.out_features = out_features
         self.c = c
         self.dropout = dropout
-        self.use_bias = use_bias
+        self.use_bias = USE_BIAS
         # self.bias = nn.Parameter(torch.Tensor(out_features))
         # self.weight = nn.Parameter(torch.Tensor(out_features, in_features))
         self.bias = ManifoldParameter(
@@ -85,7 +85,8 @@ class HypLinear(nn.Module):
         self.reset_parameters()
 
     def reset_parameters(self):
-        init.xavier_uniform_(self.weight, gain=math.sqrt(2))
+        init.kaiming_uniform_(self.weight, a=np.sqrt(5))
+        # init.xavier_uniform_(self.weight, ga  in=math.sqrt(2))
         init.constant_(self.bias, 0)
 
     def forward(self, x):
