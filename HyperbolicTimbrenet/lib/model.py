@@ -1,4 +1,6 @@
 import tensorflow as tf
+from .hyp_model.linear_hyp import LinearHyperbolic
+from .hyp_model.manifold import Poincare
 
 class CVAE(tf.keras.Model):
     def __init__(self, latent_dim):
@@ -60,14 +62,27 @@ class CVAE(tf.keras.Model):
                     pool_size=(2, 2),strides=2,padding='same'),
                 
                 tf.keras.layers.Flatten(),
-                tf.keras.layers.Dense(latent_dim + latent_dim),
+                # tf.keras.layers.Dense(4*(latent_dim + latent_dim)),
+                # tf.keras.layers.Dense(latent_dim + latent_dim),
+
+                # LinearHyperbolic( int(32 * (latent_dim+latent_dim)), Poincare(), 1, activation=tf.keras.layers.LeakyReLU(), output_hyp=True),
+                # LinearHyperbolic( int(8 * (latent_dim+latent_dim)), Poincare(), 1, activation=tf.keras.layers.LeakyReLU(), output_hyp=True),
+                LinearHyperbolic(latent_dim+latent_dim, Poincare(), 1),
+
           ]
         )
         
         self.generative_net = tf.keras.Sequential(
             [
                 tf.keras.layers.InputLayer(input_shape=(latent_dim,)),
-                tf.keras.layers.Dense(units=1*8*256),
+
+                # tf.keras.layers.Dense(4*(latent_dim + latent_dim)),
+                # tf.keras.layers.Dense(units=1*8*256),
+
+                # LinearHyperbolic(int(8 * (latent_dim+latent_dim)), Poincare(), 1, activation=tf.keras.layers.LeakyReLU(), output_hyp=True),
+                # LinearHyperbolic(int(16 * (latent_dim+latent_dim)), Poincare(), 1, activation=tf.keras.layers.LeakyReLU()),
+                LinearHyperbolic(1*8*256, Poincare(), 1, activation=tf.keras.layers.LeakyReLU()),
+
                 tf.keras.layers.Reshape(target_shape=(1, 8, 256)),
                 
                 tf.keras.layers.UpSampling2D(
