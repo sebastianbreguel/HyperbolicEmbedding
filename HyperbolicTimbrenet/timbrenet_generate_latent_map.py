@@ -1,8 +1,5 @@
-import os
-import sys
 import itertools
 import numpy as np
-import tensorflow as tf
 import matplotlib.pyplot as plt
 from sklearn.cross_decomposition import CCA
 from lib.model import CVAE as Model

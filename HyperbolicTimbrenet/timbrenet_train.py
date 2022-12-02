@@ -1,11 +1,9 @@
 import os
-import sys
 import time
 import datetime
 import numpy as np
 import tensorflow as tf
 from lib.model import CVAE as Model
-from lib.latent_chord import latent_chord
 from scipy.io.wavfile import read as read_wav
 from lib.specgrams_helper import SpecgramsHelper
 
@@ -121,6 +119,8 @@ def train_model(latent_dim,
 
     #Train
     best_elbo = -1e20
+    test_losses = []
+    train_losses = []
 
     for epoch in range(start_epoch, start_epoch+ epochs):
         start_time = time.time()
@@ -139,7 +139,13 @@ def train_model(latent_dim,
         with train_summary_writer.as_default():
             tf.summary.scalar('Train ELBO', -train_loss.result(), step=epoch)
 
-        print('Epoch: {}, Test set ELBO: {}, time elapse for current epoch {}'.format(epoch,elbo,end_time - start_time))
+        test_losses.append([elbo,epoch])
+        train_elbo = -train_loss.result()
+        train_losses.append([train_elbo,epoch])
+
+
+        print('Epoch: {}, Test set ELBO: {}, Train set ELBO: {}, \
+            time elapse for current epoch {}'.format(epoch,elbo,train_elbo,end_time - start_time))
 
         if elbo > best_elbo:
             print('Model saved:')

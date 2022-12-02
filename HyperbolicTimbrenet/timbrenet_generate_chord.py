@@ -1,6 +1,4 @@
 import os
-import sys
-import numpy as np
 import tensorflow as tf
 from scipy.io.wavfile import write
 from lib.model import CVAE as Model
