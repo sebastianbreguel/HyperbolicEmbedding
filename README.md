@@ -4,8 +4,8 @@ This is a repository to investigate how to generate music based in Hyperbolic Em
 
 Here are two folders:
 
-- *TorchExperiments*: This folder contains the experiments and models done with PyTorch
-- *HyperbolicTImbrenet*: This folders contain the timbrenet model of Agustin Macaya, and our experiments applying hyperobolic layers to the model.
+- **TorchExperiments**: This folder contains the experiments and models done with PyTorch
+- **HyperbolicTImbrenet**: This folders contain the timbrenet model of Agustin Macaya, and our experiments applying hyperobolic layers to the model.
 
 
 ## Explanations
