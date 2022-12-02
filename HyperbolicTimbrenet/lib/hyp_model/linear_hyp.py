@@ -31,7 +31,7 @@ class LinearHyperbolic(keras.layers.Layer):
         self.output_hyp = output_hyp
 
     def build(self, batch_input_shape):
-        print(batch_input_shape,"yo?")
+        print(batch_input_shape, "yo?")
         w_init = tf.random_normal_initializer()
         self.kernel = tf.Variable(
             initial_value=w_init(
@@ -96,8 +96,7 @@ class LinearHyperbolic(keras.layers.Layer):
         }
 
 
-
-class  LinearHyperbolicPlusPlus(keras.layers.Layer):
+class LinearHyperbolicPlusPlus(keras.layers.Layer):
     """
     Implementation of a hyperbolic linear layer for a neural network, that inherits from the keras Layer class
 
@@ -171,11 +170,15 @@ class  LinearHyperbolicPlusPlus(keras.layers.Layer):
         if self.input_hyp == False:
             inputs = self.manifold.proj(self.manifold.expmap0(inputs, self.c), self.c)
 
-        v_norm = tf.clip_by_value( tf.norm(self.weigh_v, axis=0, keepdims=True), clip_value_min=1e-6, clip_value_max=1e10)
+        v_norm = tf.clip_by_value(
+            tf.norm(self.weigh_v, axis=0, keepdims=True),
+            clip_value_min=1e-6,
+            clip_value_max=1e10,
+        )
         weigh_v_norm = self.weigh_v / v_norm
-        x = poincare_linear(inputs, self.manifold, self.weight_g, weigh_v_norm, self.bias, self.c)
-
-
+        x = poincare_linear(
+            inputs, self.manifold, self.weight_g, weigh_v_norm, self.bias, self.c
+        )
 
         if self.has_act:
             x = activation_result(self.manifold, self.activation, x, self.c)
