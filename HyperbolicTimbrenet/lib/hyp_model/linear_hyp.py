@@ -1,5 +1,6 @@
 import tensorflow as tf
 from tensorflow import keras
+from .util import poincare_linear, unidirectional_poincare_mlr, activation_result
 
 
 class LinearHyperbolic(keras.layers.Layer):
@@ -192,11 +193,3 @@ class  LinearHyperbolicPlusPlus(keras.layers.Layer):
             "manifold": self.manifold,
             "curvature": self.c,
         }
-
-
-def activation_result(manifold, activation, input, c=1.0):
-    result = manifold.logmap0(input, c=c)
-    result = activation(result)
-    result = manifold.expmap0(result, c=c)
-    result = manifold.proj(result, c=c)
-    return result

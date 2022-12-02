@@ -27,3 +27,13 @@ def unidirectional_poincare_mlr(x, z_norm, z_unit, r, c):
     six = tf.math.divide(five, forth)
     seven = first_part * asinh(six)
     return seven
+
+
+
+
+def activation_result(manifold, activation, input, c=1.0):
+    result = manifold.logmap0(input, c=c)
+    result = activation(result)
+    result = manifold.expmap0(result, c=c)
+    result = manifold.proj(result, c=c)
+    return result
