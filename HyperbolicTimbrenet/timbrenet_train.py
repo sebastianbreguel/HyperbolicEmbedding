@@ -24,7 +24,6 @@ def compute_loss(model, x, beta):
     mean, logvar = model.encode(x)
     z = model.reparameterize(mean, logvar)
     x_logit = model.decode(z)
-
     mse = tf.keras.losses.MeanSquaredError(reduction=tf.keras.losses.Reduction.NONE)
     MSE = mse(x, x_logit)
     logpx_z = -tf.reduce_sum(MSE, axis=[1, 2])
@@ -57,7 +56,7 @@ def train_model(
 
     if gpu:
         os.environ["CUDA_VISIBLE_DEVICES"] = "1"
-        print(tf.test.is_gpu_available())
+        print(tf.config.list_physical_devices("GPU"))
 
     spec_helper = SpecgramsHelper(
         audio_length=64000,
@@ -132,6 +131,7 @@ def train_model(
     # declare model
     model = Model(latent_dim)
     model.inference_net.summary()
+    model.generative_net.summary()
 
     print("New Model")
     description = (
@@ -162,8 +162,8 @@ def train_model(
     best_elbo = -1e20
     test_losses = []
     train_losses = []
-
     for epoch in range(start_epoch, start_epoch + epochs):
+
         start_time = time.time()
         train_loss = tf.keras.metrics.Mean()
         for train_x in train_dataset:
@@ -179,7 +179,6 @@ def train_model(
             tf.summary.scalar("Test ELBO", -test_loss.result(), step=epoch)
         with train_summary_writer.as_default():
             tf.summary.scalar("Train ELBO", -train_loss.result(), step=epoch)
-
         test_losses.append([elbo, epoch])
         train_elbo = -train_loss.result()
         train_losses.append([train_elbo, epoch])
@@ -192,18 +191,15 @@ def train_model(
         )
 
         if elbo > best_elbo:
-            print("Model saved:")
+            print('Model saved:')
             best_elbo = elbo
-            model.save_weights(
-                model_save
-                + "_se_"
-                + str(start_epoch)
-                + "_ee_"
-                + str(epochs + start_epoch)
-                + "_ep_"
-                + str(epoch)
-            )
-            model.save_weights(model_save + "_the_best")
+            model.save_weights(model_save+'_se_'+str(start_epoch)+'_ee_'+str(epochs+start_epoch)+'_ep_'+str(epoch))
+            model.save_weights(model_save+'_the_best')
+    # create a file for losses and write the losses
+    f = open(model_save + "_losses.txt", "w")
+    f.write("Train losses: " + str(train_losses) + "\n")
+    f.write("Test losses: " + str(test_losses) + "\n")
+    f.close()
 
 
 if __name__ == "__main__":
@@ -238,10 +234,12 @@ if __name__ == "__main__":
     examples = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
     # Select training params
-    epochs = 5
+    epochs = 15
     beta = 0.2
     learning_rate = 3e-5
-    optimizer = tf.keras.optimizers.Adam(learning_rate)
+    optimizer = tf.keras.optimizers.Adam(
+        learning_rate=learning_rate, weight_decay=0.0001
+    )
 
     train_model(
         latent_dim,
