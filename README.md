@@ -8,7 +8,7 @@ Here are two folders:
 - **HyperbolicTImbrenet**: This folders contain the timbrenet model of Agustin Macaya, and our experiments applying hyperobolic layers to the model.
 
 
-## Explanations
+## State of Art
 
 On this repository we try to explore and show where and how Hyperbolic layers can be usefull to improve some deep learning task.
 
