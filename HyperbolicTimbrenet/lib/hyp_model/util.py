@@ -28,9 +28,6 @@ def unidirectional_poincare_mlr(x, z_norm, z_unit, r, c):
     seven = first_part * asinh(six)
     return seven
 
-
-
-
 def activation_result(manifold, activation, input, c=1.0):
     result = manifold.logmap0(input, c=c)
     result = activation(result)

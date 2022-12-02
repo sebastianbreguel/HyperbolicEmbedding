@@ -1,5 +1,5 @@
 import tensorflow as tf
-from .hyp_model.linear_hyp import LinearHyperbolic
+from .hyp_model.linear_hyp import LinearHyperbolic, LinearHyperbolicPlusPlus
 from .hyp_model.manifold import Poincare
 
 class CVAE(tf.keras.Model):
@@ -65,9 +65,9 @@ class CVAE(tf.keras.Model):
                 # tf.keras.layers.Dense(4*(latent_dim + latent_dim)),
                 # tf.keras.layers.Dense(latent_dim + latent_dim),
 
-                # LinearHyperbolic( int(32 * (latent_dim+latent_dim)), Poincare(), 1, activation=tf.keras.layers.LeakyReLU(), output_hyp=True),
-                # LinearHyperbolic( int(8 * (latent_dim+latent_dim)), Poincare(), 1, activation=tf.keras.layers.LeakyReLU(), output_hyp=True),
-                LinearHyperbolic(latent_dim+latent_dim, Poincare(), 1),
+                # LinearHyperbolicPlusPlus( int(32 * (latent_dim+latent_dim)), Poincare(), 1, activation=tf.keras.layers.LeakyReLU(), output_hyp=True),
+                # LinearHyperbolicPlusPlus( int(8 * (latent_dim+latent_dim)), Poincare(), 1, activation=tf.keras.layers.LeakyReLU(), output_hyp=True),
+                LinearHyperbolicPlusPlus(latent_dim+latent_dim, Poincare(), 1),
 
           ]
         )
@@ -79,9 +79,9 @@ class CVAE(tf.keras.Model):
                 # tf.keras.layers.Dense(4*(latent_dim + latent_dim)),
                 # tf.keras.layers.Dense(units=1*8*256),
 
-                # LinearHyperbolic(int(8 * (latent_dim+latent_dim)), Poincare(), 1, activation=tf.keras.layers.LeakyReLU(), output_hyp=True),
+                # LinearHyperbolicPlusPlus(int(8 * (latent_dim+latent_dim)), Poincare(), 1, activation=tf.keras.layers.LeakyReLU(), output_hyp=True),
                 # LinearHyperbolic(int(16 * (latent_dim+latent_dim)), Poincare(), 1, activation=tf.keras.layers.LeakyReLU()),
-                LinearHyperbolic(1*8*256, Poincare(), 1, activation=tf.keras.layers.LeakyReLU()),
+                LinearHyperbolicPlusPlus(1*8*256, Poincare(), 1, activation=tf.keras.layers.LeakyReLU()),
 
                 tf.keras.layers.Reshape(target_shape=(1, 8, 256)),
                 
