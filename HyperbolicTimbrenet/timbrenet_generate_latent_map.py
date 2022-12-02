@@ -6,7 +6,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from sklearn.cross_decomposition import CCA
 from lib.model import CVAE as Model
-from lib.latent_chord_v2 import latent_chord
+from lib.latent_chord import latent_chord
 from lib.specgrams_helper import SpecgramsHelper
 
 
