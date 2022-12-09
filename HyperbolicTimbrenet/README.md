@@ -1,7 +1,10 @@
 # TimbreNet
+
 This project aims to create deep learning tools for musicians to work with the timbre of different sounds and instruments.
 
 This project is in a initial developing stage.
+
+on dowloand_file.ipynb you have to run to obatin the weights of the models trainend
 
 ## Datasets
 
@@ -33,3 +36,7 @@ This project is in a initial developing stage.
 - In the "volumes" select the volumes of the dataset you want to plot.
 - In the "examples" select the examples of the dataset you want to plot.
 - Finally, run timbrenet_generate_latent_map.py
+
+```
+
+```

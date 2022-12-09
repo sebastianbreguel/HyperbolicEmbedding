@@ -54,6 +54,7 @@ def train_model(
     beta,
     learning_rate,
     optimizer,
+    model = 1,
     baseline=True,
     hyperbolic=False,
     mircea_model=False,
@@ -134,26 +135,25 @@ def train_model(
     print("Success preparing train and test dataset!")
 
     model_save = "./results"
-    if baseline:
-        if hyperbolic:
+    if model == 1:
             model_save += "/baseline_hyp"
             file = "baseline_hyperbolic_latent_2_lr_3e-05_b_1_the_best"
             model = HModel(latent_dim)
-        else:
+    elif model == 2:
             file = "baseline_latent_2_lr_3e-05_b_1_the_best"
             model_save += "/baseline"
             model = Model(latent_dim)
-    else:
-        if mircea_model:
-            file = "17_08_56_mel_p0_latent_2_lr_3e-05_b_1_the_best"
-            start_epoch = 467
+    elif model == 3:
+        file = "17_08_56_mel_p0_latent_2_lr_3e-05_b_1_the_best"
+        start_epoch = 467
 
-            model_save += "/mircea_model"
-            model = HModel_new(latent_dim)
-        else:
-            file = "breguel_model_latent_2_lr_3e-05_b_1_the_best"
-            model_save += "/breguel_model"
-            model = HModel_breguel(latent_dim)
+        model_save += "/mircea_model"
+        model = HModel_new(latent_dim)
+
+    elif model == 4:
+        file = "breguel_model_latent_2_lr_3e-05_b_1_the_best"
+        model_save += "/breguel_model"
+        model = HModel_breguel(latent_dim)
 
     model.inference_net.summary()
     model.generative_net.summary()
@@ -284,8 +284,12 @@ if __name__ == "__main__":
         beta,
         learning_rate,
         optimizer,
-        # hyperbolic=True,
-        baseline=False,
-        # mircea_model=True,
+        model = 1,
         gpu=True,
     )
+
+
+# model 1 is baseline
+# model 2 is baseline hyperbolic
+# model 3 is mircea
+# model 4 is breguel
