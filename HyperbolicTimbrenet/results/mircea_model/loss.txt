@@ -1,0 +1,554 @@
+Epoch: 1, Test set ELBO: -20471.04296875, Train set ELBO: -29410.53515625, time elapse for current epoch 114.74434685707092
+Model saved:
+Epoch: 2, Test set ELBO: -18736.818359375, Train set ELBO: -19054.154296875, time elapse for current epoch 111.84471201896667
+Model saved:
+Epoch: 3, Test set ELBO: -17653.607421875, Train set ELBO: -17666.630859375, time elapse for current epoch 111.7379379272461
+Model saved:
+Epoch: 4, Test set ELBO: -17351.966796875, Train set ELBO: -17174.732421875, time elapse for current epoch 113.11829400062561
+Model saved:
+Epoch: 5, Test set ELBO: -17092.599609375, Train set ELBO: -16891.111328125, time elapse for current epoch 117.74918293952942
+Model saved:
+Epoch: 6, Test set ELBO: -16389.4296875, Train set ELBO: -16492.044921875, time elapse for current epoch 117.49072790145874
+Model saved:
+Epoch: 7, Test set ELBO: -15813.134765625, Train set ELBO: -15880.3740234375, time elapse for current epoch 112.65011191368103
+Model saved:
+Epoch: 8, Test set ELBO: -15830.2705078125, Train set ELBO: -15576.6708984375, time elapse for current epoch 112.53599810600281
+Epoch: 9, Test set ELBO: -15504.1513671875, Train set ELBO: -15359.2880859375, time elapse for current epoch 112.62588596343994
+Model saved:
+Epoch: 10, Test set ELBO: -15334.9091796875, Train set ELBO: -15180.03125, time elapse for current epoch 113.00497388839722
+Model saved:
+Epoch: 11, Test set ELBO: -15181.5126953125, Train set ELBO: -14994.9951171875, time elapse for current epoch 113.03472685813904
+Model saved:
+Epoch: 12, Test set ELBO: -14893.884765625, Train set ELBO: -14954.337890625, time elapse for current epoch 116.3094801902771
+Model saved:
+Epoch: 13, Test set ELBO: -14681.8779296875, Train set ELBO: -14568.4267578125, time elapse for current epoch 112.08674836158752
+Model saved:
+Epoch: 14, Test set ELBO: -14389.3779296875, Train set ELBO: -14348.033203125, time elapse for current epoch 112.94149279594421
+Model saved:
+Epoch: 15, Test set ELBO: -14234.5341796875, Train set ELBO: -14154.4736328125, time elapse for current epoch 113.51526713371277
+Model saved:
+Epoch: 16, Test set ELBO: -14157.0771484375, Train set ELBO: -14042.173828125, time elapse for current epoch 113.37125778198242
+Model saved:
+Epoch: 17, Test set ELBO: -14010.953125, Train set ELBO: -13951.4580078125, time elapse for current epoch 112.98309922218323
+Model saved:
+Epoch: 18, Test set ELBO: -13998.546875, Train set ELBO: -13888.1513671875, time elapse for current epoch 113.2589361667633
+Model saved:
+Epoch: 19, Test set ELBO: -14057.1162109375, Train set ELBO: -13895.2880859375, time elapse for current epoch 113.32515525817871
+Epoch: 20, Test set ELBO: -13925.6396484375, Train set ELBO: -13823.7421875, time elapse for current epoch 113.62954497337341
+Model saved:
+Epoch: 21, Test set ELBO: -14049.4287109375, Train set ELBO: -13777.3095703125, time elapse for current epoch 113.84942317008972
+Epoch: 22, Test set ELBO: -13863.1689453125, Train set ELBO: -13837.6513671875, time elapse for current epoch 113.81768417358398
+Model saved:
+Epoch: 23, Test set ELBO: -13881.7451171875, Train set ELBO: -13725.4970703125, time elapse for current epoch 114.17971086502075
+Epoch: 24, Test set ELBO: -13914.3115234375, Train set ELBO: -13730.96875, time elapse for current epoch 111.48636984825134
+Epoch: 25, Test set ELBO: -13837.84375, Train set ELBO: -13694.205078125, time elapse for current epoch 110.9035291671753
+Model saved:
+Epoch: 26, Test set ELBO: -13884.259765625, Train set ELBO: -13706.4345703125, time elapse for current epoch 110.78940272331238
+Epoch: 27, Test set ELBO: -13757.859375, Train set ELBO: -13690.4013671875, time elapse for current epoch 110.97567296028137
+Model saved:
+Epoch: 28, Test set ELBO: -13817.9140625, Train set ELBO: -13672.6708984375, time elapse for current epoch 111.49281001091003
+Epoch: 29, Test set ELBO: -13754.6552734375, Train set ELBO: -13673.6201171875, time elapse for current epoch 109.98813271522522
+Model saved:
+Epoch: 30, Test set ELBO: -13761.0751953125, Train set ELBO: -13654.822265625, time elapse for current epoch 110.4984381198883
+Epoch: 31, Test set ELBO: -13735.0732421875, Train set ELBO: -13641.7646484375, time elapse for current epoch 109.79893898963928
+Model saved:
+Epoch: 32, Test set ELBO: -13813.2109375, Train set ELBO: -13661.916015625, time elapse for current epoch 111.04212093353271
+Epoch: 33, Test set ELBO: -13753.1865234375, Train set ELBO: -13619.7080078125, time elapse for current epoch 110.38438105583191
+Epoch: 34, Test set ELBO: -13802.6796875, Train set ELBO: -13641.9873046875, time elapse for current epoch 110.58504390716553
+Epoch: 35, Test set ELBO: -13790.9501953125, Train set ELBO: -13606.1591796875, time elapse for current epoch 110.39464402198792
+Epoch: 36, Test set ELBO: -13718.5302734375, Train set ELBO: -13591.8173828125, time elapse for current epoch 110.36377596855164
+Model saved:
+Epoch: 37, Test set ELBO: -13735.4580078125, Train set ELBO: -13700.4912109375, time elapse for current epoch 111.16395688056946
+Epoch: 38, Test set ELBO: -13755.6796875, Train set ELBO: -13589.6484375, time elapse for current epoch 111.17930293083191
+Epoch: 39, Test set ELBO: -13734.359375, Train set ELBO: -13557.6474609375, time elapse for current epoch 110.73794412612915
+Epoch: 40, Test set ELBO: -13686.267578125, Train set ELBO: -13581.697265625, time elapse for current epoch 111.43744015693665
+Model saved:
+Epoch: 41, Test set ELBO: -13673.1474609375, Train set ELBO: -13569.7412109375, time elapse for current epoch 112.32480716705322
+Model saved:
+Epoch: 42, Test set ELBO: -13731.5, Train set ELBO: -13564.5283203125, time elapse for current epoch 111.5520977973938
+Epoch: 43, Test set ELBO: -13684.142578125, Train set ELBO: -13540.1162109375, time elapse for current epoch 112.7933418750763
+Epoch: 44, Test set ELBO: -13703.3544921875, Train set ELBO: -13545.0673828125, time elapse for current epoch 111.88618898391724
+Epoch: 45, Test set ELBO: -13692.041015625, Train set ELBO: -13594.2451171875, time elapse for current epoch 112.16227602958679
+Epoch: 46, Test set ELBO: -13644.828125, Train set ELBO: -13543.9970703125, time elapse for current epoch 111.1835150718689
+Model saved:
+Epoch: 47, Test set ELBO: -13719.2958984375, Train set ELBO: -13526.171875, time elapse for current epoch 109.0049479007721
+Epoch: 48, Test set ELBO: -13721.1533203125, Train set ELBO: -13520.205078125, time elapse for current epoch 108.92588973045349
+Epoch: 49, Test set ELBO: -13714.5283203125, Train set ELBO: -13514.1376953125, time elapse for current epoch 109.48950290679932
+Epoch: 50, Test set ELBO: -13618.0615234375, Train set ELBO: -13524.8623046875, time elapse for current epoch 109.00727081298828
+Model saved:
+Epoch: 51, Test set ELBO: -13853.9716796875, Train set ELBO: -13665.0673828125, time elapse for current epoch 110.12663769721985
+Epoch: 52, Test set ELBO: -13751.642578125, Train set ELBO: -13623.5380859375, time elapse for current epoch 109.59038305282593
+Epoch: 53, Test set ELBO: -13636.4501953125, Train set ELBO: -13525.7109375, time elapse for current epoch 109.73153614997864
+Epoch: 54, Test set ELBO: -13646.298828125, Train set ELBO: -13521.642578125, time elapse for current epoch 110.2459282875061
+Epoch: 55, Test set ELBO: -13665.1357421875, Train set ELBO: -13519.0751953125, time elapse for current epoch 110.56476068496704
+Epoch: 56, Test set ELBO: -13670.5625, Train set ELBO: -13499.0302734375, time elapse for current epoch 110.18176603317261
+Epoch: 57, Test set ELBO: -13626.1669921875, Train set ELBO: -13503.0517578125, time elapse for current epoch 110.67926812171936
+Epoch: 58, Test set ELBO: -13607.5439453125, Train set ELBO: -13496.1318359375, time elapse for current epoch 110.81334185600281
+Model saved:
+Epoch: 59, Test set ELBO: -13581.7529296875, Train set ELBO: -13494.7412109375, time elapse for current epoch 111.66236710548401
+Model saved:
+Epoch: 60, Test set ELBO: -13619.1787109375, Train set ELBO: -13499.1943359375, time elapse for current epoch 110.93642997741699
+Epoch: 61, Test set ELBO: -13641.4248046875, Train set ELBO: -13489.048828125, time elapse for current epoch 110.28836417198181
+Epoch: 62, Test set ELBO: -13580.4921875, Train set ELBO: -13478.5732421875, time elapse for current epoch 111.86226677894592
+Model saved:
+Epoch: 63, Test set ELBO: -13610.759765625, Train set ELBO: -13459.798828125, time elapse for current epoch 111.68943095207214
+Epoch: 64, Test set ELBO: -14240.5419921875, Train set ELBO: -13715.259765625, time elapse for current epoch 111.50605893135071
+Epoch: 65, Test set ELBO: -13667.291015625, Train set ELBO: -13681.9375, time elapse for current epoch 111.87517499923706
+Epoch: 66, Test set ELBO: -13667.9248046875, Train set ELBO: -13541.6982421875, time elapse for current epoch 112.77765893936157
+Epoch: 67, Test set ELBO: -13651.3564453125, Train set ELBO: -13516.3125, time elapse for current epoch 113.37739491462708
+Epoch: 68, Test set ELBO: -13639.53125, Train set ELBO: -13486.03125, time elapse for current epoch 112.76345705986023
+Epoch: 69, Test set ELBO: -13683.3349609375, Train set ELBO: -13545.6328125, time elapse for current epoch 109.86271619796753
+Epoch: 70, Test set ELBO: -13639.3193359375, Train set ELBO: -13496.6201171875, time elapse for current epoch 109.67444801330566
+Epoch: 71, Test set ELBO: -13576.2109375, Train set ELBO: -13469.423828125, time elapse for current epoch 109.3351309299469
+Model saved:
+Epoch: 72, Test set ELBO: -13575.7548828125, Train set ELBO: -13462.4677734375, time elapse for current epoch 110.42657089233398
+Model saved:
+Epoch: 73, Test set ELBO: -13636.1953125, Train set ELBO: -13462.0341796875, time elapse for current epoch 110.64000940322876
+Epoch: 74, Test set ELBO: -13537.71875, Train set ELBO: -13477.296875, time elapse for current epoch 110.82245302200317
+Model saved:
+Epoch: 75, Test set ELBO: -13559.6064453125, Train set ELBO: -13440.4091796875, time elapse for current epoch 110.95174908638
+Epoch: 76, Test set ELBO: -13555.205078125, Train set ELBO: -13434.5849609375, time elapse for current epoch 109.99598813056946
+Epoch: 77, Test set ELBO: -13584.734375, Train set ELBO: -13435.134765625, time elapse for current epoch 110.43747019767761
+Epoch: 78, Test set ELBO: -13594.267578125, Train set ELBO: -13433.595703125, time elapse for current epoch 110.4418511390686
+Epoch: 79, Test set ELBO: -13662.0146484375, Train set ELBO: -13432.0224609375, time elapse for current epoch 111.31473708152771
+Epoch: 80, Test set ELBO: -13655.3623046875, Train set ELBO: -13478.625, time elapse for current epoch 108.78135085105896
+Epoch: 81, Test set ELBO: -13625.9677734375, Train set ELBO: -13443.892578125, time elapse for current epoch 109.33314204216003
+Epoch: 82, Test set ELBO: -13596.1611328125, Train set ELBO: -13433.5107421875, time elapse for current epoch 109.42338013648987
+Epoch: 83, Test set ELBO: -13580.9580078125, Train set ELBO: -13434.9892578125, time elapse for current epoch 109.50109815597534
+Epoch: 84, Test set ELBO: -13550.234375, Train set ELBO: -13422.900390625, time elapse for current epoch 109.68809103965759
+Epoch: 85, Test set ELBO: -13937.7265625, Train set ELBO: -13596.509765625, time elapse for current epoch 109.56536984443665
+Epoch: 86, Test set ELBO: -13751.9130859375, Train set ELBO: -13655.806640625, time elapse for current epoch 110.19584202766418
+Epoch: 87, Test set ELBO: -13666.314453125, Train set ELBO: -13480.8583984375, time elapse for current epoch 110.04439377784729
+Epoch: 88, Test set ELBO: -13623.5146484375, Train set ELBO: -13452.0107421875, time elapse for current epoch 110.18043088912964
+Epoch: 89, Test set ELBO: -13533.7939453125, Train set ELBO: -13440.1171875, time elapse for current epoch 110.4898407459259
+Model saved:
+Epoch: 90, Test set ELBO: -13616.4169921875, Train set ELBO: -13441.828125, time elapse for current epoch 110.78878116607666
+Epoch: 91, Test set ELBO: -13580.8310546875, Train set ELBO: -13423.6787109375, time elapse for current epoch 109.2341239452362
+Epoch: 92, Test set ELBO: -13549.5703125, Train set ELBO: -13422.0849609375, time elapse for current epoch 108.17390298843384
+Epoch: 93, Test set ELBO: -13552.609375, Train set ELBO: -13414.5615234375, time elapse for current epoch 108.56138801574707
+Epoch: 94, Test set ELBO: -13650.5224609375, Train set ELBO: -13418.306640625, time elapse for current epoch 109.66996598243713
+Epoch: 95, Test set ELBO: -13528.119140625, Train set ELBO: -13469.8896484375, time elapse for current epoch 109.27420377731323
+Model saved:
+Epoch: 96, Test set ELBO: -13635.8310546875, Train set ELBO: -13426.9794921875, time elapse for current epoch 109.27842998504639
+Epoch: 97, Test set ELBO: -13533.2724609375, Train set ELBO: -13423.1162109375, time elapse for current epoch 109.73086905479431
+Epoch: 98, Test set ELBO: -13523.126953125, Train set ELBO: -13405.6298828125, time elapse for current epoch 111.12301397323608
+Model saved:
+Epoch: 99, Test set ELBO: -13501.9521484375, Train set ELBO: -13385.8271484375, time elapse for current epoch 110.6990966796875
+Model saved:
+Epoch: 100, Test set ELBO: -13523.0029296875, Train set ELBO: -13406.4716796875, time elapse for current epoch 111.0475549697876
+Epoch: 101, Test set ELBO: -13536.9658203125, Train set ELBO: -13391.791015625, time elapse for current epoch 111.51119995117188
+Epoch: 102, Test set ELBO: -13547.234375, Train set ELBO: -13392.8955078125, time elapse for current epoch 111.46085000038147
+Epoch: 103, Test set ELBO: -13559.0126953125, Train set ELBO: -13392.4814453125, time elapse for current epoch 110.21227407455444
+Epoch: 104, Test set ELBO: -13706.7568359375, Train set ELBO: -13496.1865234375, time elapse for current epoch 110.55695796012878
+Epoch: 105, Test set ELBO: -13556.0361328125, Train set ELBO: -13442.298828125, time elapse for current epoch 111.04295015335083
+Epoch: 106, Test set ELBO: -13639.6005859375, Train set ELBO: -13428.080078125, time elapse for current epoch 111.434743642807
+Epoch: 107, Test set ELBO: -13540.103515625, Train set ELBO: -13428.1640625, time elapse for current epoch 112.69196105003357
+Epoch: 108, Test set ELBO: -13501.4111328125, Train set ELBO: -13388.369140625, time elapse for current epoch 111.90845274925232
+Model saved:
+Epoch: 109, Test set ELBO: -13532.3662109375, Train set ELBO: -13374.1875, time elapse for current epoch 112.23671221733093
+Epoch: 110, Test set ELBO: -13509.2578125, Train set ELBO: -13385.7138671875, time elapse for current epoch 112.33214092254639
+Epoch: 111, Test set ELBO: -13492.9208984375, Train set ELBO: -13372.9970703125, time elapse for current epoch 112.3110899925232
+Model saved:
+Epoch: 112, Test set ELBO: -13570.4345703125, Train set ELBO: -13369.6875, time elapse for current epoch 112.83475399017334
+Epoch: 113, Test set ELBO: -13510.7099609375, Train set ELBO: -13372.7099609375, time elapse for current epoch 113.09518480300903
+Epoch: 114, Test set ELBO: -13487.9990234375, Train set ELBO: -13373.7099609375, time elapse for current epoch 110.41372609138489
+Model saved:
+Epoch: 115, Test set ELBO: -13525.5361328125, Train set ELBO: -13349.4326171875, time elapse for current epoch 109.89074611663818
+Epoch: 116, Test set ELBO: -13505.1533203125, Train set ELBO: -13441.564453125, time elapse for current epoch 109.81154894828796
+Epoch: 117, Test set ELBO: -13586.6201171875, Train set ELBO: -13404.6083984375, time elapse for current epoch 110.04293584823608
+Epoch: 118, Test set ELBO: -13453.7783203125, Train set ELBO: -13352.2451171875, time elapse for current epoch 110.06812119483948
+Model saved:
+Epoch: 119, Test set ELBO: -13503.6943359375, Train set ELBO: -13359.6474609375, time elapse for current epoch 110.52711296081543
+Epoch: 120, Test set ELBO: -13480.5146484375, Train set ELBO: -13346.986328125, time elapse for current epoch 109.63879203796387
+Epoch: 121, Test set ELBO: -13470.5703125, Train set ELBO: -13353.1953125, time elapse for current epoch 109.74490690231323
+Epoch: 122, Test set ELBO: -13569.109375, Train set ELBO: -13469.8359375, time elapse for current epoch 109.63274002075195
+Epoch: 123, Test set ELBO: -13492.7763671875, Train set ELBO: -13407.6826171875, time elapse for current epoch 109.41169023513794
+Epoch: 124, Test set ELBO: -13497.46875, Train set ELBO: -13353.8779296875, time elapse for current epoch 109.69227194786072
+Epoch: 125, Test set ELBO: -13480.8427734375, Train set ELBO: -13349.328125, time elapse for current epoch 109.65054607391357
+Epoch: 126, Test set ELBO: -13494.7255859375, Train set ELBO: -13338.0146484375, time elapse for current epoch 109.7604820728302
+Epoch: 127, Test set ELBO: -13456.7646484375, Train set ELBO: -13325.3623046875, time elapse for current epoch 110.11966323852539
+Epoch: 128, Test set ELBO: -13505.9111328125, Train set ELBO: -13329.3232421875, time elapse for current epoch 112.70084714889526
+Epoch: 129, Test set ELBO: -13464.580078125, Train set ELBO: -13330.033203125, time elapse for current epoch 114.24153304100037
+Epoch: 130, Test set ELBO: -13416.9892578125, Train set ELBO: -13325.2861328125, time elapse for current epoch 113.9512951374054
+Model saved:
+Epoch: 131, Test set ELBO: -13530.7294921875, Train set ELBO: -13397.228515625, time elapse for current epoch 113.99425196647644
+Epoch: 132, Test set ELBO: -13477.6083984375, Train set ELBO: -13377.7998046875, time elapse for current epoch 113.49429607391357
+Epoch: 133, Test set ELBO: -13527.9482421875, Train set ELBO: -13322.9453125, time elapse for current epoch 114.60982394218445
+Epoch: 134, Test set ELBO: -13450.640625, Train set ELBO: -13319.837890625, time elapse for current epoch 113.8492202758789
+Epoch: 135, Test set ELBO: -13430.7333984375, Train set ELBO: -13301.064453125, time elapse for current epoch 112.83900904655457
+Epoch: 136, Test set ELBO: -13351.765625, Train set ELBO: -13287.3779296875, time elapse for current epoch 111.45444798469543
+Model saved:
+Epoch: 137, Test set ELBO: -13418.3330078125, Train set ELBO: -13289.6298828125, time elapse for current epoch 109.51883697509766
+Epoch: 138, Test set ELBO: -13581.6201171875, Train set ELBO: -13306.8037109375, time elapse for current epoch 108.9113998413086
+Epoch: 139, Test set ELBO: -13693.744140625, Train set ELBO: -13393.1943359375, time elapse for current epoch 108.87021994590759
+Epoch: 140, Test set ELBO: -13440.671875, Train set ELBO: -13441.650390625, time elapse for current epoch 109.19538617134094
+Epoch: 141, Test set ELBO: -13317.1552734375, Train set ELBO: -13295.0615234375, time elapse for current epoch 110.76570892333984
+Model saved:
+Epoch: 142, Test set ELBO: -13391.9365234375, Train set ELBO: -13284.9609375, time elapse for current epoch 109.39793491363525
+Epoch: 143, Test set ELBO: -13334.3193359375, Train set ELBO: -13277.7158203125, time elapse for current epoch 109.88621687889099
+Epoch: 144, Test set ELBO: -13275.236328125, Train set ELBO: -13246.5654296875, time elapse for current epoch 109.9258201122284
+Model saved:
+Epoch: 145, Test set ELBO: -13284.8466796875, Train set ELBO: -13262.1591796875, time elapse for current epoch 109.92140412330627
+Epoch: 146, Test set ELBO: -13316.9287109375, Train set ELBO: -13236.6689453125, time elapse for current epoch 110.31571984291077
+Epoch: 147, Test set ELBO: -13236.8740234375, Train set ELBO: -13234.7626953125, time elapse for current epoch 110.40631008148193
+Model saved:
+Epoch: 148, Test set ELBO: -13306.6552734375, Train set ELBO: -13209.5546875, time elapse for current epoch 110.48211145401001
+Epoch: 149, Test set ELBO: -13248.5966796875, Train set ELBO: -13203.1904296875, time elapse for current epoch 110.72553610801697
+Epoch: 150, Test set ELBO: -13244.0029296875, Train set ELBO: -13181.462890625, time elapse for current epoch 111.07766032218933
+Epoch: 151, Test set ELBO: -13250.6005859375, Train set ELBO: -13222.1083984375, time elapse for current epoch 110.82174396514893
+Epoch: 152, Test set ELBO: -13289.361328125, Train set ELBO: -13189.0361328125, time elapse for current epoch 111.13053297996521
+Epoch: 153, Test set ELBO: -13191.0595703125, Train set ELBO: -13182.921875, time elapse for current epoch 111.16378617286682
+Model saved:
+Epoch: 154, Test set ELBO: -13194.8232421875, Train set ELBO: -13185.7685546875, time elapse for current epoch 111.21142911911011
+Epoch: 155, Test set ELBO: -13138.017578125, Train set ELBO: -13148.2578125, time elapse for current epoch 111.21853804588318
+Model saved:
+Epoch: 156, Test set ELBO: -13160.462890625, Train set ELBO: -13144.3505859375, time elapse for current epoch 111.89331698417664
+Epoch: 157, Test set ELBO: -13370.181640625, Train set ELBO: -13152.15625, time elapse for current epoch 111.31286811828613
+Epoch: 158, Test set ELBO: -13165.2255859375, Train set ELBO: -13146.806640625, time elapse for current epoch 111.50772881507874
+Epoch: 159, Test set ELBO: -13174.7216796875, Train set ELBO: -13125.0810546875, time elapse for current epoch 111.35788917541504
+Epoch: 160, Test set ELBO: -13184.3154296875, Train set ELBO: -13176.6396484375, time elapse for current epoch 109.3816339969635
+Epoch: 161, Test set ELBO: -13214.2998046875, Train set ELBO: -13218.728515625, time elapse for current epoch 109.24488091468811
+Epoch: 162, Test set ELBO: -13305.6796875, Train set ELBO: -13138.455078125, time elapse for current epoch 109.32211303710938
+Epoch: 163, Test set ELBO: -13832.8466796875, Train set ELBO: -13663.265625, time elapse for current epoch 109.39058923721313
+Epoch: 164, Test set ELBO: -13556.9912109375, Train set ELBO: -13435.9404296875, time elapse for current epoch 109.57409381866455
+Epoch: 165, Test set ELBO: -13314.9404296875, Train set ELBO: -13338.587890625, time elapse for current epoch 109.56554102897644
+Epoch: 166, Test set ELBO: -13194.1533203125, Train set ELBO: -13171.7705078125, time elapse for current epoch 109.63955593109131
+Epoch: 167, Test set ELBO: -13248.3271484375, Train set ELBO: -13143.6923828125, time elapse for current epoch 110.10360383987427
+Epoch: 168, Test set ELBO: -13116.4189453125, Train set ELBO: -13125.572265625, time elapse for current epoch 110.0599570274353
+Model saved:
+Epoch: 169, Test set ELBO: -13131.1123046875, Train set ELBO: -13098.4404296875, time elapse for current epoch 110.58679604530334
+Epoch: 170, Test set ELBO: -13112.2109375, Train set ELBO: -13064.671875, time elapse for current epoch 110.49412608146667
+Model saved:
+Epoch: 171, Test set ELBO: -13132.9716796875, Train set ELBO: -13072.0576171875, time elapse for current epoch 110.63508582115173
+Epoch: 172, Test set ELBO: -13225.0205078125, Train set ELBO: -13061.40625, time elapse for current epoch 110.73783278465271
+Epoch: 173, Test set ELBO: -13189.078125, Train set ELBO: -13061.1884765625, time elapse for current epoch 111.01098084449768
+Epoch: 174, Test set ELBO: -13033.931640625, Train set ELBO: -13074.53515625, time elapse for current epoch 111.07061409950256
+Model saved:
+Epoch: 175, Test set ELBO: -13134.875, Train set ELBO: -13080.4658203125, time elapse for current epoch 111.30206203460693
+Epoch: 176, Test set ELBO: -13121.0068359375, Train set ELBO: -13050.9326171875, time elapse for current epoch 111.84941387176514
+Epoch: 177, Test set ELBO: -13150.5966796875, Train set ELBO: -13028.5615234375, time elapse for current epoch 111.5488109588623
+Epoch: 178, Test set ELBO: -13104.3232421875, Train set ELBO: -13088.580078125, time elapse for current epoch 111.63005900382996
+Epoch: 179, Test set ELBO: -13053.3701171875, Train set ELBO: -13042.8466796875, time elapse for current epoch 112.04943490028381
+Epoch: 180, Test set ELBO: -13085.25, Train set ELBO: -13044.5029296875, time elapse for current epoch 112.19938731193542
+Epoch: 181, Test set ELBO: -13220.814453125, Train set ELBO: -13181.697265625, time elapse for current epoch 112.18620920181274
+Epoch: 182, Test set ELBO: -13033.61328125, Train set ELBO: -13088.685546875, time elapse for current epoch 109.26284599304199
+Model saved:
+Epoch: 183, Test set ELBO: -13104.578125, Train set ELBO: -13038.470703125, time elapse for current epoch 108.97807312011719
+Epoch: 184, Test set ELBO: -13105.8076171875, Train set ELBO: -13007.5849609375, time elapse for current epoch 109.29566693305969
+Epoch: 185, Test set ELBO: -12981.453125, Train set ELBO: -12992.2783203125, time elapse for current epoch 109.78861498832703
+Model saved:
+Epoch: 186, Test set ELBO: -13000.8857421875, Train set ELBO: -13016.162109375, time elapse for current epoch 110.3570008277893
+Epoch: 187, Test set ELBO: -13029.8955078125, Train set ELBO: -13002.0888671875, time elapse for current epoch 110.28757691383362
+Epoch: 188, Test set ELBO: -13024.6826171875, Train set ELBO: -13020.884765625, time elapse for current epoch 110.28226590156555
+Epoch: 189, Test set ELBO: -13103.7861328125, Train set ELBO: -13024.08984375, time elapse for current epoch 110.3378632068634
+Epoch: 190, Test set ELBO: -13192.673828125, Train set ELBO: -13290.9248046875, time elapse for current epoch 110.57079577445984
+Epoch: 191, Test set ELBO: -13111.8505859375, Train set ELBO: -13070.7373046875, time elapse for current epoch 110.93420600891113
+Epoch: 192, Test set ELBO: -13004.73828125, Train set ELBO: -12986.6318359375, time elapse for current epoch 110.89350724220276
+Epoch: 193, Test set ELBO: -13020.7587890625, Train set ELBO: -12957.1455078125, time elapse for current epoch 111.4960150718689
+Epoch: 194, Test set ELBO: -13062.2275390625, Train set ELBO: -12919.5966796875, time elapse for current epoch 111.05680084228516
+Epoch: 195, Test set ELBO: -13157.4736328125, Train set ELBO: -12948.0380859375, time elapse for current epoch 111.1704089641571
+Epoch: 196, Test set ELBO: -13052.12890625, Train set ELBO: -13002.75, time elapse for current epoch 111.42168378829956
+Epoch: 197, Test set ELBO: -13099.4912109375, Train set ELBO: -12916.0537109375, time elapse for current epoch 111.66028809547424
+Epoch: 198, Test set ELBO: -13053.6103515625, Train set ELBO: -12986.6708984375, time elapse for current epoch 111.95855402946472
+Epoch: 199, Test set ELBO: -13051.5283203125, Train set ELBO: -12945.1962890625, time elapse for current epoch 112.15813302993774
+Epoch: 200, Test set ELBO: -13555.931640625, Train set ELBO: -13071.0107421875, time elapse for current epoch 111.89156293869019
+Epoch: 201, Test set ELBO: -13236.859375, Train set ELBO: -13234.2607421875, time elapse for current epoch 112.43414092063904
+Epoch: 202, Test set ELBO: -13114.5986328125, Train set ELBO: -13021.1865234375, time elapse for current epoch 112.30919313430786
+Epoch: 203, Test set ELBO: -13080.8544921875, Train set ELBO: -13019.873046875, time elapse for current epoch 113.3474509716034
+Epoch: 204, Test set ELBO: -13126.9599609375, Train set ELBO: -12979.1181640625, time elapse for current epoch 111.89108800888062
+Epoch: 205, Test set ELBO: -12978.2490234375, Train set ELBO: -12958.3466796875, time elapse for current epoch 109.69787383079529
+Model saved:
+Epoch: 206, Test set ELBO: -13002.388671875, Train set ELBO: -12924.5283203125, time elapse for current epoch 109.94698405265808
+Epoch: 207, Test set ELBO: -12963.6357421875, Train set ELBO: -12917.3173828125, time elapse for current epoch 110.07947897911072
+Model saved:
+Epoch: 208, Test set ELBO: -13089.6318359375, Train set ELBO: -12944.720703125, time elapse for current epoch 110.31449007987976
+Epoch: 209, Test set ELBO: -12989.2373046875, Train set ELBO: -12915.279296875, time elapse for current epoch 110.28163504600525
+Epoch: 210, Test set ELBO: -13125.8798828125, Train set ELBO: -12867.0419921875, time elapse for current epoch 110.5429859161377
+Epoch: 211, Test set ELBO: -13103.3974609375, Train set ELBO: -12885.2919921875, time elapse for current epoch 110.97825193405151
+Epoch: 212, Test set ELBO: -12974.796875, Train set ELBO: -12906.7158203125, time elapse for current epoch 109.91007208824158
+Epoch: 213, Test set ELBO: -12900.97265625, Train set ELBO: -12881.8310546875, time elapse for current epoch 109.800466299057
+Model saved:
+Epoch: 214, Test set ELBO: -12982.126953125, Train set ELBO: -12953.6044921875, time elapse for current epoch 109.84430003166199
+Epoch: 215, Test set ELBO: -12957.8916015625, Train set ELBO: -12872.96484375, time elapse for current epoch 110.05397486686707
+Epoch: 216, Test set ELBO: -13049.822265625, Train set ELBO: -12903.861328125, time elapse for current epoch 109.87853789329529
+Epoch: 217, Test set ELBO: -12989.5234375, Train set ELBO: -12856.9697265625, time elapse for current epoch 110.24001002311707
+Epoch: 218, Test set ELBO: -13039.0126953125, Train set ELBO: -12924.5068359375, time elapse for current epoch 110.34772682189941
+Epoch: 219, Test set ELBO: -12901.9150390625, Train set ELBO: -12816.2490234375, time elapse for current epoch 110.36962985992432
+Epoch: 220, Test set ELBO: -12989.720703125, Train set ELBO: -12834.642578125, time elapse for current epoch 110.6838698387146
+Epoch: 221, Test set ELBO: -13003.435546875, Train set ELBO: -12848.9755859375, time elapse for current epoch 110.86002373695374
+Epoch: 222, Test set ELBO: -12881.322265625, Train set ELBO: -12815.45703125, time elapse for current epoch 110.92896580696106
+Model saved:
+Epoch: 223, Test set ELBO: -12919.591796875, Train set ELBO: -12787.9521484375, time elapse for current epoch 111.33189296722412
+Epoch: 224, Test set ELBO: -12967.357421875, Train set ELBO: -12840.98828125, time elapse for current epoch 111.54844689369202
+Epoch: 225, Test set ELBO: -12765.4521484375, Train set ELBO: -12767.3935546875, time elapse for current epoch 111.42615818977356
+Model saved:
+Epoch: 226, Test set ELBO: -13005.8359375, Train set ELBO: -12727.8056640625, time elapse for current epoch 111.60912799835205
+Epoch: 227, Test set ELBO: -12911.9052734375, Train set ELBO: -12790.8583984375, time elapse for current epoch 108.63516283035278
+Epoch: 228, Test set ELBO: -12848.48828125, Train set ELBO: -12750.056640625, time elapse for current epoch 108.8559958934784
+Epoch: 229, Test set ELBO: -12791.7763671875, Train set ELBO: -12748.1240234375, time elapse for current epoch 108.93971014022827
+Epoch: 230, Test set ELBO: -13041.9638671875, Train set ELBO: -12857.6171875, time elapse for current epoch 108.96086072921753
+Epoch: 231, Test set ELBO: -12886.4375, Train set ELBO: -12848.5224609375, time elapse for current epoch 109.00202989578247
+Epoch: 232, Test set ELBO: -12861.3251953125, Train set ELBO: -12786.0615234375, time elapse for current epoch 109.08744406700134
+Epoch: 233, Test set ELBO: -12848.6015625, Train set ELBO: -12738.9560546875, time elapse for current epoch 109.58730387687683
+Epoch: 234, Test set ELBO: -12942.6005859375, Train set ELBO: -12761.640625, time elapse for current epoch 109.5421462059021
+Epoch: 235, Test set ELBO: -12852.830078125, Train set ELBO: -12685.4326171875, time elapse for current epoch 109.36400508880615
+Epoch: 236, Test set ELBO: -12772.076171875, Train set ELBO: -12704.7353515625, time elapse for current epoch 109.92389869689941
+Epoch: 237, Test set ELBO: -12825.1669921875, Train set ELBO: -12669.6767578125, time elapse for current epoch 110.02496290206909
+Epoch: 238, Test set ELBO: -12803.6787109375, Train set ELBO: -12669.2265625, time elapse for current epoch 110.21743893623352
+Epoch: 239, Test set ELBO: -12880.744140625, Train set ELBO: -12642.8740234375, time elapse for current epoch 110.7438702583313
+Epoch: 240, Test set ELBO: -12759.1943359375, Train set ELBO: -12703.146484375, time elapse for current epoch 111.04868769645691
+Model saved:
+Epoch: 241, Test set ELBO: -12875.33984375, Train set ELBO: -12649.88671875, time elapse for current epoch 110.83679008483887
+Epoch: 242, Test set ELBO: -12799.0966796875, Train set ELBO: -12641.87890625, time elapse for current epoch 111.24933290481567
+Epoch: 243, Test set ELBO: -12781.6005859375, Train set ELBO: -12591.6455078125, time elapse for current epoch 111.01205825805664
+Epoch: 244, Test set ELBO: -12783.01171875, Train set ELBO: -12607.04296875, time elapse for current epoch 111.23739099502563
+Epoch: 245, Test set ELBO: -12748.552734375, Train set ELBO: -12598.0341796875, time elapse for current epoch 111.5777838230133
+Model saved:
+Epoch: 246, Test set ELBO: -12703.2314453125, Train set ELBO: -12603.8505859375, time elapse for current epoch 112.14869809150696
+Model saved:
+Epoch: 247, Test set ELBO: -12682.2890625, Train set ELBO: -12604.9228515625, time elapse for current epoch 111.81888723373413
+Model saved:
+Epoch: 248, Test set ELBO: -12701.515625, Train set ELBO: -12570.7744140625, time elapse for current epoch 112.08797216415405
+Epoch: 249, Test set ELBO: -12748.609375, Train set ELBO: -12593.6328125, time elapse for current epoch 110.8007550239563
+Epoch: 250, Test set ELBO: -12808.0849609375, Train set ELBO: -12585.9326171875, time elapse for current epoch 109.99434494972229
+Epoch: 251, Test set ELBO: -12814.1728515625, Train set ELBO: -12550.7099609375, time elapse for current epoch 109.42030620574951
+Epoch: 252, Test set ELBO: -12746.9990234375, Train set ELBO: -12510.5615234375, time elapse for current epoch 112.71272921562195
+Epoch: 253, Test set ELBO: -12704.4951171875, Train set ELBO: -12569.3583984375, time elapse for current epoch 113.86198210716248
+Epoch: 254, Test set ELBO: -12852.85546875, Train set ELBO: -12531.6904296875, time elapse for current epoch 113.51629209518433
+Epoch: 255, Test set ELBO: -13029.298828125, Train set ELBO: -12604.5771484375, time elapse for current epoch 112.45160603523254
+Epoch: 256, Test set ELBO: -12787.9482421875, Train set ELBO: -12666.4912109375, time elapse for current epoch 113.7265248298645
+Epoch: 257, Test set ELBO: -12794.4833984375, Train set ELBO: -12531.7294921875, time elapse for current epoch 110.13554525375366
+Epoch: 258, Test set ELBO: -12696.947265625, Train set ELBO: -12563.3671875, time elapse for current epoch 110.39827489852905
+Epoch: 259, Test set ELBO: -12971.9970703125, Train set ELBO: -12636.6357421875, time elapse for current epoch 108.79372382164001
+Epoch: 260, Test set ELBO: -12699.4794921875, Train set ELBO: -12653.466796875, time elapse for current epoch 109.18546628952026
+Epoch: 261, Test set ELBO: -12644.787109375, Train set ELBO: -12474.48046875, time elapse for current epoch 109.40171313285828
+Model saved:
+Epoch: 262, Test set ELBO: -12600.7763671875, Train set ELBO: -12541.0322265625, time elapse for current epoch 109.99071288108826
+Model saved:
+Epoch: 263, Test set ELBO: -12818.4755859375, Train set ELBO: -12525.9990234375, time elapse for current epoch 109.90584015846252
+Epoch: 264, Test set ELBO: -12692.9384765625, Train set ELBO: -12537.6826171875, time elapse for current epoch 109.8708438873291
+Epoch: 265, Test set ELBO: -12659.228515625, Train set ELBO: -12435.7109375, time elapse for current epoch 109.95926880836487
+Epoch: 266, Test set ELBO: -12639.0888671875, Train set ELBO: -12506.6982421875, time elapse for current epoch 110.71621084213257
+Epoch: 267, Test set ELBO: -12674.8701171875, Train set ELBO: -12484.3984375, time elapse for current epoch 110.23173403739929
+Epoch: 268, Test set ELBO: -12605.3984375, Train set ELBO: -12432.1806640625, time elapse for current epoch 111.08010697364807
+Epoch: 269, Test set ELBO: -12605.2724609375, Train set ELBO: -12476.5791015625, time elapse for current epoch 110.96660995483398
+Epoch: 270, Test set ELBO: -12631.7353515625, Train set ELBO: -12524.2744140625, time elapse for current epoch 110.78116416931152
+Epoch: 271, Test set ELBO: -12730.5634765625, Train set ELBO: -12447.7060546875, time elapse for current epoch 111.0055160522461
+Epoch: 272, Test set ELBO: -12744.94140625, Train set ELBO: -12500.3427734375, time elapse for current epoch 111.18159103393555
+Epoch: 273, Test set ELBO: -12628.1298828125, Train set ELBO: -12455.94140625, time elapse for current epoch 111.31889414787292
+Epoch: 274, Test set ELBO: -12528.73828125, Train set ELBO: -12411.9267578125, time elapse for current epoch 111.81434392929077
+Model saved:
+Epoch: 275, Test set ELBO: -12656.0810546875, Train set ELBO: -12387.3349609375, time elapse for current epoch 112.17799401283264
+Epoch: 276, Test set ELBO: -12581.0625, Train set ELBO: -12396.4248046875, time elapse for current epoch 112.17173910140991
+Epoch: 277, Test set ELBO: -12476.486328125, Train set ELBO: -12368.8447265625, time elapse for current epoch 112.69685506820679
+Model saved:
+Epoch: 278, Test set ELBO: -12590.494140625, Train set ELBO: -12429.2353515625, time elapse for current epoch 112.58431005477905
+Epoch: 279, Test set ELBO: -12981.9580078125, Train set ELBO: -12400.982421875, time elapse for current epoch 112.81076788902283
+Epoch: 280, Test set ELBO: -12596.7841796875, Train set ELBO: -12377.4296875, time elapse for current epoch 110.98776078224182
+Epoch: 281, Test set ELBO: -12927.017578125, Train set ELBO: -12506.7216796875, time elapse for current epoch 110.8967490196228
+Epoch: 282, Test set ELBO: -12648.7109375, Train set ELBO: -12410.1982421875, time elapse for current epoch 109.50269103050232
+Epoch: 283, Test set ELBO: -12565.7880859375, Train set ELBO: -12377.0185546875, time elapse for current epoch 109.52833795547485
+Epoch: 284, Test set ELBO: -12470.099609375, Train set ELBO: -12319.15234375, time elapse for current epoch 109.65409898757935
+Model saved:
+Epoch: 285, Test set ELBO: -12647.2099609375, Train set ELBO: -12413.0263671875, time elapse for current epoch 110.42946290969849
+Epoch: 286, Test set ELBO: -12501.75, Train set ELBO: -12333.9072265625, time elapse for current epoch 110.227854013443
+Epoch: 287, Test set ELBO: -12604.6884765625, Train set ELBO: -12320.158203125, time elapse for current epoch 110.44858598709106
+Epoch: 288, Test set ELBO: -12488.3193359375, Train set ELBO: -12322.4443359375, time elapse for current epoch 110.93149495124817
+Epoch: 289, Test set ELBO: -12531.0380859375, Train set ELBO: -12331.7265625, time elapse for current epoch 110.64834523200989
+Epoch: 290, Test set ELBO: -12508.3828125, Train set ELBO: -12296.2099609375, time elapse for current epoch 110.94832992553711
+Epoch: 291, Test set ELBO: -12468.1591796875, Train set ELBO: -12301.2373046875, time elapse for current epoch 110.71362781524658
+Model saved:
+Epoch: 292, Test set ELBO: -12427.658203125, Train set ELBO: -12259.259765625, time elapse for current epoch 111.54557180404663
+Model saved:
+Epoch: 293, Test set ELBO: -12533.744140625, Train set ELBO: -12267.7919921875, time elapse for current epoch 111.67759275436401
+Epoch: 294, Test set ELBO: -12568.0703125, Train set ELBO: -12572.0341796875, time elapse for current epoch 111.33484101295471
+Epoch: 295, Test set ELBO: -12557.4951171875, Train set ELBO: -12437.7353515625, time elapse for current epoch 111.51145529747009
+Epoch: 296, Test set ELBO: -12397.7890625, Train set ELBO: -12285.4384765625, time elapse for current epoch 111.97073173522949
+Model saved:
+Epoch: 297, Test set ELBO: -12762.421875, Train set ELBO: -12382.3505859375, time elapse for current epoch 112.5135600566864
+Epoch: 298, Test set ELBO: -12605.4208984375, Train set ELBO: -12416.2138671875, time elapse for current epoch 111.94965887069702
+Epoch: 299, Test set ELBO: -12371.6640625, Train set ELBO: -12319.3505859375, time elapse for current epoch 112.46011996269226
+Model saved:
+Epoch: 300, Test set ELBO: -12519.1396484375, Train set ELBO: -12323.2255859375, time elapse for current epoch 112.80047011375427
+Epoch: 301, Test set ELBO: -12488.796875, Train set ELBO: -12328.728515625, time elapse for current epoch 112.62851214408875
+Epoch: 302, Test set ELBO: -12554.14453125, Train set ELBO: -12255.794921875, time elapse for current epoch 112.03053116798401
+Epoch: 303, Test set ELBO: -12402.9228515625, Train set ELBO: -12197.3330078125, time elapse for current epoch 111.35275912284851
+Epoch: 304, Test set ELBO: -12411.2431640625, Train set ELBO: -12257.4814453125, time elapse for current epoch 109.75514483451843
+Epoch: 305, Test set ELBO: -12445.0869140625, Train set ELBO: -12252.0537109375, time elapse for current epoch 108.33559083938599
+Epoch: 306, Test set ELBO: -12666.9365234375, Train set ELBO: -12314.8154296875, time elapse for current epoch 108.29737710952759
+Epoch: 307, Test set ELBO: -12484.921875, Train set ELBO: -12353.9267578125, time elapse for current epoch 108.69145393371582
+Epoch: 308, Test set ELBO: -12692.8779296875, Train set ELBO: -12242.3291015625, time elapse for current epoch 108.79211640357971
+Epoch: 309, Test set ELBO: -12325.7255859375, Train set ELBO: -12221.9677734375, time elapse for current epoch 108.89025402069092
+Model saved:
+Epoch: 310, Test set ELBO: -12458.2578125, Train set ELBO: -12248.6123046875, time elapse for current epoch 109.31255388259888
+Epoch: 311, Test set ELBO: -12634.666015625, Train set ELBO: -12220.4365234375, time elapse for current epoch 109.42930102348328
+Epoch: 312, Test set ELBO: -12318.1142578125, Train set ELBO: -12368.9873046875, time elapse for current epoch 109.37983298301697
+Model saved:
+Epoch: 313, Test set ELBO: -12440.7060546875, Train set ELBO: -12180.6826171875, time elapse for current epoch 109.70802307128906
+Epoch: 314, Test set ELBO: -12463.9970703125, Train set ELBO: -12241.7041015625, time elapse for current epoch 109.90538311004639
+Epoch: 315, Test set ELBO: -12405.8193359375, Train set ELBO: -12184.07421875, time elapse for current epoch 110.01169300079346
+Epoch: 316, Test set ELBO: -12523.294921875, Train set ELBO: -12204.2001953125, time elapse for current epoch 110.17906188964844
+Epoch: 317, Test set ELBO: -13051.955078125, Train set ELBO: -12319.4873046875, time elapse for current epoch 110.11003398895264
+Epoch: 318, Test set ELBO: -12409.5419921875, Train set ELBO: -12329.146484375, time elapse for current epoch 110.63074898719788
+Epoch: 319, Test set ELBO: -12432.7783203125, Train set ELBO: -12147.462890625, time elapse for current epoch 111.11528778076172
+Epoch: 320, Test set ELBO: -12971.806640625, Train set ELBO: -12471.3525390625, time elapse for current epoch 111.19649696350098
+Epoch: 321, Test set ELBO: -12375.986328125, Train set ELBO: -12261.0068359375, time elapse for current epoch 111.15620923042297
+Epoch: 322, Test set ELBO: -12419.341796875, Train set ELBO: -12157.970703125, time elapse for current epoch 111.28158593177795
+Epoch: 323, Test set ELBO: -12320.4755859375, Train set ELBO: -12146.4130859375, time elapse for current epoch 111.48549318313599
+Epoch: 324, Test set ELBO: -12377.54296875, Train set ELBO: -12184.75, time elapse for current epoch 111.56307363510132
+Epoch: 325, Test set ELBO: -12231.4140625, Train set ELBO: -12118.994140625, time elapse for current epoch 111.63230180740356
+Model saved:
+Epoch: 326, Test set ELBO: -12495.5556640625, Train set ELBO: -12156.71484375, time elapse for current epoch 111.61491298675537
+Epoch: 327, Test set ELBO: -12286.5224609375, Train set ELBO: -12241.7978515625, time elapse for current epoch 110.35371708869934
+Epoch: 328, Test set ELBO: -12324.9306640625, Train set ELBO: -12117.337890625, time elapse for current epoch 109.25224018096924
+Epoch: 329, Test set ELBO: -12186.9248046875, Train set ELBO: -12110.12109375, time elapse for current epoch 109.3031759262085
+Model saved:
+Epoch: 330, Test set ELBO: -12416.822265625, Train set ELBO: -12036.642578125, time elapse for current epoch 109.64548993110657
+Epoch: 331, Test set ELBO: -12190.3798828125, Train set ELBO: -12043.6591796875, time elapse for current epoch 109.39745926856995
+Epoch: 332, Test set ELBO: -12216.1396484375, Train set ELBO: -12095.5234375, time elapse for current epoch 109.89136576652527
+Epoch: 333, Test set ELBO: -12220.1484375, Train set ELBO: -12051.3564453125, time elapse for current epoch 109.59217619895935
+Epoch: 334, Test set ELBO: -12201.6533203125, Train set ELBO: -12139.7314453125, time elapse for current epoch 109.64188694953918
+Epoch: 335, Test set ELBO: -12391.3564453125, Train set ELBO: -12211.533203125, time elapse for current epoch 110.33116602897644
+Epoch: 336, Test set ELBO: -12580.482421875, Train set ELBO: -12138.07421875, time elapse for current epoch 110.055899143219
+Epoch: 337, Test set ELBO: -12287.0712890625, Train set ELBO: -12180.501953125, time elapse for current epoch 110.54665803909302
+Epoch: 338, Test set ELBO: -12276.6494140625, Train set ELBO: -12045.7900390625, time elapse for current epoch 110.60732793807983
+Epoch: 339, Test set ELBO: -12369.7470703125, Train set ELBO: -12182.2763671875, time elapse for current epoch 110.51179385185242
+Epoch: 340, Test set ELBO: -12561.9921875, Train set ELBO: -12287.900390625, time elapse for current epoch 111.04988479614258
+Epoch: 341, Test set ELBO: -12308.2685546875, Train set ELBO: -12160.5693359375, time elapse for current epoch 110.93559336662292
+Epoch: 342, Test set ELBO: -12163.2470703125, Train set ELBO: -12056.84375, time elapse for current epoch 111.29965806007385
+Model saved:
+Epoch: 343, Test set ELBO: -12102.693359375, Train set ELBO: -11999.1591796875, time elapse for current epoch 111.62222003936768
+Model saved:
+Epoch: 344, Test set ELBO: -12059.505859375, Train set ELBO: -12014.8505859375, time elapse for current epoch 111.72817015647888
+Model saved:
+Epoch: 345, Test set ELBO: -12790.4345703125, Train set ELBO: -12252.1083984375, time elapse for current epoch 112.00561594963074
+Epoch: 346, Test set ELBO: -12259.962890625, Train set ELBO: -12441.9521484375, time elapse for current epoch 111.77975010871887
+Epoch: 347, Test set ELBO: -12355.2763671875, Train set ELBO: -12033.2724609375, time elapse for current epoch 111.86836361885071
+Epoch: 348, Test set ELBO: -12404.5458984375, Train set ELBO: -12119.9560546875, time elapse for current epoch 112.15358114242554
+Epoch: 349, Test set ELBO: -12620.8701171875, Train set ELBO: -12095.521484375, time elapse for current epoch 112.01445078849792
+Epoch: 350, Test set ELBO: -12268.4716796875, Train set ELBO: -12080.8564453125, time elapse for current epoch 110.81990790367126
+Epoch: 351, Test set ELBO: -12317.2451171875, Train set ELBO: -12134.4130859375, time elapse for current epoch 110.13418006896973
+Epoch: 352, Test set ELBO: -12186.853515625, Train set ELBO: -11981.1240234375, time elapse for current epoch 109.56118702888489
+Epoch: 353, Test set ELBO: -12145.1865234375, Train set ELBO: -12020.1572265625, time elapse for current epoch 109.85330009460449
+Epoch: 354, Test set ELBO: -12032.9736328125, Train set ELBO: -11968.9794921875, time elapse for current epoch 109.66939496994019
+Model saved:
+Epoch: 355, Test set ELBO: -12206.4716796875, Train set ELBO: -12024.15234375, time elapse for current epoch 110.27883982658386
+Epoch: 356, Test set ELBO: -12138.4072265625, Train set ELBO: -11994.220703125, time elapse for current epoch 109.95883083343506
+Epoch: 357, Test set ELBO: -12182.40234375, Train set ELBO: -12012.59375, time elapse for current epoch 110.24159598350525
+Epoch: 358, Test set ELBO: -12199.7861328125, Train set ELBO: -12059.8388671875, time elapse for current epoch 110.48893618583679
+Epoch: 359, Test set ELBO: -12250.998046875, Train set ELBO: -12025.7216796875, time elapse for current epoch 110.78523707389832
+Epoch: 360, Test set ELBO: -12364.7685546875, Train set ELBO: -12041.2880859375, time elapse for current epoch 110.6506519317627
+Epoch: 361, Test set ELBO: -12524.3037109375, Train set ELBO: -12111.849609375, time elapse for current epoch 111.13585209846497
+Epoch: 362, Test set ELBO: -12214.8154296875, Train set ELBO: -12037.3251953125, time elapse for current epoch 110.8024218082428
+Epoch: 363, Test set ELBO: -12225.5693359375, Train set ELBO: -11961.5244140625, time elapse for current epoch 111.91612815856934
+Epoch: 364, Test set ELBO: -12097.34375, Train set ELBO: -11913.7548828125, time elapse for current epoch 111.20674300193787
+Epoch: 365, Test set ELBO: -12195.5517578125, Train set ELBO: -11979.529296875, time elapse for current epoch 111.15909814834595
+Epoch: 366, Test set ELBO: -12047.2080078125, Train set ELBO: -11894.9521484375, time elapse for current epoch 111.6611020565033
+Epoch: 367, Test set ELBO: -12195.439453125, Train set ELBO: -11947.5537109375, time elapse for current epoch 111.73841381072998
+Epoch: 368, Test set ELBO: -12129.28515625, Train set ELBO: -12005.484375, time elapse for current epoch 111.7844967842102
+Epoch: 369, Test set ELBO: -12534.2509765625, Train set ELBO: -12062.9326171875, time elapse for current epoch 112.09546995162964
+Epoch: 370, Test set ELBO: -12658.9560546875, Train set ELBO: -12109.1875, time elapse for current epoch 112.05072283744812
+Epoch: 371, Test set ELBO: -12044.45703125, Train set ELBO: -11975.1826171875, time elapse for current epoch 111.88264870643616
+Epoch: 372, Test set ELBO: -12071.64453125, Train set ELBO: -11985.673828125, time elapse for current epoch 112.68711614608765
+Epoch: 373, Test set ELBO: -12095.0498046875, Train set ELBO: -12016.0361328125, time elapse for current epoch 111.39251494407654
+Epoch: 374, Test set ELBO: -11909.6416015625, Train set ELBO: -11949.6982421875, time elapse for current epoch 110.72702097892761
+Model saved:
+Epoch: 375, Test set ELBO: -12082.0, Train set ELBO: -11891.7578125, time elapse for current epoch 109.87407898902893
+Epoch: 376, Test set ELBO: -12313.751953125, Train set ELBO: -12002.021484375, time elapse for current epoch 110.05974912643433
+Epoch: 377, Test set ELBO: -12118.771484375, Train set ELBO: -11973.7861328125, time elapse for current epoch 110.09083890914917
+Epoch: 378, Test set ELBO: -11900.791015625, Train set ELBO: -11932.2919921875, time elapse for current epoch 111.2142698764801
+Model saved:
+Epoch: 379, Test set ELBO: -11959.91796875, Train set ELBO: -12067.5341796875, time elapse for current epoch 126.96746373176575
+Epoch: 380, Test set ELBO: -12210.744140625, Train set ELBO: -11940.2666015625, time elapse for current epoch 114.19830203056335
+Epoch: 381, Test set ELBO: -11998.4541015625, Train set ELBO: -11884.09765625, time elapse for current epoch 114.54359197616577
+Epoch: 382, Test set ELBO: -12154.53515625, Train set ELBO: -11900.0634765625, time elapse for current epoch 110.58376908302307
+Epoch: 383, Test set ELBO: -11915.2724609375, Train set ELBO: -11960.744140625, time elapse for current epoch 110.11067509651184
+Epoch: 384, Test set ELBO: -12061.9990234375, Train set ELBO: -11952.4619140625, time elapse for current epoch 110.5386381149292
+Epoch: 385, Test set ELBO: -12031.7802734375, Train set ELBO: -11893.6689453125, time elapse for current epoch 110.48326396942139
+Epoch: 386, Test set ELBO: -12133.7587890625, Train set ELBO: -12072.5078125, time elapse for current epoch 110.8121747970581
+Epoch: 387, Test set ELBO: -11979.5380859375, Train set ELBO: -11942.26171875, time elapse for current epoch 110.71087312698364
+Epoch: 388, Test set ELBO: -12018.1767578125, Train set ELBO: -11826.443359375, time elapse for current epoch 110.88361191749573
+Epoch: 389, Test set ELBO: -12200.015625, Train set ELBO: -11942.3486328125, time elapse for current epoch 111.08730912208557
+Epoch: 390, Test set ELBO: -12156.5771484375, Train set ELBO: -11972.849609375, time elapse for current epoch 111.21788287162781
+Epoch: 391, Test set ELBO: -11937.62109375, Train set ELBO: -11930.4541015625, time elapse for current epoch 111.3424699306488
+Epoch: 392, Test set ELBO: -12038.6474609375, Train set ELBO: -11812.4013671875, time elapse for current epoch 110.19861102104187
+Epoch: 393, Test set ELBO: -12052.8154296875, Train set ELBO: -11870.3583984375, time elapse for current epoch 108.55685329437256
+Epoch: 394, Test set ELBO: -11897.0615234375, Train set ELBO: -11856.7412109375, time elapse for current epoch 108.26488399505615
+Model saved:
+Epoch: 395, Test set ELBO: -12035.9013671875, Train set ELBO: -11858.1083984375, time elapse for current epoch 108.8697280883789
+Epoch: 396, Test set ELBO: -11758.517578125, Train set ELBO: -11884.578125, time elapse for current epoch 108.16425490379333
+Model saved:
+Epoch: 397, Test set ELBO: -12338.23828125, Train set ELBO: -11948.5244140625, time elapse for current epoch 108.19364309310913
+Epoch: 398, Test set ELBO: -12182.1767578125, Train set ELBO: -11958.3662109375, time elapse for current epoch 108.29302906990051
+Epoch: 399, Test set ELBO: -12210.541015625, Train set ELBO: -11964.5400390625, time elapse for current epoch 108.33332681655884
+Epoch: 400, Test set ELBO: -11999.240234375, Train set ELBO: -11903.3720703125, time elapse for current epoch 108.37793302536011
+Epoch: 401, Test set ELBO: -12083.662109375, Train set ELBO: -11903.6083984375, time elapse for current epoch 108.56143712997437
+Epoch: 402, Test set ELBO: -11960.3427734375, Train set ELBO: -11813.220703125, time elapse for current epoch 108.60311913490295
+Epoch: 403, Test set ELBO: -11819.2314453125, Train set ELBO: -11784.9345703125, time elapse for current epoch 108.71153688430786
+Epoch: 404, Test set ELBO: -11946.1259765625, Train set ELBO: -11779.943359375, time elapse for current epoch 109.03115487098694
+Epoch: 405, Test set ELBO: -11930.9599609375, Train set ELBO: -11939.533203125, time elapse for current epoch 109.07855296134949
+Epoch: 406, Test set ELBO: -11896.4892578125, Train set ELBO: -11744.3349609375, time elapse for current epoch 109.1265218257904
+Epoch: 407, Test set ELBO: -12037.4755859375, Train set ELBO: -11729.8935546875, time elapse for current epoch 109.12599587440491
+Epoch: 408, Test set ELBO: -11875.1318359375, Train set ELBO: -11807.998046875, time elapse for current epoch 109.95607590675354
+Epoch: 409, Test set ELBO: -12194.2841796875, Train set ELBO: -11831.052734375, time elapse for current epoch 110.86424708366394
+Epoch: 410, Test set ELBO: -12006.1650390625, Train set ELBO: -11796.6435546875, time elapse for current epoch 109.73975276947021
+Epoch: 411, Test set ELBO: -13546.0888671875, Train set ELBO: -12000.888671875, time elapse for current epoch 109.80455303192139
+Epoch: 412, Test set ELBO: -13344.884765625, Train set ELBO: -13324.7734375, time elapse for current epoch 110.01637506484985
+Epoch: 413, Test set ELBO: -13014.775390625, Train set ELBO: -12741.2998046875, time elapse for current epoch 110.43860602378845
+Epoch: 414, Test set ELBO: -12697.244140625, Train set ELBO: -12557.5888671875, time elapse for current epoch 107.61336088180542
+Epoch: 415, Test set ELBO: -12779.74609375, Train set ELBO: -12393.2587890625, time elapse for current epoch 106.96592378616333
+Epoch: 416, Test set ELBO: -12389.5087890625, Train set ELBO: -12148.3701171875, time elapse for current epoch 107.48160409927368
+Epoch: 417, Test set ELBO: -11831.177734375, Train set ELBO: -11967.072265625, time elapse for current epoch 107.58274006843567
+Epoch: 418, Test set ELBO: -12033.0712890625, Train set ELBO: -11770.5126953125, time elapse for current epoch 107.64103889465332
+Epoch: 419, Test set ELBO: -12011.4013671875, Train set ELBO: -11808.3134765625, time elapse for current epoch 107.87163496017456
+Epoch: 420, Test set ELBO: -11960.580078125, Train set ELBO: -11772.91015625, time elapse for current epoch 107.81979298591614
+Epoch: 421, Test set ELBO: -11923.5107421875, Train set ELBO: -11782.9580078125, time elapse for current epoch 108.10788321495056
+Epoch: 422, Test set ELBO: -12309.2998046875, Train set ELBO: -11858.0634765625, time elapse for current epoch 108.27980494499207
+Epoch: 423, Test set ELBO: -11951.5126953125, Train set ELBO: -11839.1240234375, time elapse for current epoch 108.41420006752014
+Epoch: 424, Test set ELBO: -11917.0078125, Train set ELBO: -11819.4248046875, time elapse for current epoch 108.80328702926636
+Epoch: 425, Test set ELBO: -11808.6884765625, Train set ELBO: -11767.00390625, time elapse for current epoch 108.82496476173401
+Epoch: 426, Test set ELBO: -12225.724609375, Train set ELBO: -11843.193359375, time elapse for current epoch 108.90880274772644
+Epoch: 427, Test set ELBO: -11950.388671875, Train set ELBO: -11938.6103515625, time elapse for current epoch 109.20937490463257
+Epoch: 428, Test set ELBO: -11837.693359375, Train set ELBO: -11758.4248046875, time elapse for current epoch 109.2699887752533
+Epoch: 429, Test set ELBO: -12127.4951171875, Train set ELBO: -11757.8720703125, time elapse for current epoch 109.5195860862732
+Epoch: 430, Test set ELBO: -11777.8974609375, Train set ELBO: -11770.62890625, time elapse for current epoch 109.76707291603088
+Epoch: 431, Test set ELBO: -11785.251953125, Train set ELBO: -11761.0693359375, time elapse for current epoch 109.94088912010193
+Epoch: 432, Test set ELBO: -11971.9482421875, Train set ELBO: -11884.6826171875, time elapse for current epoch 110.3749520778656
+Epoch: 433, Test set ELBO: -11997.0068359375, Train set ELBO: -11896.9111328125, time elapse for current epoch 110.3101110458374
+Epoch: 434, Test set ELBO: -11743.9248046875, Train set ELBO: -11721.03125, time elapse for current epoch 110.40393710136414
+Model saved:
+Epoch: 435, Test set ELBO: -11933.650390625, Train set ELBO: -11776.978515625, time elapse for current epoch 111.20851922035217
+Epoch: 436, Test set ELBO: -11894.203125, Train set ELBO: -11878.0830078125, time elapse for current epoch 109.77075386047363
+Epoch: 437, Test set ELBO: -11973.0390625, Train set ELBO: -11773.2978515625, time elapse for current epoch 107.78047394752502
+Epoch: 438, Test set ELBO: -11700.765625, Train set ELBO: -11752.80078125, time elapse for current epoch 108.09195899963379
+Model saved:
+Epoch: 439, Test set ELBO: -12092.14453125, Train set ELBO: -11758.9521484375, time elapse for current epoch 107.94402694702148
+Epoch: 440, Test set ELBO: -11901.0546875, Train set ELBO: -11778.4951171875, time elapse for current epoch 108.33248901367188
+Epoch: 441, Test set ELBO: -11753.7998046875, Train set ELBO: -11649.6845703125, time elapse for current epoch 108.55824685096741
+Epoch: 442, Test set ELBO: -11702.998046875, Train set ELBO: -11717.4521484375, time elapse for current epoch 108.53318881988525
+Epoch: 443, Test set ELBO: -11740.1064453125, Train set ELBO: -11682.9404296875, time elapse for current epoch 108.60462284088135
+Epoch: 444, Test set ELBO: -11724.5263671875, Train set ELBO: -11689.638671875, time elapse for current epoch 108.74234986305237
+Epoch: 445, Test set ELBO: -12493.482421875, Train set ELBO: -11859.939453125, time elapse for current epoch 108.96501111984253
+Epoch: 446, Test set ELBO: -12223.2333984375, Train set ELBO: -11944.6044921875, time elapse for current epoch 109.09033679962158
+Epoch: 447, Test set ELBO: -12080.4765625, Train set ELBO: -11755.4365234375, time elapse for current epoch 109.37918281555176
+Epoch: 448, Test set ELBO: -11937.1865234375, Train set ELBO: -11780.5244140625, time elapse for current epoch 109.38070487976074
+Epoch: 449, Test set ELBO: -11741.4375, Train set ELBO: -11636.8115234375, time elapse for current epoch 109.53957724571228
+Epoch: 450, Test set ELBO: -11878.091796875, Train set ELBO: -11704.84375, time elapse for current epoch 109.56936192512512
+Epoch: 451, Test set ELBO: -11681.08984375, Train set ELBO: -11697.1064453125, time elapse for current epoch 109.87987399101257
+Model saved:
+Epoch: 452, Test set ELBO: -11767.8271484375, Train set ELBO: -11663.0615234375, time elapse for current epoch 110.17813801765442
+Epoch: 453, Test set ELBO: -11730.6591796875, Train set ELBO: -11704.30859375, time elapse for current epoch 110.15840911865234
+Epoch: 454, Test set ELBO: -11844.0185546875, Train set ELBO: -11659.724609375, time elapse for current epoch 110.98635911941528
+Epoch: 455, Test set ELBO: -12048.1572265625, Train set ELBO: -11846.8369140625, time elapse for current epoch 110.98202085494995
+Epoch: 456, Test set ELBO: -11665.8505859375, Train set ELBO: -11850.22265625, time elapse for current epoch 110.99846291542053
+Model saved:
+Epoch: 457, Test set ELBO: -13219.7705078125, Train set ELBO: -11771.0146484375, time elapse for current epoch 111.11921310424805
+Epoch: 458, Test set ELBO: -12130.736328125, Train set ELBO: -12120.7236328125, time elapse for current epoch 111.08379817008972
+Epoch: 459, Test set ELBO: -11955.525390625, Train set ELBO: -11945.6357421875, time elapse for current epoch 109.05661797523499
+Epoch: 460, Test set ELBO: -11709.26953125, Train set ELBO: -11746.9013671875, time elapse for current epoch 108.21407389640808
+Epoch: 461, Test set ELBO: -11888.3994140625, Train set ELBO: -11732.84375, time elapse for current epoch 108.39279890060425
+Epoch: 462, Test set ELBO: -11863.58984375, Train set ELBO: -11753.509765625, time elapse for current epoch 108.5728669166565
+Epoch: 463, Test set ELBO: -11854.57421875, Train set ELBO: -11822.17578125, time elapse for current epoch 108.3662440776825
+Epoch: 464, Test set ELBO: -11969.654296875, Train set ELBO: -11718.5556640625, time elapse for current epoch 108.74728178977966
+Epoch: 465, Test set ELBO: -11910.998046875, Train set ELBO: -11849.400390625, time elapse for current epoch 118.11332297325134
+Epoch: 466, Test set ELBO: -11961.68359375, Train set ELBO: -11847.3544921875, time elapse for current epoch 119.8209810256958

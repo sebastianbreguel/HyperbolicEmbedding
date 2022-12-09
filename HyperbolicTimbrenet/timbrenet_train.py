@@ -4,6 +4,9 @@ import datetime
 import numpy as np
 import tensorflow as tf
 from lib.model import CVAE as Model
+from lib.model import HCVAE as HModel
+from lib.model import HVAE_NEW as HModel_new
+from lib.model import HVAE_BREGUEL as HModel_breguel
 from scipy.io.wavfile import read as read_wav
 from lib.specgrams_helper import SpecgramsHelper
 
@@ -51,9 +54,11 @@ def train_model(
     beta,
     learning_rate,
     optimizer,
+    baseline=True,
+    hyperbolic=False,
+    mircea_model=False,
     gpu=True,
 ):
-
     if gpu:
         os.environ["CUDA_VISIBLE_DEVICES"] = "1"
         print(tf.config.list_physical_devices("GPU"))
@@ -128,14 +133,34 @@ def train_model(
     )
     print("Success preparing train and test dataset!")
 
-    # declare model
-    model = Model(latent_dim)
+    model_save = "./results"
+    if baseline:
+        if hyperbolic:
+            model_save += "/baseline_hyp"
+            file = "baseline_hyperbolic_latent_2_lr_3e-05_b_1_the_best"
+            model = HModel(latent_dim)
+        else:
+            file = "baseline_latent_2_lr_3e-05_b_1_the_best"
+            model_save += "/baseline"
+            model = Model(latent_dim)
+    else:
+        if mircea_model:
+            file = "17_08_56_mel_p0_latent_2_lr_3e-05_b_1_the_best"
+            start_epoch = 467
+
+            model_save += "/mircea_model"
+            model = HModel_new(latent_dim)
+        else:
+            file = "breguel_model_latent_2_lr_3e-05_b_1_the_best"
+            model_save += "/breguel_model"
+            model = HModel_breguel(latent_dim)
+
     model.inference_net.summary()
     model.generative_net.summary()
 
     print("New Model")
     description = (
-        "mel_p0_latent_"
+        "_mel_p0_latent_"
         + str(latent_dim)
         + "_lr_"
         + str(learning_rate)
@@ -144,9 +169,8 @@ def train_model(
     )
     day = datetime.datetime.now().strftime("%Y_%m_%d")
     time_clock = datetime.datetime.now().strftime("%H_%M_%S")
-    start_epoch = 1
 
-    # Create saving variables
+    # Create saving variables    x
     train_log_dir = (
         "logs/gradient_tape/" + day + "/" + time_clock + description + "/train"
     )
@@ -156,50 +180,60 @@ def train_model(
     train_summary_writer = tf.summary.create_file_writer(train_log_dir)
     test_summary_writer = tf.summary.create_file_writer(test_log_dir)
 
-    model_save = "./model_weights/" + day + "/" + time_clock + description
+    model_save += "/model_weights/" + file
+
+    # # mircea model
+    # model_save = './model_weights/2022_12_06/17_08_56_mel_p0_latent_2_lr_3e-05_b_1_the_best'
+    # model_save = './model_weights/2022_12_06/17_08_56_mel_p0_latent_2_lr_3e-05_b_1'
+    # best_elbo = -11665.8505859375
+
+    model.load_weights(model_save)
 
     # Train
-    best_elbo = -1e20
-    test_losses = []
-    train_losses = []
+    # best_elbo = -1e20
+    # model_save = './model_weights/'+day+'/' + time_clock + description
+    start_epoch = 1
+
     for epoch in range(start_epoch, start_epoch + epochs):
 
         start_time = time.time()
         train_loss = tf.keras.metrics.Mean()
+        id = 1
+        intermedio = start_time
         for train_x in train_dataset:
             train_loss(compute_apply_gradients(model, train_x, optimizer, beta))
+            print(
+                f"  - {id} -> {id}/{len(train_dataset)}  {id/len(train_dataset)}% total: {time.time()- start_time} segundos, epoca: {time.time()-intermedio} segundos",
+                end="\r",
+            )
+            id = id + 1
+            intermedio = time.time()
         end_time = time.time()
 
         test_loss = tf.keras.metrics.Mean()
         for test_x in test_dataset:
             test_loss(compute_loss(model, test_x, beta))
         elbo = -test_loss.result()
+        # test acurracy of reconstruction of test data
+
+        train_elbo = -train_loss.result()
 
         with test_summary_writer.as_default():
-            tf.summary.scalar("Test ELBO", -test_loss.result(), step=epoch)
+            tf.summary.scalar("Test ELBO", -elbo, step=epoch)
         with train_summary_writer.as_default():
-            tf.summary.scalar("Train ELBO", -train_loss.result(), step=epoch)
-        test_losses.append([elbo, epoch])
-        train_elbo = -train_loss.result()
-        train_losses.append([train_elbo, epoch])
+            tf.summary.scalar("Train ELBO", -train_elbo, step=epoch)
 
         print(
-            "Epoch: {}, Test set ELBO: {}, Train set ELBO: {}, \
-            time elapse for current epoch {}".format(
+            "Epoch: {}, Test set ELBO: {}, Train set ELBO: {}, time elapse for current epoch {}".format(
                 epoch, elbo, train_elbo, end_time - start_time
             )
         )
 
-        if elbo > best_elbo:
-            print('Model saved:')
-            best_elbo = elbo
-            model.save_weights(model_save+'_se_'+str(start_epoch)+'_ee_'+str(epochs+start_epoch)+'_ep_'+str(epoch))
-            model.save_weights(model_save+'_the_best')
-    # create a file for losses and write the losses
-    f = open(model_save + "_losses.txt", "w")
-    f.write("Train losses: " + str(train_losses) + "\n")
-    f.write("Test losses: " + str(test_losses) + "\n")
-    f.close()
+        # if elbo > best_elbo:
+        #     print('Model saved:')
+        #     best_elbo = elbo
+        #     model.save_weights(model_save+'_se_'+str(1)+'_ee_'+str(epochs+start_epoch)+'_ep_'+str(epoch))
+        #     model.save_weights(model_save+'_the_best')
 
 
 if __name__ == "__main__":
@@ -234,12 +268,10 @@ if __name__ == "__main__":
     examples = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
     # Select training params
-    epochs = 15
-    beta = 0.2
+    epochs = 500
+    beta = 1
     learning_rate = 3e-5
-    optimizer = tf.keras.optimizers.Adam(
-        learning_rate=learning_rate, weight_decay=0.0001
-    )
+    optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
 
     train_model(
         latent_dim,
@@ -252,5 +284,8 @@ if __name__ == "__main__":
         beta,
         learning_rate,
         optimizer,
+        # hyperbolic=True,
+        baseline=False,
+        # mircea_model=True,
         gpu=True,
     )

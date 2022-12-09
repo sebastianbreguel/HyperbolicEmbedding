@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow import keras
-from .util import poincare_linear, unidirectional_poincare_mlr, activation_result
+from .util import poincare_linear, activation_result
 
 
 class LinearHyperbolic(keras.layers.Layer):
@@ -31,17 +31,16 @@ class LinearHyperbolic(keras.layers.Layer):
         self.output_hyp = output_hyp
 
     def build(self, batch_input_shape):
-        print(batch_input_shape, "yo?")
-        w_init = tf.random_normal_initializer()
+        #  add seed to random initialization
+        w_init = tf.random_normal_initializer(seed=21)
         self.kernel = tf.Variable(
             initial_value=w_init(
                 shape=(batch_input_shape[-1], self.units), dtype="float32"
             ),
             dtype="float32",
             trainable=True,
+            # seed
         )
-        # init with kaiming uniform
-        # self.kernel = tf.keras.initializers.glorot_uniform()(self.kernel.shape)
 
         if self.use_bias:
             self.bias = self.add_weight(
@@ -61,13 +60,12 @@ class LinearHyperbolic(keras.layers.Layer):
         inputs = tf.cast(inputs, tf.float32)
 
         # apply dropout to kernel
-        kernel = tf.nn.dropout(self.kernel, rate=0.5)
 
         # if input is not in hyperbolic space, project it to the hyperbolic space
         if self.input_hyp == False:
             inputs = self.manifold.proj(self.manifold.expmap0(inputs, self.c), self.c)
 
-        mv = self.manifold.mobius_matvec(kernel, inputs, self.c)
+        mv = self.manifold.mobius_matvec(self.kernel, inputs, self.c)
         res = self.manifold.proj(mv, c=self.c)
 
         if self.use_bias:
@@ -83,6 +81,7 @@ class LinearHyperbolic(keras.layers.Layer):
 
         if self.output_hyp == False:
             res = self.manifold.logmap0(res, c=self.c)
+
         return res
 
     def get_config(self):
@@ -149,7 +148,6 @@ class LinearHyperbolicPlusPlus(keras.layers.Layer):
             dtype="float32",
             trainable=True,
         )
-
         if self.use_bias:
             self.bias = self.add_weight(
                 name="bias",
@@ -165,6 +163,7 @@ class LinearHyperbolicPlusPlus(keras.layers.Layer):
         """
         Called during forward pass of a neural network. Uses hyperbolic matrix multiplication
         """
+
         inputs = tf.cast(inputs, tf.float32)
 
         if self.input_hyp == False:
@@ -173,7 +172,7 @@ class LinearHyperbolicPlusPlus(keras.layers.Layer):
         v_norm = tf.clip_by_value(
             tf.norm(self.weigh_v, axis=0, keepdims=True),
             clip_value_min=1e-6,
-            clip_value_max=1e10,
+            clip_value_max=1e6,
         )
         weigh_v_norm = self.weigh_v / v_norm
         x = poincare_linear(
@@ -185,6 +184,7 @@ class LinearHyperbolicPlusPlus(keras.layers.Layer):
 
         if self.output_hyp == False:
             x = self.manifold.logmap0(x, c=self.c)
+
         return x
 
     def get_config(self):

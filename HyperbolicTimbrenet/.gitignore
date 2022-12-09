@@ -1,0 +1,16 @@
+results/baseline/model_weights/baseline_latent_2_lr_3e-05_b_1_the_best.index
+results/baseline/model_weights/baseline_latent_2_lr_3e-05_b_1_the_best.data-00000-of-00001
+
+results/baseline/model_weights/baseline_hyp_latent_2_lr_3e-05_b_1_the_best.index
+results/baseline/model_weights/baseline_hyp_latent_2_lr_3e-05_b_1_the_best.data-00000-of-00001
+
+
+results/breguel_model/model_weights/breguel_model_latent_2_lr_3e-05_b_1_the_best.data-00000-of-00001
+results/breguel_model/model_weights/breguel_model_latent_2_lr_3e-05_b_1_the_best.index
+
+
+results/mircea_model/model_weights/17_08_56_mel_p0_latent_2_lr_3e-05_b_1_the_best.index
+results/mircea_model/model_weights/17_08_56_mel_p0_latent_2_lr_3e-05_b_1_the_best.data-00000-of-00001
+
+
+*__pycache__
