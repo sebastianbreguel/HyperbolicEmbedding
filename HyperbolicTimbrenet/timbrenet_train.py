@@ -54,7 +54,7 @@ def train_model(
     beta,
     learning_rate,
     optimizer,
-    model = 1,
+    model=1,
     baseline=True,
     hyperbolic=False,
     mircea_model=False,
@@ -136,13 +136,15 @@ def train_model(
 
     model_save = "./results"
     if model == 1:
-            model_save += "/baseline_hyp"
-            file = "baseline_hyperbolic_latent_2_lr_3e-05_b_1_the_best"
-            model = HModel(latent_dim)
+        model_save += "/baseline_hyp"
+        file = "baseline_hyperbolic_latent_2_lr_3e-05_b_1_the_best"
+        model = HModel(latent_dim)
+
     elif model == 2:
-            file = "baseline_latent_2_lr_3e-05_b_1_the_best"
-            model_save += "/baseline"
-            model = Model(latent_dim)
+        file = "baseline_latent_2_lr_3e-05_b_1_the_best"
+        model_save += "/baseline"
+        model = Model(latent_dim)
+
     elif model == 3:
         file = "17_08_56_mel_p0_latent_2_lr_3e-05_b_1_the_best"
         start_epoch = 467
@@ -284,7 +286,7 @@ if __name__ == "__main__":
         beta,
         learning_rate,
         optimizer,
-        model = 1,
+        model=1,
         gpu=True,
     )
 
