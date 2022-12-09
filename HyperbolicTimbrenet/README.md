@@ -2,9 +2,50 @@
 
 This project aims to create deep learning tools for musicians to work with the timbre of different sounds and instruments.
 
-This project is in a initial developing stage.
+```bash
 
-on dowloand_file.ipynb you have to run to obatin the weights of the models trainend
+|__📜timbrenet_generate_chord.py
+|
+|__📜timbrenet_generate_latent_map.py
+|
+|__📜timbrenet_train.py
+|
+|__📜dowloand_file.ipynb
+|
+|__📂datasets/450pianoChordDataset
+|   |__📂audio
+|   |__📜README.md
+|
+|__📂generated_chords
+|
+|__📂lib
+|  |__📜latent_chord.py
+|  |__📜model.py
+|  |__📜specgrams_helper.py
+|  |__📜spectral_ops.py
+|  |__📂hyp_model
+|  |   |__📜__init_.py
+|  |   |__📜linear_hyp.py
+|  |   |__📜manifold.py
+|  |   |__📜util.py
+|
+|__📂logs/gradient_tape/2022_12_09 #cache for training model
+|
+|__📂results
+|  |   |__📂baseline
+|  |   |__📂baseline_hyp
+|  |   |__📂breguel_model
+|  |   |__📂mircea_model   # * all the models have the same structure
+|  |   |   |__📂model_weights
+|  |   |   |__📜loss.txt
+|
+|
+|_📂trained_models/450_piano_chords    #pretrained models weights
+
+
+
+
+- To run trained models you need to run the jupyter notebook Dowloand_file.ipynb
 
 ## Datasets
 
@@ -36,6 +77,8 @@ on dowloand_file.ipynb you have to run to obatin the weights of the models train
 - In the "volumes" select the volumes of the dataset you want to plot.
 - In the "examples" select the examples of the dataset you want to plot.
 - Finally, run timbrenet_generate_latent_map.py
+
+```
 
 ```
 
