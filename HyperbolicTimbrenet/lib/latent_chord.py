@@ -28,7 +28,7 @@ class latent_chord:
     instruments = [None, "piano", "guitar"]
     mkr_type = ["o", ".", "*"]
 
-    def _init_(self, latent, model, spec_helper):
+    def __init__(self, latent, model, spec_helper):
         self.latent = latent
         self.model = model
         self.spec_helper = spec_helper
