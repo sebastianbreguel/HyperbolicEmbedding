@@ -7,6 +7,8 @@ from lib.model import CVAE as Model
 from lib.model import HCVAE as HModel
 from lib.model import HVAE_NEW as HModel_new
 from lib.model import HVAE_BREGUEL as HModel_breguel
+from lib.model import ECVAE as EModel
+
 from scipy.io.wavfile import read as read_wav
 from lib.specgrams_helper import SpecgramsHelper
 
@@ -136,14 +138,14 @@ def train_model(
 
     model_save = "./results"
     if model == 1:
-        model_save += "/baseline_hyp"
-        file = "baseline_hyperbolic_latent_2_lr_3e-05_b_1_the_best"
-        model = HModel(latent_dim)
-
-    elif model == 2:
         file = "baseline_latent_2_lr_3e-05_b_1_the_best"
         model_save += "/baseline"
         model = Model(latent_dim)
+
+    elif model == 2:
+        model_save += "/baseline_hyp"
+        file = "baseline_hyperbolic_latent_2_lr_3e-05_b_1_the_best"
+        model = HModel(latent_dim)
 
     elif model == 3:
         file = "17_08_56_mel_p0_latent_2_lr_3e-05_b_1_the_best"
@@ -156,6 +158,12 @@ def train_model(
         file = "breguel_model_latent_2_lr_3e-05_b_1_the_best"
         model_save += "/breguel_model"
         model = HModel_breguel(latent_dim)
+    
+    elif model == 5:
+        file  = "hyp+vae_latent_2_lr_3e-05_b_1_the_best"
+        model_save += "/hyp+vae"
+        model = EModel(latent_dim)
+        
 
     model.inference_net.summary()
     model.generative_net.summary()
@@ -184,16 +192,12 @@ def train_model(
 
     model_save += "/model_weights/" + file
 
-    # # mircea model
-    # model_save = './model_weights/2022_12_06/17_08_56_mel_p0_latent_2_lr_3e-05_b_1_the_best'
-    # model_save = './model_weights/2022_12_06/17_08_56_mel_p0_latent_2_lr_3e-05_b_1'
-    # best_elbo = -11665.8505859375
 
     model.load_weights(model_save)
 
     # Train
-    # best_elbo = -1e20
-    # model_save = './model_weights/'+day+'/' + time_clock + description
+    best_elbo = -1e20
+    model_save = './model_weights/'+day+'/' + time_clock + description
     start_epoch = 1
 
     for epoch in range(start_epoch, start_epoch + epochs):
@@ -231,11 +235,11 @@ def train_model(
             )
         )
 
-        # if elbo > best_elbo:
-        #     print('Model saved:')
-        #     best_elbo = elbo
-        #     model.save_weights(model_save+'_se_'+str(1)+'_ee_'+str(epochs+start_epoch)+'_ep_'+str(epoch))
-        #     model.save_weights(model_save+'_the_best')
+        if elbo > best_elbo:
+            print('Model saved:')
+            best_elbo = elbo
+            model.save_weights(model_save+'_se_'+str(1)+'_ee_'+str(epochs+start_epoch)+'_ep_'+str(epoch))
+            model.save_weights(model_save+'_the_best')
 
 
 if __name__ == "__main__":
@@ -295,3 +299,4 @@ if __name__ == "__main__":
 # model 2 is baseline hyperbolic
 # model 3 is mircea
 # model 4 is breguel
+# model 5 is timbreNet + embedding hyperbolico
