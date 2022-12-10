@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 import scipy.io.wavfile as wav
+from .hyp_model.manifold import Poincare
 
 
 def import_audio(filename):
@@ -27,7 +28,7 @@ class latent_chord:
     instruments = [None, "piano", "guitar"]
     mkr_type = ["o", ".", "*"]
 
-    def __init__(self, latent, model, spec_helper):
+    def _init_(self, latent, model, spec_helper):
         self.latent = latent
         self.model = model
         self.spec_helper = spec_helper
@@ -110,7 +111,7 @@ class latent_chord:
         return audio[0, :, 0]
 
     @classmethod
-    def from_file(cls, path, filename, model, spec_helper):
+    def from_file(cls, path, filename, model, spec_helper, hyp=False):
         cls.model = model
         cls.spec_helper = spec_helper
         if filename[-4:] == ".wav":
@@ -119,7 +120,13 @@ class latent_chord:
         else:
             audio_origin = import_audio(path + filename + ".wav")[0, :]
         mel = cls.spec_helper.waves_to_melspecgrams(audio_origin.reshape([1, 64000, 1]))
-        latent, _ = cls.model.encode(mel)
+        
+        if hyp:
+            encode, _ = cls.model.encode(mel)
+            manifold = Poincare()
+            latent = manifold.logmap0(encode, c=1)
+        else:
+            latent, _ = cls.model.encode(mel)
         new_latent_chord = latent_chord(latent, model, spec_helper)
         (
             new_latent_chord.instrument,

@@ -216,5 +216,5 @@ if __name__ == "__main__":
     examples = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
     timbrenet_generate_latent_map(
-        latent_dim, dataset_path, instruments, chords, volumes, examples, 4
+        latent_dim, dataset_path, instruments, chords, volumes, examples, 5
     )
