@@ -158,12 +158,11 @@ def train_model(
         file = "breguel_model_latent_2_lr_3e-05_b_1_the_best"
         model_save += "/breguel_model"
         model = HModel_breguel(latent_dim)
-    
+
     elif model == 5:
-        file  = "hyp+vae_latent_2_lr_3e-05_b_1_the_best"
+        file = "hyp+vae_latent_2_lr_3e-05_b_1_the_best"
         model_save += "/hyp+vae"
         model = EModel(latent_dim)
-        
 
     model.inference_net.summary()
     model.generative_net.summary()
@@ -192,12 +191,11 @@ def train_model(
 
     model_save += "/model_weights/" + file
 
-
     model.load_weights(model_save)
 
     # Train
     best_elbo = -1e20
-    model_save = './model_weights/'+day+'/' + time_clock + description
+    model_save = "./model_weights/" + day + "/" + time_clock + description
     start_epoch = 1
 
     for epoch in range(start_epoch, start_epoch + epochs):
@@ -236,10 +234,18 @@ def train_model(
         )
 
         if elbo > best_elbo:
-            print('Model saved:')
+            print("Model saved:")
             best_elbo = elbo
-            model.save_weights(model_save+'_se_'+str(1)+'_ee_'+str(epochs+start_epoch)+'_ep_'+str(epoch))
-            model.save_weights(model_save+'_the_best')
+            model.save_weights(
+                model_save
+                + "_se_"
+                + str(1)
+                + "_ee_"
+                + str(epochs + start_epoch)
+                + "_ep_"
+                + str(epoch)
+            )
+            model.save_weights(model_save + "_the_best")
 
 
 if __name__ == "__main__":

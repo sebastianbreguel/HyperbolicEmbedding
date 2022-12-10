@@ -3,12 +3,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cross_decomposition import CCA
 from lib.model import CVAE as Model
+from lib.model import HCVAE as HModel
+from lib.model import HVAE_NEW as HModel_new
+from lib.model import HVAE_BREGUEL as HModel_breguel
+from lib.model import ECVAE as EModel
 from lib.latent_chord import latent_chord
 from lib.specgrams_helper import SpecgramsHelper
 
 
 def timbrenet_generate_latent_map(
-    trained_model_path, latent_dim, dataset_path, instruments, chords, volumes, examples
+    latent_dim, dataset_path, instruments, chords, volumes, examples, model
 ):
     extention = ".wav"
     spec_helper = SpecgramsHelper(
@@ -19,9 +23,35 @@ def timbrenet_generate_latent_map(
         mel_downscale=1,
     )
 
-    model = Model(latent_dim)
+    model_save = "./results"
+    if model == 1:
+        model_save += "/baseline_hyp"
+        file = "baseline_hyperbolic_latent_2_lr_3e-05_b_1_the_best"
+        model = HModel(latent_dim)
+
+    elif model == 2:
+        file = "baseline_latent_2_lr_3e-05_b_1_the_best"
+        model_save += "/baseline"
+        model = Model(latent_dim)
+
+    elif model == 3:
+        file = "mircea_model_latent_2_lr_3e-05_b_1_the_best"
+        model_save += "/mircea_model"
+        model = HModel_new(latent_dim)
+
+    elif model == 4:
+        file = "breguel_model_latent_2_lr_3e-05_b_1_the_best"
+        model_save += "/breguel_model"
+        model = HModel_breguel(latent_dim)
+
+    elif model == 5:
+        file = "hyp+vae_latent_2_lr_3e-05_b_1_the_best"
+        model_save += "/hyp+vae"
+        model = EModel(latent_dim)
+
+    model_save += "/model_weights/" + file
     print("\n\nLoading Trained Model...")
-    model.load_weights(trained_model_path)
+    model.load_weights(model_save)
     print("Success Loading Trained Model!\n")
 
     # IMPORT AND CONVERT AUDIO TO MEL_SPECTROGRAMS
@@ -37,6 +67,7 @@ def timbrenet_generate_latent_map(
                             instrument + chord + volume + example + extention,
                             model,
                             spec_helper,
+                            hyp=True,
                         )
                     )
 
@@ -98,20 +129,20 @@ def timbrenet_generate_latent_map(
                 x, y, c=data.plt_color, marker=data.plt_mkr_type, s=data.plt_mkr_size
             )
             legen_data = (data.plt_mkr_type, data.plt_color, data.plt_mkr_size)
-            if legen_data in legend_mkr_list:
-                i = legend_mkr_list.index(legen_data)
-                name = legend_name_list[i]
-                legend_elements.append(element)
-                legend_names.append(
-                    str(name[0])
-                    + "_"
-                    + str(name[1])
-                    + str(name[2])
-                    + "_"
-                    + str(name[3])
-                )
-                legend_mkr_list.remove(legen_data)
-                legend_name_list.remove(name)
+            # if legen_data in legend_mkr_list:
+            #     i = legend_mkr_list.index(legen_data)
+            #     name = legend_name_list[i]
+            #     legend_elements.append(element)
+            #     legend_names.append(
+            #         str(name[0])
+            #         + "_"
+            #         + str(name[1])
+            #         + str(name[2])
+            #         + "_"
+            #         + str(name[3])
+            #     )
+            #     legend_mkr_list.remove(legen_data)
+            #     legend_name_list.remove(name)
 
     else:
         for j in range(len(latent_dataset)):
@@ -185,11 +216,5 @@ if __name__ == "__main__":
     examples = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
     timbrenet_generate_latent_map(
-        trained_model_path,
-        latent_dim,
-        dataset_path,
-        instruments,
-        chords,
-        volumes,
-        examples,
+        latent_dim, dataset_path, instruments, chords, volumes, examples, 4
     )
