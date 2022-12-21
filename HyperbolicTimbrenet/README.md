@@ -23,11 +23,19 @@ This project aims to create deep learning tools for musicians to work with the t
 |  |__📜model.py
 |  |__📜specgrams_helper.py
 |  |__📜spectral_ops.py
-|  |__📂hyp_model
+|  |__📂hyp_model           # hyperbolic layers
 |  |   |__📜__init_.py
 |  |   |__📜linear_hyp.py
 |  |   |__📜manifold.py
 |  |   |__📜util.py
+|  |
+|  |__📂models          # models
+|  |   |__📜__init_.py
+|  |   |__📜baseline.py
+|  |   |__📜baseline_hyp.py
+|  |   |__📜breguel_model.py
+|  |   |__📜hyp_vae.py
+|  |   |__📜mircea_model.py
 |
 |__📂logs/gradient_tape/2022_12_09 #cache for training model
 |
@@ -38,14 +46,13 @@ This project aims to create deep learning tools for musicians to work with the t
 |  |   |__📂mircea_model   # * all the models have the same structure
 |  |   |   |__📂model_weights
 |  |   |   |__📜loss.txt
+|  |   |__📜losses.png # comparation of the losses of the models
 |
 |
 |_📂trained_models/450_piano_chords    #pretrained models weights
 ```
 
-
-
-- To run trained models you need to run the jupyter notebook Dowloand_file.ipynb
+- To run trained models you need to run the jupyter notebook Dowloand_file.ipynb, to dowloand the weight of each model from dropbox.
 
 ## Datasets
 
@@ -77,9 +84,3 @@ This project aims to create deep learning tools for musicians to work with the t
 - In the "volumes" select the volumes of the dataset you want to plot.
 - In the "examples" select the examples of the dataset you want to plot.
 - Finally, run timbrenet_generate_latent_map.py
-
-```
-
-```
-
-```
