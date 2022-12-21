@@ -10,7 +10,6 @@ This project aims to create deep learning tools for musicians to work with the t
 |
 |__📜timbrenet_train.py
 |
-|__📜dowloand_file.ipynb
 |
 |__📂datasets/450pianoChordDataset
 |   |__📂audio
@@ -40,6 +39,7 @@ This project aims to create deep learning tools for musicians to work with the t
 |__📂logs/gradient_tape/2022_12_09 #cache for training model
 |
 |__📂results
+|  |   |__📜Dowloand_file.ipynb    # dowloand the weights of the models
 |  |   |__📂baseline
 |  |   |__📂baseline_hyp
 |  |   |__📂breguel_model
