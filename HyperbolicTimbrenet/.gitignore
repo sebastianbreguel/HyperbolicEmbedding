@@ -14,3 +14,6 @@ results/mircea_model/model_weights/mircea_model_latent_2_lr_3e-05_b_1_the_best.i
 results/hyp+vae/model_weights/hyp+vae_latent_2_lr_3e-05_b_1_the_best.index
 results/hyp+vae/model_weights/hyp+vae_latent_2_lr_3e-05_b_1_the_best.data-00000-of-00001 
 *__pycache__
+
+model_weights
+logs

@@ -733,8 +733,6 @@ class ECVAE(tf.keras.Model):
         self.embedding = tf.keras.Sequential([
                 tf.keras.layers.InputLayer(input_shape=(128, 1024, 32)),
                 tf.keras.layers.Permute((1,3,2)),
-                LinearHyperbolic(256, Poincare(), 1, activation=tf.keras.layers.LeakyReLU(), output_hyp=True),
-                tf.keras.layers.Dropout(0.25),
                 LinearHyperbolic(64, Poincare(), 1, activation=tf.keras.layers.LeakyReLU(),  input_hyp=True),
                 tf.keras.layers.Permute((1,3,2)),
                 tf.keras.layers.Reshape((128, 16, 128)),
@@ -903,7 +901,6 @@ class ECVAE(tf.keras.Model):
         embedding = self.embedding(first_conv)
         conv2 = self.conv_inter(first_conv)
         concat = tf.concat([embedding, conv2], axis=3)
-
         mean, logvar = tf.split( self.inference_net(concat), num_or_size_splits=2, axis=1)
         return mean, logvar
 

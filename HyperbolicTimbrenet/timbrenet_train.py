@@ -3,12 +3,11 @@ import time
 import datetime
 import numpy as np
 import tensorflow as tf
-from lib.model import CVAE as Model
-from lib.model import HCVAE as HModel
-from lib.model import HVAE_NEW as HModel_new
-from lib.model import HVAE_BREGUEL as HModel_breguel
-from lib.model import ECVAE as EModel
-
+from lib.models.baseline import CVAE as Model
+from lib.models.baseline_hyp import HCVAE as HModel
+from lib.models.hyp_vae import EHYP_VAE as EModel 
+from lib.models.breguel_model import HVAE_BREGUEL as HModel_breguel
+from lib.models.mircea_model import M_VAE as HModel_new
 from scipy.io.wavfile import read as read_wav
 from lib.specgrams_helper import SpecgramsHelper
 
@@ -148,9 +147,7 @@ def train_model(
         model = HModel(latent_dim)
 
     elif model == 3:
-        file = "17_08_56_mel_p0_latent_2_lr_3e-05_b_1_the_best"
-        start_epoch = 467
-
+        file = "mircea_model_latent_2_lr_3e-05_b_1_the_best"
         model_save += "/mircea_model"
         model = HModel_new(latent_dim)
 
@@ -191,7 +188,7 @@ def train_model(
 
     model_save += "/model_weights/" + file
 
-    model.load_weights(model_save)
+    # model.load_weights(model_save)
 
     # Train
     best_elbo = -1e20
@@ -233,19 +230,19 @@ def train_model(
             )
         )
 
-        if elbo > best_elbo:
-            print("Model saved:")
-            best_elbo = elbo
-            model.save_weights(
-                model_save
-                + "_se_"
-                + str(1)
-                + "_ee_"
-                + str(epochs + start_epoch)
-                + "_ep_"
-                + str(epoch)
-            )
-            model.save_weights(model_save + "_the_best")
+        # if elbo > best_elbo:
+        #     print("Model saved:")
+        #     best_elbo = elbo
+        #     model.save_weights(
+        #         model_save
+        #         + "_se_"
+        #         + str(1)
+        #         + "_ee_"
+        #         + str(epochs + start_epoch)
+        #         + "_ep_"
+        #         + str(epoch)
+        #     )
+        #     model.save_weights(model_save + "_the_best")
 
 
 if __name__ == "__main__":
@@ -296,7 +293,7 @@ if __name__ == "__main__":
         beta,
         learning_rate,
         optimizer,
-        model=1,
+        model=2,
         gpu=True,
     )
 
