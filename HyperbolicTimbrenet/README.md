@@ -46,6 +46,7 @@ This project aims to create deep learning tools for musicians to work with the t
 |  |   |__📂mircea_model   # * all the models have the same structure
 |  |   |   |__📂model_weights
 |  |   |   |__📜loss.txt
+|  |   |__📜architectures.jpeg #  visual architecture of each model
 |  |   |__📜losses.png # comparation of the losses of the models
 |
 |
