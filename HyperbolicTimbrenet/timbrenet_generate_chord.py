@@ -3,7 +3,7 @@ import tensorflow as tf
 from scipy.io.wavfile import write
 from lib.models.baseline import CVAE as Model
 from lib.models.baseline_hyp import HCVAE as HModel
-from lib.models.hyp_vae import EHYP_VAE as EModel 
+from lib.models.hyp_vae import EHYP_VAE as EModel
 from lib.models.breguel_model import HVAE_BREGUEL as HModel_breguel
 from lib.models.mircea_model import M_VAE as HModel_new
 from lib.latent_chord import latent_chord
@@ -13,7 +13,6 @@ from lib.specgrams_helper import SpecgramsHelper
 def generate_chord_from_trained_model(
     latent_dim, sample_points, chord_saving_path, model
 ):
-
     if not os.path.exists(chord_saving_path):
         os.makedirs(chord_saving_path)
 
@@ -74,7 +73,6 @@ def generate_chord_from_trained_model(
 
 
 if __name__ == "_main_":
-
     # Select trained model path
     trained_model_path = (
         "./trained_models/450_piano_chords/latent_2_lr_3e-05_epoch_385_of_501"

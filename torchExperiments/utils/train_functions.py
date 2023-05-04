@@ -9,7 +9,6 @@ from manifolds import ManifoldParameter
 
 
 def obtain_loss(option):
-
     if option == "cross":
         criterion = nn.CrossEntropyLoss()
     # loss function

@@ -2,7 +2,6 @@ import argparse
 from utils import generate_data
 
 if "__main__" == __name__:
-
     parser = argparse.ArgumentParser()
 
     parser.add_argument(

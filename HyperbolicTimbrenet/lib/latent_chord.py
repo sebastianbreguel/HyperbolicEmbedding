@@ -10,7 +10,6 @@ def import_audio(filename):
 
 
 class latent_chord:
-
     triads = [None, "C", "Dm", "Em", "F", "G", "Am", "Bdim"]
     octaves = [None, "2", "3", "4"]
     colors = [
@@ -120,7 +119,7 @@ class latent_chord:
         else:
             audio_origin = import_audio(path + filename + ".wav")[0, :]
         mel = cls.spec_helper.waves_to_melspecgrams(audio_origin.reshape([1, 64000, 1]))
-        
+
         if hyp:
             encode, _ = cls.model.encode(mel)
             manifold = Poincare()

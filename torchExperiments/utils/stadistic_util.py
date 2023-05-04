@@ -7,7 +7,6 @@ from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_sc
 
 
 def get_accuracy(loss, y_test, model, test_loader, device):
-
     y_pred = []
     y_true = []
 
@@ -42,7 +41,6 @@ def get_accuracy(loss, y_test, model, test_loader, device):
 
 def get_metrics(loss, y_test, y_pred_list, model, test_loader):
     if loss == "cross":
-
         y_pred = []
         y_true = []
 

@@ -15,7 +15,6 @@ def run_model(
     optimizer,
     y_test,
 ):
-
     for e in range(1, EPOCHS + 1):
         # TRAINING
         train_epoch_loss = train_model(
@@ -38,13 +37,11 @@ def run_model(
 
 def run_MNIST(model, device, train_loader, test_loader, criterion, optimizer):
     for epoch in range(EPOCHS):
-
         partial = 0
         total_partial = 0
         model.train()
 
         for i, (images, labels) in enumerate(train_loader):
-
             images, labels = images.to(device), labels.to(device)
             images = images.view(-1, DIMENTIONS).requires_grad_()
             optimizer.zero_grad()
@@ -61,7 +58,6 @@ def run_MNIST(model, device, train_loader, test_loader, criterion, optimizer):
         total = 0
 
         for images, labels in test_loader:
-
             images = images.view(-1, DIMENTIONS).requires_grad_()
             outputs = model(images)
 

@@ -18,7 +18,6 @@ def train_eval(
     replace,
     task,
 ) -> None:
-
     if task == "MNIST":
         train_loader, test_loader = getMNIST()
 

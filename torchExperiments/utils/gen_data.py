@@ -43,7 +43,6 @@ def generate_data(create_folder, replace, task) -> None:
         print("\nFolder created\n")
     # run generate_data.py
     if task == "ganea":
-
         data_ganea(replace)
 
     elif task == "mircea":
@@ -67,7 +66,6 @@ def prefixWord(porcent, replaced, previus):
 
 
 def generate_df(porcentaje, url, replace, words_bank):
-
     lista = [[]] * NGS
     porcent = int(porcentaje * WORD_LARGE)
     K = int(porcent * replace)
@@ -109,7 +107,6 @@ def data_ganea(replace: float) -> None:
 
 
 def data_mircea():
-
     #    A
     #  B   C
     # D E F G
@@ -176,7 +173,6 @@ def data_mircea():
                 g.append(c[i])
 
         for i in range(V):
-
             a[i] = EMB[a[i]]
             b[i] = EMB[b[i]]
             c[i] = EMB[c[i]]
@@ -232,7 +228,6 @@ def data_mircea():
 
 
 def data_MNIST():
-
     train_dataset = dsets.MNIST(
         root="./", train=True, transform=transforms.ToTensor(), download=True
     )

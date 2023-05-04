@@ -25,7 +25,6 @@ from utils.parameters import (
 
 
 def get_model(option: str, dataset: int, task: str) -> torch.nn.Module:
-
     if task == "MNIST":
         inputs = DIMENTIONS
         outputs = 10
@@ -154,7 +153,6 @@ def get_data(dataset, replace, task) -> tuple:
 
 
 def getMNIST() -> tuple:
-
     train_dataset = dsets.MNIST(
         root="./data", train=True, transform=transforms.ToTensor(), download=True
     )
