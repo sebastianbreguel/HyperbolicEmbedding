@@ -1,7 +1,5 @@
-from utils import get_accuracy
 import torch
-from utils import EPOCHS, DIMENTIONS
-from utils import train_model, val_process
+from utils import DIMENTIONS, EPOCHS, get_accuracy, train_model, val_process
 
 
 def run_model(

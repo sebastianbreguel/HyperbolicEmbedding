@@ -1,11 +1,12 @@
 """Hyperbolic layers."""
+
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.nn.init as init
-from torch.nn.modules.module import Module
 from manifolds.base import ManifoldParameter
+from torch.nn.modules.module import Module
 from utils.parameters import USE_BIAS
 
 print(USE_BIAS, "HOLAA")

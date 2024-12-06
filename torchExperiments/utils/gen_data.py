@@ -1,35 +1,16 @@
-import torchvision.transforms as transforms
-import torchvision.datasets as dsets
-import torch
-
 import os
+from random import choice, random, sample, seed
 from time import sleep
+
 import pandas as pd
-from random import choice, sample, seed, random
-
+import torch
+import torchvision.datasets as dsets
+import torchvision.transforms as transforms
 import umap
-
-from utils.parameters import (
-    NGS,
-    NUMBERS,
-    DIMENTIONS,
-    URL_PREFIX_50,
-    URL_PREFIX_30,
-    URL_PREFIX_10,
-    MAX_RANDOM,
-    MIN_RANDOM,
-    ROUND,
-    POSITIVE,
-    VOCABULARY,
-    EMB,
-    NM,
-    V,
-    SEED,
-    URL,
-    WORD_LARGE,
-    WORDS,
-    LARGE,
-)
+from utils.parameters import (DIMENTIONS, EMB, LARGE, MAX_RANDOM, MIN_RANDOM,
+                              NGS, NM, NUMBERS, POSITIVE, ROUND, SEED, URL,
+                              URL_PREFIX_10, URL_PREFIX_30, URL_PREFIX_50,
+                              VOCABULARY, WORD_LARGE, WORDS, V)
 
 
 def generate_data(create_folder, replace, task) -> None:

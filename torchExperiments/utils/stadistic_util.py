@@ -1,9 +1,9 @@
-import torch
 import numpy as np
-
+import torch
+from sklearn.metrics import (accuracy_score, f1_score, precision_score,
+                             recall_score)
 # Parameters
 from utils.parameters import NM
-from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 
 
 def get_accuracy(loss, y_test, model, test_loader, device):

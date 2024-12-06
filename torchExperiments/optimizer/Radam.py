@@ -1,6 +1,5 @@
-from geoopt import Euclidean, PoincareBall
 import torch
-from geoopt import ManifoldParameter
+from geoopt import Euclidean, ManifoldParameter, PoincareBall
 
 
 def proju(x, u, dim=-1):

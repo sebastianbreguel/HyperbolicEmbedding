@@ -58,7 +58,6 @@ class Manifold(object):
 
 
 class Poincare(Manifold):
-
     """
     Implementation of the poincare manifold,. This class can be used for mathematical functions on the poincare manifold.
     """

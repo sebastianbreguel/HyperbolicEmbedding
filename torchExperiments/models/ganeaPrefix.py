@@ -1,9 +1,7 @@
 import torch.nn as nn
-from manifolds.base import ManifoldParameter
 import torch.nn.functional as F
-
-from layers import Linear, HypLinear, HypAct, HyperbolicMLR
-
+from layers import HypAct, HyperbolicMLR, HypLinear, Linear
+from manifolds.base import ManifoldParameter
 from torch.nn import Linear
 
 

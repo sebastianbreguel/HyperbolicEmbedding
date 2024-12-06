@@ -2,8 +2,8 @@
 
 """Base manifold."""
 
-from torch.nn import Parameter, Module
 from geoopt import ManifoldTensor
+from torch.nn import Module, Parameter
 
 
 class Manifold(Module):

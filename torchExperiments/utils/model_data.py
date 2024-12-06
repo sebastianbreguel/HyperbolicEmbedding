@@ -1,27 +1,16 @@
-import torch
-from torch.utils.data import Dataset, DataLoader
-import torchvision.transforms as transforms
-import torchvision.datasets as dsets
-
 import numpy as np
 import pandas as pd
+import torch
+import torchvision.datasets as dsets
+import torchvision.transforms as transforms
 from data import generate_data
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import train_test_split
-
 from manifolds import Euclidean, PoincareBall
 from models import HNN
-from utils.parameters import (
-    URL,
-    URL_PREFIX_10,
-    URL_PREFIX_30,
-    URL_PREFIX_50,
-    IN_FEATURES,
-    BATCH_SIZE,
-    DIMENTIONS,
-    LARGE,
-    SEED,
-)
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+from torch.utils.data import DataLoader, Dataset
+from utils.parameters import (BATCH_SIZE, DIMENTIONS, IN_FEATURES, LARGE, SEED,
+                              URL, URL_PREFIX_10, URL_PREFIX_30, URL_PREFIX_50)
 
 
 def get_model(option: str, dataset: int, task: str) -> torch.nn.Module:

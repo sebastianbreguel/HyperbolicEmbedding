@@ -1,11 +1,10 @@
-import torch.nn as nn
-from .stadistic_util import get_accuracy
 import torch
-from utils.parameters import LEARNING_RATE
 import torch.nn as nn
-
-from optimizer import RiemannianAdam
 from manifolds import ManifoldParameter
+from optimizer import RiemannianAdam
+from utils.parameters import LEARNING_RATE
+
+from .stadistic_util import get_accuracy
 
 
 def obtain_loss(option):
@@ -82,8 +81,9 @@ def train_model(model, train_loader, criterion, optimizer, device):
     train_epoch_loss = 0
     model.train()
     for X_train_batch, y_train_batch in train_loader:
-        X_train_batch, y_train_batch = X_train_batch.to(device), y_train_batch.to(
-            device
+        X_train_batch, y_train_batch = (
+            X_train_batch.to(device),
+            y_train_batch.to(device),
         )
         optimizer.zero_grad()
 

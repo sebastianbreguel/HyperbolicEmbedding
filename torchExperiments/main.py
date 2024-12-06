@@ -1,11 +1,10 @@
-from utils import get_data, get_model, get_metrics, getMNIST
-import torch
-from utils import EPOCHS, LEARNING_RATE, SEED
-from utils import obtain_loss, obtain_optimizer
-from utils.parameters import LARGE
-
 import argparse
-from utils import run_model, run_MNIST
+
+import torch
+from utils import (EPOCHS, LEARNING_RATE, SEED, get_data, get_metrics,
+                   get_model, getMNIST, obtain_loss, obtain_optimizer,
+                   run_MNIST, run_model)
+from utils.parameters import LARGE
 
 print(__name__)
 

@@ -1,4 +1,5 @@
 import argparse
+
 from data_gen import generate_data
 
 if "__main__" == __name__:

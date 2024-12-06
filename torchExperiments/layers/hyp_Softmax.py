@@ -3,13 +3,14 @@ Implementation of various mathematical operations in the Poincare ball model of 
 functions are based on the implementation in https://github.com/geoopt/geoopt (copyright by Maxim Kochurov).
 """
 
+import math
+
 import numpy as np
 import torch
-from scipy.special import gamma
-import math
 import torch.nn as nn
 import torch.nn.init as init
-from manifolds import artanh, arsinh
+from manifolds import arsinh, artanh
+from scipy.special import gamma
 
 
 class HyperbolicMLR(nn.Module):

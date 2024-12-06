@@ -1,6 +1,7 @@
 import numpy as np
-import tensorflow as tf
 import scipy.io.wavfile as wav
+import tensorflow as tf
+
 from .hyp_model.manifold import Poincare
 
 

@@ -1,7 +1,8 @@
 """Euclidean manifold."""
 
-from .base import Manifold
 import torch
+
+from .base import Manifold
 
 
 class Euclidean(Manifold):

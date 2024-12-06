@@ -1,15 +1,16 @@
+import datetime
 import os
 import time
-import datetime
+
 import numpy as np
 import tensorflow as tf
 from lib.models.baseline import CVAE as Model
 from lib.models.baseline_hyp import HCVAE as HModel
-from lib.models.hyp_vae import EHYP_VAE as EModel
 from lib.models.breguel_model import HVAE_BREGUEL as HModel_breguel
+from lib.models.hyp_vae import EHYP_VAE as EModel
 from lib.models.mircea_model import M_VAE as HModel_new
-from scipy.io.wavfile import read as read_wav
 from lib.specgrams_helper import SpecgramsHelper
+from scipy.io.wavfile import read as read_wav
 
 
 def import_audio(filename):

@@ -1,4 +1,5 @@
 import tensorflow as tf
+
 from .hyp_model.linear_hyp import LinearHyperbolic, LinearHyperbolicPlusPlus
 from .hyp_model.manifold import Poincare
 

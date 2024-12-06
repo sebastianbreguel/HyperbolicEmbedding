@@ -1,6 +1,7 @@
 import tensorflow as tf
 from tensorflow import keras
-from .util import poincare_linear, activation_result
+
+from .util import activation_result, poincare_linear
 
 
 class LinearHyperbolic(keras.layers.Layer):

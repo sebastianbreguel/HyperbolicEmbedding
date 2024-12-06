@@ -1,5 +1,6 @@
 import tensorflow as tf
-from .manifold import cosh, sinh, asinh
+
+from .manifold import asinh, cosh, sinh
 
 
 def poincare_linear(x, manifold, weight_g, weight_v, bias, c):

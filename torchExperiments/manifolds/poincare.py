@@ -1,10 +1,11 @@
 """Poincare ball manifold."""
 
+import itertools
+
 import torch
 
 from .base import Manifold
 from .math_utils import artanh, tanh
-import itertools
 
 
 class PoincareBall(Manifold):
