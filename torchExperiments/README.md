@@ -1,102 +1,84 @@
-# EmbeddingHyperbolic
+# torchExperiments
 
-This is a repository to investigate how to generate music based in Hyperbolic Embeddings
+PyTorch experiments comparing Euclidean and Hyperbolic neural networks on classification and regression tasks.
 
-```bash
-main.py
-|
-|__📂utils                              # utils function to create, get, process and run data/metrics/models
-|   |__📜model_data.py
-|   |__📜parameters.py
-|   |__📜run.py
-|   |__📜stadistic_util.py
-|   |__📜train_functions.py
-|
-|__📂manifolds                          # Manifolds to use in the project
-|   |__📜base.py
-|   |__📜Euclidean.py
-|   |__📜math_util.py
-|   |__📜poincare.py
-|
-|__📂layers                             # Manifold Layers
-|   |__📜layers.py
-|   |__📜hyp_layers.py
-|   |__📜hyp_softmax.py
-|
-|__📂models                             # NN for the project
-|   |__ ganeaPrefix.py
-|
-|__📂Optimizer
-|   |__ 📜Radam.py
-|
-|__📂data                               # Data to use in the project
-|   |__📜data_gen.py
-|   |__📜data_main.py
-|
-|_📂analisis                            # jupyter notebooks where we analize the results
-|  |
-|  |__📂 Ganea
-|  |   |__📂First
-|  |   |   |__📜analisis.ipynb
-|  |   |
-|  |   |
-|  |   |__📂Second
-|  |   |   |__📜analisis2.ipynb
+## Project Structure
 
 ```
-
-# Usage
-
-## Arguments to create data
-
-```bash
---generate_data : Generate data from midi files
---create_folder : Create folder to save data
---task: Task to train, could be ganea/MNIST(classification) or mircea(regression)
---replace: if task 'ganea'-> Make prefix with noise
+main.py                                # Entry point (train + evaluate)
+data.py                                # Standalone data generation script
+config.py                              # All hyperparameters and dataset paths
+│
+├── training/                          # Training pipeline
+│   ├── data_gen.py                    # Synthetic data generation (Ganea, Mircea, MNIST)
+│   ├── data_loader.py                 # Data loading and model factory
+│   ├── metrics.py                     # Accuracy, F1, precision, recall
+│   └── trainer.py                     # Loss/optimizer factories + training loops
+│
+├── layers/                            # Neural network layers
+│   ├── layers.py                      # Euclidean linear layer
+│   ├── hyp_layers.py                  # Hyperbolic linear + activation layers
+│   └── hyp_Softmax.py                 # Hyperbolic MLR (softmax equivalent)
+│
+├── manifolds/                         # Manifold implementations
+│   ├── base.py                        # Abstract manifold + ManifoldParameter
+│   ├── euclidean.py                   # Euclidean manifold
+│   ├── poincare.py                    # Poincaré ball manifold
+│   └── math_utils.py                  # artanh, tanh helpers
+│
+├── models/
+│   └── hnn.py                         # HNN (Hyperbolic Neural Network)
+│
+├── optimizer/
+│   └── Radam.py                       # Riemannian Adam
+│
+└── data/                              # Data files only (CSVs, no Python)
+    ├── Prefix/
+    └── MNIST/
 ```
 
-## Arguments to run model
+## Installation
 
 ```bash
---train_eval : Train and evaluate the model
---model: Model to train, colud be euclidean or hyperbolic
---optimizer: Optimizer to train, could be SGD or Adam
---loss: Loss to train, could be mse or cross
---dataset: determinate the large of the prefix
-        - 0: if task mircea
-        - 10, 30 o 50: if task ganea
+uv sync
 ```
 
-### Examples
+## Usage
 
-1: Run model euclidean with dataset 10 on task ganea
+### Generate data
 
-```python
+```bash
+python main.py --generate_data --create_folder --task ganea --replace 0.5
+```
+
+### Train and evaluate
+
+```bash
+# Euclidean model, prefix task (dataset 10)
 python main.py --train_eval --model euclidean --task ganea --loss cross --dataset 10
 
-```
-
-2: Run model hyperbolic with dataset 10 on task ganea
-
-```python
+# Hyperbolic model, prefix task (dataset 10)
 python main.py --train_eval --model hyperbolic --task ganea --loss cross --dataset 10
-```
 
-3: Run model euclidean with dataset 0 on task ganea
-
-```python
+# Euclidean model, regression task
 python main.py --train_eval --model euclidean --task mircea --loss mse --dataset 0
-
 ```
 
-4: **_run and create data_**
+### All arguments
 
-```python
-python main.py --generate_data --create_folder --task ganea --replace --train_eval --model euclidean --task ganea --loss cross --dataset 10
-```
+| Argument | Values | Description |
+|---|---|---|
+| `--model` | `euclidean`, `hyperbolic` | Which manifold to use |
+| `--optimizer` | `Adam`, `SGD`, `Radam` | Optimizer (Radam = Riemannian Adam) |
+| `--task` | `ganea`, `mircea`, `MNIST` | Task type |
+| `--loss` | `cross`, `mse` | Loss function |
+| `--dataset` | `0`, `10`, `30`, `50` | Prefix length (0 for mircea) |
+| `--replace` | float (default 0.5) | Fraction of positive samples in ganea task |
+| `--generate_data` | flag | Generate data before training |
+| `--create_folder` | flag | Create output folders |
+| `--train_eval` | flag | Run training and evaluation |
 
-#### TODO
+## TODO
 
 - [x] Add more datasets
 - [x] Implement Riemannian Adam
@@ -105,11 +87,7 @@ python main.py --generate_data --create_folder --task ganea --replace --train_ev
 
 ## References
 
-- Hyperbolic Neural Networks: [paper](https://arxiv.org/abs/1805.09112)-[github](https://github.com/dalab/hyperbolic_nn)
-- Codes for Network Embedding: [github](https://github.com/chenweize1998/fully-hyperbolic-nn/tree/main/gcn)
-- Poincaré Embeddings for Learning Hierarchical Representations: [paper](https://papers.nips.cc/paper/2017/hash/59dfa2df42d9e3d41f5b02bfc32229dd-Abstract.html) - [github](https://github.com/facebookresearch/poincare-embeddings)
-
-## Usefull
-
-- [Hyperbolic Algorithms](https://github.com/drewwilimitis/hyperbolic-learning)
-- [Hyperbolic Embedding](https://github.com/prokopevaleksey/poincare-embeddings)
+- Hyperbolic Neural Networks: [paper](https://arxiv.org/abs/1805.09112) · [code](https://github.com/dalab/hyperbolic_nn)
+- Poincaré Embeddings: [paper](https://papers.nips.cc/paper/2017/hash/59dfa2df42d9e3d41f5b02bfc32229dd-Abstract.html) · [code](https://github.com/facebookresearch/poincare-embeddings)
+- Fully Hyperbolic NN: [code](https://github.com/chenweize1998/fully-hyperbolic-nn/tree/main/gcn)
+- [Hyperbolic Learning Algorithms](https://github.com/drewwilimitis/hyperbolic-learning)

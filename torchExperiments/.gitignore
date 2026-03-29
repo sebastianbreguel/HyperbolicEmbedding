@@ -10,3 +10,4 @@ analisis/task1
 *.csv
 analysis.ipynb
 analisis
+.venv

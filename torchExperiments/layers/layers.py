@@ -1,45 +1,38 @@
-"""Euclidean layers."""
+"""Euclidean neural network layers (baseline counterparts to hyperbolic layers)."""
 
-import math
+from __future__ import annotations
 
-import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch import Tensor
 from torch.nn.modules.module import Module
-from torch.nn.parameter import Parameter
-
-
-def get_dim_act(args):
-    """
-    Helper function to get dimension and activation at every layer.
-    :param args:
-    :return:
-    """
-    if not args.act:
-        act = lambda x: x
-    else:
-        act = getattr(F, args.act)
-    acts = [act] * (args.num_layers - 1)
-    dims = [args.feat_dim] + ([args.dim] * (args.num_layers - 1))
-    if args.task in ["lp", "rec"]:
-        dims += [args.dim]
-        acts += [act]
-    return dims, acts
 
 
 class Linear(Module):
-    """
-    Simple Linear layer with dropout.
+    """Euclidean linear layer with dropout and activation.
+
+    Args:
+        in_features: Input dimensionality.
+        out_features: Output dimensionality.
+        dropout: Dropout probability applied after the linear transform.
+        act: Activation function (e.g. nn.ReLU()).
+        use_bias: Whether to include a bias term.
     """
 
-    def __init__(self, in_features, out_features, dropout, act, use_bias):
-        super(Linear, self).__init__()
+    def __init__(
+        self,
+        in_features: int,
+        out_features: int,
+        dropout: float,
+        act: nn.Module,
+        use_bias: bool,
+    ) -> None:
+        super().__init__()
         self.dropout = dropout
         self.linear = nn.Linear(in_features, out_features, use_bias)
         self.act = act
 
-    def forward(self, x):
-        hidden = self.linear.forward(x)
+    def forward(self, x: Tensor) -> Tensor:
+        hidden = self.linear(x)
         hidden = F.dropout(hidden, self.dropout, training=self.training)
-        out = self.act(hidden)
-        return out
+        return self.act(hidden)

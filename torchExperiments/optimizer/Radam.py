@@ -1,46 +1,66 @@
+"""Riemannian Adam optimiser for parameters on Riemannian manifolds.
+
+Implements the Riemannian Adam algorithm from Bécigneul & Ganea 2019
+"Riemannian Adaptive Optimization Methods" (https://arxiv.org/abs/1810.00760).
+
+The key difference from standard Adam is that gradient accumulation and
+parameter updates are performed using manifold-aware operations:
+  - egrad2rgrad: converts Euclidean gradient to Riemannian gradient
+  - retr_transp: retraction + parallel transport of momentum
+"""
+
+from __future__ import annotations
+
+from typing import Any
+
 import torch
-from geoopt import Euclidean, ManifoldParameter, PoincareBall
+from geoopt import Euclidean, ManifoldParameter
 
 
-def proju(x, u, dim=-1):
+def proju(x: torch.Tensor, u: torch.Tensor, dim: int = -1) -> torch.Tensor:
+    """Project u onto the tangent space at x (broadcast-safe identity for flat space)."""
     target_shape = torch.broadcast_shapes(x.shape, u.shape)
     return u.expand(target_shape)
 
 
-class OptimMixin(object):
+class OptimMixin:
+    """Mixin that adds Riemannian manifold awareness to a standard PyTorch optimizer."""
+
     _default_manifold = Euclidean()
 
-    def __init__(self, *args, stabilize=None, **kwargs):
+    def __init__(self, *args: Any, stabilize: int | None = None, **kwargs: Any) -> None:
         self._stabilize = stabilize
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)  # type: ignore[call-arg]
 
-    def add_param_group(self, param_group: dict):
+    def add_param_group(self, param_group: dict[str, Any]) -> None:
         param_group.setdefault("stabilize", self._stabilize)
-        return super().add_param_group(param_group)
+        return super().add_param_group(param_group)  # type: ignore[misc]
 
-    def stabilize_group(self, group):
-        pass
+    def stabilize_group(self, group: dict[str, Any]) -> None:
+        """Stabilize one parameter group (no-op in base class)."""
 
-    def stabilize(self):
-        """Stabilize parameters if they are off-manifold due to numerical reasons."""
+    def stabilize(self) -> None:
+        """Project all ManifoldParameters back onto their manifold.
+
+        Useful when numerical drift has pushed parameters slightly off-manifold
+        (e.g. outside the Poincaré ball).
+        """
         for group in self.param_groups:
             self.stabilize_group(group)
 
 
-def copy_or_set_(dest, source):
-    """
-    A workaround to respect strides of :code:`dest` when copying :code:`source`
-    (https://github.com/geoopt/geoopt/issues/70)
-    Parameters
-    ----------
-    dest : torch.Tensor
-        Destination tensor where to store new data
-    source : torch.Tensor
-        Source data to put in the new tensor
-    Returns
-    -------
-    dest
-        torch.Tensor, modified inplace
+def copy_or_set_(dest: torch.Tensor, source: torch.Tensor) -> torch.Tensor:
+    """Copy ``source`` into ``dest``, respecting strides.
+
+    A workaround for https://github.com/geoopt/geoopt/issues/70: when strides
+    differ, ``set_`` would corrupt the tensor, so we fall back to ``copy_``.
+
+    Args:
+        dest: Destination tensor (modified in-place).
+        source: Source data.
+
+    Returns:
+        ``dest`` after the copy.
     """
     if dest.stride() != source.stride():
         return dest.copy_(source)
@@ -87,11 +107,18 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
 
     """
 
-    def __init__(self, *args, stabilize, **kwargs):
+    def __init__(self, *args: Any, stabilize: int, **kwargs: Any) -> None:
         super().__init__(*args, stabilize=stabilize, **kwargs)
-        # self.max_grad_norm = max_grad_norm
 
-    def step(self, closure=None):
+    def step(self, closure: Any | None = None) -> torch.Tensor | None:
+        """Perform a single optimisation step.
+
+        Args:
+            closure: Optional closure that re-evaluates the model and returns the loss.
+
+        Returns:
+            The loss evaluated by the closure, or None.
+        """
         loss = None
         if closure is not None:
             loss = closure()
@@ -181,7 +208,8 @@ class RiemannianAdam(OptimMixin, torch.optim.Adam):
         return loss
 
     @torch.no_grad()
-    def stabilize_group(self, group):
+    def stabilize_group(self, group: dict[str, Any]) -> None:
+        """Project ManifoldParameters in one group back onto their manifold."""
         for p in group["params"]:
             if not isinstance(p, (ManifoldParameter)):
                 continue

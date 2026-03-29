@@ -1,1 +1,1 @@
-from .ganeaPrefix import HNN
+from .hnn import HNN

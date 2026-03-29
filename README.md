@@ -1,25 +1,29 @@
-# EmbeddingHyperbolic
+# Hyperbolic Embedding
 
-This is a repository to investigate how to generate music based in Hyperbolic Embeddings
+A repository to investigate how to use Hyperbolic Embeddings in deep learning, with a focus on music generation.
 
 ## Summary
 
-Euclidean Space is a generalization of the space we live in, which has zero curvature. Lately, some investigations have show that, negative curvature space, a.k.a. Hyperbolic Space, has some properties that can be exploited for hierarchical data in deep learning.
+Euclidean space has zero curvature. Hyperbolic space has constant negative curvature and naturally captures hierarchical structure, making it well-suited for tree-like and hierarchical data in deep learning.
 
-On this repository we explore and show where Hyperbolic layers can be usefull to improve some deep learning task. Here are two folders:
+This repository contains two independent projects:
 
-- **TorchExperiments**: This folder contains the experiments and models done with PyTorch
-- **HyperbolicTImbrenet**: This folders contain the timbrenet model of Agustin Macaya, and our experiments applying hyperobolic layers to the model.
+| Folder | Framework | Description |
+|---|---|---|
+| [`torchExperiments/`](./torchExperiments/) | PyTorch | Hyperbolic NN experiments on classification and regression tasks |
+| [`HyperbolicTimbrenet/`](./HyperbolicTimbrenet/) | TensorFlow | TimbreNet model extended with hyperbolic layers for music generation |
 
 ## References
 
-- [Hyperbolic Neural Networks](https://arxiv.org/abs/1909.02265)
-- [Hyperbolic Nueronal Networks ++](https://arxiv.org/pdf/2006.08210.pdf)
+- [Hyperbolic Neural Networks](https://arxiv.org/abs/1805.09112)
+- [Hyperbolic Neural Networks ++](https://arxiv.org/pdf/2006.08210.pdf)
 
-PhD's advisors: Denis Parra, Mircea Petrache, Rodrigo Cadiz
+## TODO
 
-TODO lista:
+- [ ] Adapt wrapped hyperbolic layers to the TimbreNet model
+- [ ] Train the model with hyperbolic layers
+- [ ] Incorporate [Hyperbolic CNN](https://github.com/kschwethelm/HyperbolicCV/tree/main) and [Hyperbolic VAE](https://github.com/julian-8897/hyperbolic_vae/tree/master)
 
-- [ ] Adapt the wrapped hyperbolic layers to the timbrenet model
-- [ ] Train the model with the hyperbolic layers
-- [ ] Try to incorporate the hyperbolic cnn incorporating [Hyperbolic CNN](https://github.com/kschwethelm/HyperbolicCV/tree/main) and this [Hyperbolic VAE](https://github.com/julian-8897/hyperbolic_vae/tree/master)
+---
+
+Advisors: Denis Parra, Mircea Petrache, Rodrigo Cadiz

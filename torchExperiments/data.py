@@ -1,6 +1,22 @@
+"""Entry point for dataset generation.
+
+Usage
+-----
+    # Generate ganea prefix data (creates data/Prefix/ folder):
+    python data.py --task ganea --replace 0.5 --create_folder
+
+    # Generate mircea phylogenetic data:
+    python data.py --task mircea
+
+    # Download MNIST and save UMAP-reduced embeddings:
+    python data.py --task MNIST
+"""
+
+from __future__ import annotations
+
 import argparse
 
-from utils import generate_data
+from training import generate_data
 
 if "__main__" == __name__:
     parser = argparse.ArgumentParser()

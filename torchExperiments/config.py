@@ -10,17 +10,13 @@ OUT_FEATURES = 2
 SEED = 0
 USE_BIAS = False
 
-
 ##########################
-#####    Data Params
+#####    Ganea Task
 ##########################
-
-# GANEA
-
-NGS = 50_000  # Number of examples
+NGS = 50_000  # number of examples
 WORDS = 1_000
-POSITIVE = 0.5  # Prefix Positive Samples
-NUM = 9  # Number of OPTIONS
+POSITIVE = 0.5  # fraction of positive prefix samples
+NUM = 9  # number of character options
 NUMBERS = [str(i) for i in range(0, NUM + 1)] * 4
 URL_PREFIX_50 = "data/Prefix/Prefix_50"
 URL_PREFIX_30 = "data/Prefix/Prefix_30"
@@ -28,22 +24,19 @@ URL_PREFIX_10 = "data/Prefix/Prefix_10"
 LARGE = 2
 WORD_LARGE = 20
 
-# MIRCEA
-
+##########################
+#####    Mircea Task
+##########################
 URL = "data/Phylogenetics.csv"
 V = 20
 NM = 1000
-VOCABULARY = "abcdefghijklmnopqrstuvwxyz"[:V]
-VOCABULARY = [x for x in VOCABULARY]
+VOCABULARY = list("abcdefghijklmnopqrstuvwxyz"[:V])
 MIN_RANDOM = 0
 MAX_RANDOM = 0.3
 ROUND = 5
-# p = [p1, p2, p3, p4, p5, p6]
-EMB = {}
-for i, e in enumerate(VOCABULARY):
-    EMB[e] = i
+EMB = {e: i for i, e in enumerate(VOCABULARY)}
 
-
-# MNIST
-
-DIMENTIONS = 15
+##########################
+#####    MNIST Task
+##########################
+DIMENSIONS = 15
