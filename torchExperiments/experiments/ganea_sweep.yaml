@@ -1,0 +1,12 @@
+# Grid sweep: model × optimizer × hidden_size for ganea prefix task
+task: ganea
+loss: cross
+dataset: 10
+replace: 0.5
+epochs: 60
+runs: 3
+
+sweep:
+  model: [euclidean, hyperbolic]
+  optimizer: [Adam, Radam]
+  hidden_size: [32, 64, 128]

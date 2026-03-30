@@ -1,0 +1,10 @@
+# Sweep over architectures for MNIST classification
+task: MNIST
+loss: cross
+optimizer: Radam
+epochs: 30
+runs: 3
+
+sweep:
+  model: [euclidean, hyperbolic]
+  hidden_size: [32, 64, 128, 256]

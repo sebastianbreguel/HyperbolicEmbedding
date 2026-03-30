@@ -1,0 +1,9 @@
+# Single hyperbolic experiment for phylogenetic regression
+task: mircea
+model: hyperbolic
+optimizer: Radam
+loss: mse
+epochs: 100
+learning_rate: 0.001
+hidden_size: 64
+runs: 5
