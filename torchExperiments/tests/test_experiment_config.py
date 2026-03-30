@@ -1,8 +1,19 @@
 """Tests for YAML experiment config loading and sweep expansion."""
 from __future__ import annotations
-import os, tempfile
-import pytest, yaml
-from experiment_config import load_config, expand_sweep, apply_filters, merge_with_defaults, VALID_KEYS
+
+import os
+import tempfile
+
+import pytest
+import yaml
+
+from experiment_config import (
+    apply_filters,
+    expand_sweep,
+    load_config,
+    merge_with_defaults,
+)
+
 
 def _write_yaml(data: dict) -> str:
     fd, path = tempfile.mkstemp(suffix=".yaml")
