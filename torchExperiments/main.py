@@ -24,6 +24,23 @@ import torch
 import wandb
 
 import config
+
+
+def resolve_device(requested: str = "auto") -> torch.device:
+    """Return the best available torch device.
+
+    Args:
+        requested: ``"auto"`` (detect best), ``"cpu"``, ``"cuda"``, or ``"mps"``.
+    """
+    if requested != "auto":
+        return torch.device(requested)
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        return torch.device("mps")
+    return torch.device("cpu")
+
+
 from training import (
     get_data,
     get_model,
@@ -42,6 +59,7 @@ def train_eval(
     loss: str,
     replace: float,
     task: str,
+    device: torch.device | None = None,
 ) -> None:
     """Build model, load data, and run one full training + evaluation cycle.
 
@@ -52,13 +70,15 @@ def train_eval(
         loss: ``"cross"`` (classification) or ``"mse"`` (regression).
         replace: Fraction of characters replaced in the ganea prefix task.
         task: ``"ganea"``, ``"mircea"``, or ``"MNIST"``.
+        device: Torch device. Defaults to auto-detection.
     """
     if task == "MNIST":
         train_loader, test_loader = getMNIST()
     else:
         train_loader, val_loader, test_loader, y_test = get_data(dataset, replace, task)
 
-    device = torch.device("cpu")
+    if device is None:
+        device = resolve_device()
     model = get_model(option_model, dataset, task).to(device)
     criterion = obtain_loss(loss)
     optimizer = obtain_optimizer(optimizer_option, model)
@@ -86,7 +106,7 @@ def _print_sweep_table(experiments: list[dict], runs: int) -> None:
     print(f"\nTotal: {len(experiments)} experiments × {runs} runs = {len(experiments) * runs} runs")
 
 
-def _run_experiment(exp_config: dict, run_index: int) -> None:
+def _run_experiment(exp_config: dict, run_index: int, device: torch.device | None = None) -> None:
     """Run a single experiment with the given config."""
     config.apply_config(exp_config)
     task = exp_config["task"]
@@ -99,9 +119,9 @@ def _run_experiment(exp_config: dict, run_index: int) -> None:
     wandb.init(
         project=wandb_project,
         name=f"{model_name}_{task}_ds{dataset}_run{run_index}",
-        config={**exp_config, "run_index": run_index},
+        config={**exp_config, "run_index": run_index, "device": str(device)},
     )
-    train_eval(model_name, optimizer_name, dataset, loss, replace, task)
+    train_eval(model_name, optimizer_name, dataset, loss, replace, task, device)
     wandb.finish()
 
 
@@ -122,6 +142,7 @@ if "__main__" == __name__:
     parser.add_argument("--runs", type=int, default=10, help="Independent runs per experiment")
     parser.add_argument("--wandb_project", type=str, default="hyperbolic-embedding")
     parser.add_argument("--debug", action="store_true", help="Enable autograd anomaly detection")
+    parser.add_argument("--device", type=str, default="auto", help="Device: auto, cpu, cuda, mps")
     args = parser.parse_args()
 
     if args.debug:
@@ -142,16 +163,20 @@ if "__main__" == __name__:
         if args.dry_run:
             _print_sweep_table(experiments, runs)
         else:
+            device = resolve_device(raw.get("device", "auto"))
+            print(f"Device: {device}")
             total = len(experiments) * runs
             run_num = 0
             for exp_idx, exp in enumerate(experiments):
                 for r in range(runs):
                     run_num += 1
                     print(f"=== [{run_num}/{total}] Experiment {exp_idx}, Run {r + 1}/{runs} ===")
-                    _run_experiment(exp, r)
+                    _run_experiment(exp, r, device)
     else:
         if not args.model or not args.task or not args.loss:
             parser.error("--model, --task, and --loss are required (or use --config)")
+        device = resolve_device(args.device)
+        print(f"Device: {device}")
         for i in range(args.runs):
             print(f"=== Run {i + 1}/{args.runs} ===")
             wandb.init(
@@ -164,5 +189,5 @@ if "__main__" == __name__:
                     "learning_rate": config.LEARNING_RATE, "run_index": i,
                 },
             )
-            train_eval(args.model, args.optimizer, args.dataset, args.loss, args.replace, args.task)
+            train_eval(args.model, args.optimizer, args.dataset, args.loss, args.replace, args.task, device)
             wandb.finish()

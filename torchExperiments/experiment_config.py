@@ -10,7 +10,7 @@ import config
 
 VALID_KEYS = {
     "task", "model", "optimizer", "loss", "dataset", "replace",
-    "runs", "wandb_project", "debug",
+    "runs", "wandb_project", "debug", "device",
     "epochs", "learning_rate", "batch_size", "hidden_size",
     "use_bias", "seed", "dimensions",
     "sweep",
