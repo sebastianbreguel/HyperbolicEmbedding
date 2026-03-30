@@ -8,8 +8,9 @@ from __future__ import annotations
 import numpy as np
 import torch
 import torch.nn as nn
-from manifolds import arsinh, artanh
 from torch import Tensor
+
+from manifolds import arsinh
 
 
 class HyperbolicMLR(nn.Module):

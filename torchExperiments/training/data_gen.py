@@ -19,12 +19,27 @@ import pandas as pd
 import torch
 import torchvision.datasets as dsets
 import torchvision.transforms as transforms
-import umap
+
 from config import (
-    DIMENSIONS, EMB, LARGE, MAX_RANDOM, MIN_RANDOM,
-    NGS, NM, NUMBERS, POSITIVE, ROUND, SEED, URL,
-    URL_PREFIX_10, URL_PREFIX_30, URL_PREFIX_50,
-    VOCABULARY, WORD_LARGE, WORDS, V,
+    DIMENSIONS,
+    EMB,
+    LARGE,
+    MAX_RANDOM,
+    MIN_RANDOM,
+    NGS,
+    NM,
+    NUMBERS,
+    POSITIVE,
+    ROUND,
+    SEED,
+    URL,
+    URL_PREFIX_10,
+    URL_PREFIX_30,
+    URL_PREFIX_50,
+    VOCABULARY,
+    WORD_LARGE,
+    WORDS,
+    V,
 )
 
 
@@ -180,6 +195,8 @@ def data_MNIST() -> None:
     test_dataset = dsets.MNIST(root="./", train=False, transform=transforms.ToTensor())
 
     X_train = train_dataset.data.numpy()
+    import umap
+
     reducer = umap.UMAP(random_state=42, n_components=DIMENSIONS)
     X_train_embed = torch.from_numpy(reducer.fit_transform(pd.DataFrame(X_train.reshape(X_train.shape[0], -1))))
     train_dataset.data = X_train_embed
