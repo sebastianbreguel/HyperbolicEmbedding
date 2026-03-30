@@ -45,6 +45,12 @@ class HNN(nn.Module):
         if self.c == 1:
             self.softmax = HyperbolicMLR(manifold, out_features, out_features, c)
 
+    def encode(self, x: Tensor) -> Tensor:
+        """Return penultimate embedding (before classification head)."""
+        x = self.manifold.proj(self.manifold.expmap0(x))
+        x = self.hyp_act(self.linear1(x))
+        return self.linear2(x)
+
     def forward(self, x: Tensor) -> Tensor:
         x = self.manifold.proj(self.manifold.expmap0(x))
         x = self.hyp_act(self.linear1(x))
