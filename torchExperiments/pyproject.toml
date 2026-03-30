@@ -38,7 +38,7 @@ select = ["E", "F", "W", "I", "UP"]
 ignore = ["E501"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["config", "layers", "manifolds", "models", "optimizer", "training"]
+known-first-party = ["config", "experiment_config", "layers", "manifolds", "models", "optimizer", "training"]
 
 [tool.bandit]
 exclude_dirs = ["tests"]

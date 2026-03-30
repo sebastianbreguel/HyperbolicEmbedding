@@ -8,6 +8,12 @@ PyTorch experiments comparing Euclidean and Hyperbolic neural networks on classi
 main.py                                # Entry point (train + evaluate)
 data.py                                # Standalone data generation script
 config.py                              # All hyperparameters and dataset paths
+experiment_config.py                   # YAML config loading + sweep expansion
+│
+├── experiments/                       # YAML experiment configs
+│   ├── ganea_sweep.yaml               # Grid sweep for prefix task
+│   ├── mircea_single.yaml             # Single regression experiment
+│   └── mnist_architectures.yaml       # Architecture sweep for MNIST
 │
 ├── training/                          # Training pipeline
 │   ├── data_gen.py                    # Synthetic data generation (Ganea, Mircea, MNIST)
@@ -18,7 +24,7 @@ config.py                              # All hyperparameters and dataset paths
 ├── layers/                            # Neural network layers
 │   ├── layers.py                      # Euclidean linear layer
 │   ├── hyp_layers.py                  # Hyperbolic linear + activation layers
-│   └── hyp_Softmax.py                 # Hyperbolic MLR (softmax equivalent)
+│   └── hyp_softmax.py                 # Hyperbolic MLR (softmax equivalent)
 │
 ├── manifolds/                         # Manifold implementations
 │   ├── base.py                        # Abstract manifold + ManifoldParameter
@@ -31,6 +37,8 @@ config.py                              # All hyperparameters and dataset paths
 │
 ├── optimizer/
 │   └── Radam.py                       # Riemannian Adam
+│
+├── tests/                             # Test suite (pytest)
 │
 └── data/                              # Data files only (CSVs, no Python)
     ├── Prefix/
@@ -48,20 +56,55 @@ uv sync
 ### Generate data
 
 ```bash
-python main.py --generate_data --create_folder --task ganea --replace 0.5
+uv run python data.py --task ganea --replace 0.5 --create_folder
+uv run python data.py --task mircea
+uv run python data.py --task MNIST
 ```
 
 ### Train and evaluate
 
 ```bash
-# Euclidean model, prefix task (dataset 10)
-python main.py --train_eval --model euclidean --task ganea --loss cross --dataset 10
+# Euclidean model, prefix task (dataset 10), 5 runs
+uv run python main.py --model euclidean --task ganea --loss cross --dataset 10 --runs 5
 
-# Hyperbolic model, prefix task (dataset 10)
-python main.py --train_eval --model hyperbolic --task ganea --loss cross --dataset 10
+# Hyperbolic model, prefix task (dataset 10), Riemannian Adam
+uv run python main.py --model hyperbolic --task ganea --loss cross --dataset 10 --optimizer Radam
 
-# Euclidean model, regression task
-python main.py --train_eval --model euclidean --task mircea --loss mse --dataset 0
+# Regression task (Mircea phylogenetic)
+uv run python main.py --model hyperbolic --task mircea --loss mse --optimizer Radam
+
+# MNIST classification
+uv run python main.py --model hyperbolic --task MNIST --loss cross --optimizer Radam
+
+# With autograd anomaly detection (slow, for debugging)
+uv run python main.py --model hyperbolic --task ganea --loss cross --dataset 10 --debug
+```
+
+### YAML experiment configs
+
+```bash
+# Single experiment from YAML
+uv run python main.py --config experiments/mircea_single.yaml
+
+# Full grid sweep (12 experiments × 3 runs = 36 runs)
+uv run python main.py --config experiments/ganea_sweep.yaml
+
+# Preview sweep without running
+uv run python main.py --config experiments/ganea_sweep.yaml --dry-run
+
+# Filter to specific combinations
+uv run python main.py --config experiments/ganea_sweep.yaml --filter model=hyperbolic,optimizer=Radam
+
+# Run single experiment by index
+uv run python main.py --config experiments/ganea_sweep.yaml --experiment 0
+```
+
+See `experiments/` for example configs. Any hyperparameter in `config.py` can be overridden in YAML.
+
+### Run tests
+
+```bash
+uv run pytest tests/ -v
 ```
 
 ### All arguments
@@ -72,16 +115,21 @@ python main.py --train_eval --model euclidean --task mircea --loss mse --dataset
 | `--optimizer` | `Adam`, `SGD`, `Radam` | Optimizer (Radam = Riemannian Adam) |
 | `--task` | `ganea`, `mircea`, `MNIST` | Task type |
 | `--loss` | `cross`, `mse` | Loss function |
-| `--dataset` | `0`, `10`, `30`, `50` | Prefix length (0 for mircea) |
-| `--replace` | float (default 0.5) | Fraction of positive samples in ganea task |
-| `--generate_data` | flag | Generate data before training |
-| `--create_folder` | flag | Create output folders |
-| `--train_eval` | flag | Run training and evaluation |
+| `--dataset` | `10`, `30`, `50` | Prefix length (ganea only) |
+| `--replace` | float (default 0.5) | Noise fraction for ganea prefix |
+| `--runs` | int (default 10) | Number of repeated independent runs |
+| `--wandb_project` | str | W&B project name |
+| `--debug` | flag | Enable autograd anomaly detection |
+| `--config` | path | YAML experiment config file |
+| `--filter` | `key=val,...` | Filter sweep combinations |
+| `--experiment` | int | Run single experiment by index |
+| `--dry-run` | flag | List experiments without running |
 
 ## TODO
 
 - [x] Add more datasets
 - [x] Implement Riemannian Adam
+- [x] Add test suite
 - [ ] Implement Riemannian SGD
 - [ ] Expand to RNN
 
