@@ -1,0 +1,55 @@
+# =============================================================================
+# EXPERIMENT 4: Hierarchy Depth — Does Prefix Length Amplify the Advantage?
+# =============================================================================
+#
+# HYPOTHESIS
+# ----------
+# H4 (Depth amplification): Longer prefix lengths (dataset=50 vs. 10) create
+#   deeper effective hierarchies in the data because the model must learn to
+#   match a longer shared prefix, increasing the complexity of the
+#   tree-structured decision boundary.  The hyperbolic advantage should grow
+#   monotonically with prefix length because hyperbolic space gains capacity
+#   exponentially with radius (the "room at the leaves" argument of
+#   Krioukov et al. 2010 "Hyperbolic Geometry of Complex Networks").
+#
+# DESIGN RATIONALE
+# ----------------
+# - All three dataset sizes (10, 30, 50) swept.
+# - Low noise (replace=0.1) to keep the hierarchical signal clean so that
+#   depth, not noise, drives any observed effect.
+# - Three hidden_size values (32, 64, 128) crossed with geometry to test
+#   whether depth interacts with capacity (i.e., does the hyperbolic
+#   efficiency advantage grow with depth?).
+# - Optimizer fixed to Radam for both models (same rationale as Exp 2).
+# - 8 runs per config.
+#
+# NOTE on input dimensionality: the model input size is computed as
+#   inputs = 20 * LARGE + int(dataset * 0.2)
+# so the three prefix lengths yield input sizes 42, 46, 50 respectively.
+# This is a minor confound (slightly larger input for larger prefix) but is
+# unavoidable given the feature encoding.  Report input sizes in the paper.
+#
+# EXPECTED OUTCOMES
+# -----------------
+# - Accuracy gap (hyperbolic - Euclidean) increases from dataset=10 to 50.
+# - At dataset=10 the hierarchy is shallow; Euclidean may match hyperbolic.
+# - At dataset=50 the hierarchy is deepest; maximum advantage expected.
+# - Interaction: at small hidden_size, depth should amplify the gap further.
+#
+# COMPUTE ESTIMATE
+# ----------------
+# 2 models × 3 datasets × 3 hidden_sizes × 8 runs = 144 runs
+# =============================================================================
+
+task: ganea
+loss: cross
+replace: 0.1
+optimizer: Radam
+epochs: 80
+runs: 8
+wandb_project: hyperbolic-geometry-comparison
+
+sweep:
+  model: [euclidean, hyperbolic]
+  dataset: [10, 30, 50]
+  hidden_size: [32, 64, 128]

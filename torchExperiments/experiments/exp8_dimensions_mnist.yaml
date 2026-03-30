@@ -1,0 +1,60 @@
+# =============================================================================
+# EXPERIMENT 8: Embedding Dimensions on MNIST — Does Hyperbolic Scale Better?
+# =============================================================================
+#
+# HYPOTHESIS
+# ----------
+# H8 (Dimension scaling): In Euclidean space, accuracy on MNIST should
+#   improve roughly monotonically with UMAP dimension because more components
+#   retain more variance.  In hyperbolic space, high dimensions may not bring
+#   proportional benefit (and may even hurt) because the Poincaré ball becomes
+#   numerically ill-conditioned in high dimensions: most volume is
+#   concentrated near the boundary, causing gradient vanishing through the
+#   conformal factor lambda_x (Nickel & Kiela 2018 "Learning Continuous
+#   Hierarchies in the Lorentz Model of Hyperbolic Geometry").
+#
+# DESIGN RATIONALE
+# ----------------
+# - Dimensions swept across a wide range: {5, 10, 15, 20, 30, 50}.
+# - Fixed hidden_size=128 to avoid capacity being the bottleneck.
+# - Radam only (consistent with Exp 6 and Exp 7 conclusion).
+# - 8 runs: the key question is the shape of the curve, not a single
+#   comparison; 8 runs gives sufficient mean accuracy estimates.
+# - Note: each new dimensions value requires regenerating UMAP embeddings.
+#   Batch all data generation before launching this sweep.
+#
+# EXPECTED OUTCOMES
+# -----------------
+# - Euclidean accuracy increases with dimensions up to ~20 then plateaus.
+# - Hyperbolic accuracy peaks at a lower dimension (~10-15) and may
+#   slightly degrade at high dimensions due to numerical issues.
+# - If H8 is confirmed, it implies a qualitative recommendation: prefer
+#   Euclidean geometry for high-dimensional flat data.
+#
+# IMPORTANT: Regenerate UMAP data for all dimension values before running:
+#   for d in 5 10 15 20 30 50; do
+#     # Edit DIMENSIONS in config.py to $d, then:
+#     uv run data.py --task MNIST
+#     mv data/MNIST/train.csv data/MNIST/train_d${d}.csv
+#     mv data/MNIST/test.csv  data/MNIST/test_d${d}.csv
+#   done
+# Then symlink or copy the correct files for each run, OR implement a
+# dimensions-aware data loader path in getMNIST(). This experiment may
+# require a minor code change to load dimension-specific UMAP files.
+#
+# COMPUTE ESTIMATE
+# ----------------
+# 2 models × 6 dimensions × 8 runs = 96 runs
+# =============================================================================
+
+task: MNIST
+loss: cross
+optimizer: Radam
+hidden_size: 128
+epochs: 40
+runs: 8
+wandb_project: hyperbolic-geometry-comparison
+
+sweep:
+  model: [euclidean, hyperbolic]
+  dimensions: [5, 10, 15, 20, 30, 50]

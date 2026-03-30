@@ -1,0 +1,63 @@
+# =============================================================================
+# EXPERIMENT 3: Noise Robustness — When Does the Hierarchical Signal Degrade?
+# =============================================================================
+#
+# HYPOTHESIS
+# ----------
+# H3a (Signal degradation): As the noise level (replace) increases from 0.0
+#   to 0.9, the accuracy advantage of hyperbolic geometry over Euclidean
+#   shrinks and eventually vanishes.  At high noise the task becomes nearly
+#   random-guess, and no geometry can extract the corrupted hierarchical
+#   signal.
+#
+# H3b (Differential robustness): Hyperbolic geometry degrades more gracefully
+#   than Euclidean at moderate noise levels (replace 0.3-0.6), because the
+#   Poincaré ball naturally places structurally related points close together;
+#   noise must move a point substantially to cross a decision boundary in
+#   hyperbolic space (Chami et al. 2019 "Hyperbolic Graph Convolutional NNs").
+#
+# DESIGN RATIONALE
+# ----------------
+# - Replace values {0.0, 0.2, 0.4, 0.6, 0.8} span the full noise range
+#   in 5 steps.  These values must correspond to pre-generated CSV files
+#   (run data.py --task ganea --replace <value> for each before this sweep).
+# - Fixed dataset=30, hidden_size=64, Radam: isolates noise as the sole
+#   independent variable.
+# - 8 runs per config to capture variance which will increase as noise
+#   pushes accuracy toward chance (0.5 for binary classification).
+# - Both geometries swept simultaneously so the comparison is apples-to-apples
+#   across noise levels.
+#
+# EXPECTED OUTCOMES
+# -----------------
+# - At replace=0.0: clean hierarchy, maximum hyperbolic advantage.
+# - At replace=0.4-0.6: Euclidean catches up (both models near 50-60%).
+# - At replace=0.8: both models converge toward chance (0.5 ± noise).
+# - The replace value at which the gap closes is a quantitative measure of
+#   "how much noise the hyperbolic inductive bias can absorb."
+#
+# IMPORTANT: Data generation required before running this sweep.
+# Run for each replace value:
+#   uv run data.py --task ganea --replace 0.0
+#   uv run data.py --task ganea --replace 0.2
+#   uv run data.py --task ganea --replace 0.4
+#   uv run data.py --task ganea --replace 0.6
+#   uv run data.py --task ganea --replace 0.8
+#
+# COMPUTE ESTIMATE
+# ----------------
+# 2 models × 5 noise levels × 8 runs = 80 runs
+# =============================================================================
+
+task: ganea
+loss: cross
+dataset: 30
+hidden_size: 64
+optimizer: Radam
+epochs: 80
+runs: 8
+wandb_project: hyperbolic-geometry-comparison
+
+sweep:
+  model: [euclidean, hyperbolic]
+  replace: [0.0, 0.2, 0.4, 0.6, 0.8]

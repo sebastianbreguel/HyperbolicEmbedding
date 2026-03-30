@@ -1,0 +1,56 @@
+# =============================================================================
+# EXPERIMENT 1: Geometry Baseline — Primary Comparison
+# =============================================================================
+#
+# HYPOTHESIS
+# ----------
+# H1a (Hierarchical advantage): On the Ganea prefix task (inherently
+#   tree-structured data), hyperbolic geometry achieves strictly higher test
+#   accuracy than Euclidean geometry at the same hidden_size, because the
+#   Poincaré ball distorts distances in a way that mirrors the exponential
+#   growth of node counts in trees (Gromov 1987; Nickel & Kiela 2017).
+#
+# H1b (Optimizer necessity): Riemannian Adam (Radam) is necessary — not just
+#   beneficial — for hyperbolic models to converge.  Using vanilla Adam with
+#   hyperbolic parameters will degrade performance because Euclidean gradient
+#   updates do not respect the manifold geometry (Zhang et al. 2016).
+#
+# H1c (Baseline parity): For the Euclidean model, Radam and Adam should
+#   produce statistically indistinguishable results (since ManifoldParameter
+#   separation in obtain_optimizer means both reduce to standard updates on
+#   flat parameters).
+#
+# DESIGN RATIONALE
+# ----------------
+# - Fixed moderate dataset (prefix length 30) and low noise (replace=0.1)
+#   so the hierarchical signal is clean and the geometry effect dominates.
+# - hidden_size=64 matches the codebase default; keeps capacity equal.
+# - 10 runs provides sufficient power to detect a 5 pp accuracy difference
+#   with ~80% power at alpha=0.05 (two-sided t-test).
+# - This is the primary "anchor" experiment; all other experiments should
+#   be compared back to these numbers.
+#
+# EXPECTED OUTCOMES (literature)
+# --------------------------------
+# - Hyperbolic+Radam > Euclidean+Adam/Radam by ~3-8 pp on clean hierarchical
+#   data (Ganea et al. 2018, Table 1).
+# - Hyperbolic+Adam noticeably worse than Hyperbolic+Radam (numerical
+#   instability near ball boundary).
+# - Euclidean+Adam ≈ Euclidean+Radam (within ~1 pp).
+#
+# COMPUTE ESTIMATE
+# ----------------
+# 2 models × 2 optimizers × 10 runs = 40 runs
+# =============================================================================
+
+task: ganea
+loss: cross
+dataset: 30
+replace: 0.1
+epochs: 80
+runs: 10
+wandb_project: hyperbolic-geometry-comparison
+
+sweep:
+  model: [euclidean, hyperbolic]
+  optimizer: [Adam, Radam]

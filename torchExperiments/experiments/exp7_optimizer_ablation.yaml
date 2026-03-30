@@ -1,0 +1,61 @@
+# =============================================================================
+# EXPERIMENT 7: Optimizer Ablation — SGD vs Adam vs Riemannian Adam
+# =============================================================================
+#
+# HYPOTHESIS
+# ----------
+# H7a (SGD as lower bound): SGD without momentum-based adaptive rates will
+#   underperform both Adam variants on both geometries, serving as a lower
+#   bound on optimiser quality.
+#
+# H7b (Riemannian necessity): The gap between Radam and Adam is larger for
+#   hyperbolic models than for Euclidean models.  For Euclidean geometry,
+#   the ManifoldParameter separation in obtain_optimizer means Adam and Radam
+#   differ only in stabilisation; the gap should be small (<2 pp).  For
+#   hyperbolic models, Radam correctly retracts parameters onto the manifold
+#   after each step, which is essential for numerical stability
+#   (Bonnabel 2013 "Stochastic Gradient Descent on Riemannian Manifolds").
+#
+# H7c (SGD-hyperbolic instability): SGD on hyperbolic models is especially
+#   likely to diverge or produce degenerate (near-zero or near-boundary)
+#   embeddings because it applies flat gradient updates to curved-space
+#   parameters.  Expect high variance across runs and potentially NaN losses.
+#
+# DESIGN RATIONALE
+# ----------------
+# - All three optimizers crossed with both geometries: 3×2=6 conditions.
+# - Fixed dataset=30, replace=0.1, hidden_size=64: matches Exp 1 anchor so
+#   Exp 7 results are directly comparable to the primary comparison.
+# - 10 runs: SGD has high variance; more runs are needed to characterise
+#   the distribution reliably.
+# - epochs=100: SGD may need more epochs to converge; budget extra time.
+#   If SGD diverges (NaN loss), those runs should be reported as failures
+#   in the paper, not silently excluded.
+#
+# ANALYSIS NOTE
+# -------------
+# Inspect the training curves (wandb), not just final accuracy.
+# Key signals:
+#   - Loss spikes or NaNs: evidence of manifold boundary violations.
+#   - Slow convergence: shows optimizer mismatch with geometry.
+#   - High run-to-run variance in SGD runs: confirms instability.
+# Report the failure rate (runs with NaN or >50% val loss divergence) as
+# a separate metric alongside accuracy.
+#
+# COMPUTE ESTIMATE
+# ----------------
+# 2 models × 3 optimizers × 10 runs = 60 runs
+# =============================================================================
+
+task: ganea
+loss: cross
+dataset: 30
+replace: 0.1
+hidden_size: 64
+epochs: 100
+runs: 10
+wandb_project: hyperbolic-geometry-comparison
+
+sweep:
+  model: [euclidean, hyperbolic]
+  optimizer: [Adam, SGD, Radam]

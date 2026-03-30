@@ -1,0 +1,31 @@
+# =============================================================================
+# EXPERIMENT 5b: Phylogenetic Regression — Capacity Sweep (Companion to Exp 5)
+# =============================================================================
+#
+# HYPOTHESIS
+# ----------
+# See Exp 5, H5a.  This file tests capacity efficiency specifically for the
+# Mircea task using the best optimizer per geometry (Radam for both).
+#
+# DESIGN RATIONALE
+# ----------------
+# Separated from exp5 to allow running the primary 2×2 first and inspecting
+# results before committing compute to the full capacity sweep.
+# Radam fixed for both models: consistent with Exp 2 (same rationale).
+#
+# COMPUTE ESTIMATE
+# ----------------
+# 2 models × 3 hidden_sizes × 8 runs = 48 runs
+# =============================================================================
+
+task: mircea
+loss: mse
+epochs: 120
+learning_rate: 0.001
+optimizer: Radam
+runs: 8
+wandb_project: hyperbolic-geometry-comparison
+
+sweep:
+  model: [euclidean, hyperbolic]
+  hidden_size: [32, 64, 128]

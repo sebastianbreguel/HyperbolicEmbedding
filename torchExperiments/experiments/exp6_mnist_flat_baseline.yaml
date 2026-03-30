@@ -1,0 +1,69 @@
+# =============================================================================
+# EXPERIMENT 6: MNIST (Flat Data) — Geometry Should Not Matter
+# =============================================================================
+#
+# HYPOTHESIS
+# ----------
+# H6a (Flat data null hypothesis): On MNIST reduced via UMAP to a low-
+#   dimensional Euclidean manifold, hyperbolic geometry provides no
+#   statistically significant advantage over Euclidean geometry.  UMAP
+#   explicitly preserves local Euclidean neighbourhood structure (McInnes
+#   et al. 2018), and digit classification does not require representing
+#   tree-structured hierarchies.  Any difference should be within
+#   ±1-2 pp (noise level), not systematic.
+#
+# H6b (UMAP dimension interaction): Larger UMAP dimensions capture more
+#   variance from the original 784-d input, potentially improving accuracy
+#   for both geometries equally.  Hyperbolic space does not provide a special
+#   advantage for higher-dimensional flat data.
+#
+# H6c (Role as control): If hyperbolic outperforms Euclidean on MNIST by a
+#   large margin, this would suggest the observed advantage on Ganea/Mircea
+#   is not geometry-specific but rather an optimizer or regularisation
+#   artefact.  MNIST acts as a falsifiability check on the whole experimental
+#   narrative.
+#
+# DESIGN RATIONALE
+# ----------------
+# - dimensions swept across {10, 15, 30}: 15 is the codebase default;
+#   10 tests a near-minimal representation; 30 tests richer encoding.
+#   NOTE: changing dimensions requires re-running data.py --task MNIST
+#   for each dimension value to regenerate the UMAP embeddings.
+# - hidden_size swept {64, 128}: MNIST needs more capacity than Ganea
+#   because it has 10 classes vs. 2; we skip 32 since under-fitting is
+#   expected below 64 on a 10-class problem.
+# - Radam only: avoids the optimizer confounder and keeps compute tractable.
+# - 10 runs for MNIST because variance tends to be lower (large, clean
+#   dataset), but we want confidence that any null result is genuine.
+# - epochs=40: sufficient for convergence on UMAP-reduced MNIST.
+#
+# EXPECTED OUTCOMES
+# -----------------
+# - Accuracy is comparable for Euclidean and hyperbolic across all configs.
+# - Neither geometry systematically wins; paired t-tests should be
+#   non-significant (p > 0.05) for each hidden_size × dimensions combo.
+# - This negative result is scientifically meaningful: it confirms that
+#   the advantage on Ganea/Mircea is geometry-driven, not a general
+#   hyperbolic model quality advantage.
+#
+# IMPORTANT: For each dimensions value (10, 15, 30), regenerate UMAP data:
+#   uv run data.py --task MNIST  (after setting DIMENSIONS in config.py)
+# The default dimensions=15 data may already exist.  Run dry-first:
+#   uv run main.py --config experiments/exp6_mnist_flat_baseline.yaml --dry-run
+#
+# COMPUTE ESTIMATE
+# ----------------
+# 2 models × 3 dimensions × 2 hidden_sizes × 10 runs = 120 runs
+# =============================================================================
+
+task: MNIST
+loss: cross
+optimizer: Radam
+epochs: 40
+runs: 10
+wandb_project: hyperbolic-geometry-comparison
+
+sweep:
+  model: [euclidean, hyperbolic]
+  dimensions: [10, 15, 30]
+  hidden_size: [64, 128]
