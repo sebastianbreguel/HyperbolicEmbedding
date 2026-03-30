@@ -17,7 +17,7 @@ import torch
 import wandb
 from torch import Tensor
 
-from config import BATCH_SIZE, EPOCHS, LARGE, LEARNING_RATE
+import config
 from training import (
     get_data,
     get_metrics,
@@ -58,9 +58,8 @@ def train_eval(
     criterion = obtain_loss(loss)
     optimizer = obtain_optimizer(optimizer_option, model)
 
-    print(f"Running {option_model} model | {optimizer_option} optimizer | lr={LEARNING_RATE}")
+    print(f"Running {option_model} model | {optimizer_option} optimizer | lr={config.LEARNING_RATE}")
     wandb.watch(model, log="gradients", log_freq=10)
-    torch.autograd.set_detect_anomaly(True)
 
     if task == "MNIST":
         run_MNIST(model, device, train_loader, test_loader, criterion, optimizer)
@@ -78,8 +77,12 @@ if "__main__" == __name__:
     parser.add_argument("--replace", type=float, default=0.5, help="Noise fraction for ganea prefix")
     parser.add_argument("--runs", type=int, default=10, help="Number of repeated independent runs")
     parser.add_argument("--wandb_project", type=str, default="hyperbolic-embedding")
+    parser.add_argument("--debug", action="store_true", help="Enable autograd anomaly detection (slow)")
 
     args = parser.parse_args()
+
+    if args.debug:
+        torch.autograd.set_detect_anomaly(True)
 
     for i in range(args.runs):
         print(f"=== Run {i + 1}/{args.runs} ===")
@@ -93,9 +96,9 @@ if "__main__" == __name__:
                 "loss": args.loss,
                 "dataset": args.dataset,
                 "replace": args.replace,
-                "epochs": EPOCHS,
-                "batch_size": BATCH_SIZE,
-                "learning_rate": LEARNING_RATE,
+                "epochs": config.EPOCHS,
+                "batch_size": config.BATCH_SIZE,
+                "learning_rate": config.LEARNING_RATE,
                 "run_index": i,
             },
         )

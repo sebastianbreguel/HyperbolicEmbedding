@@ -7,10 +7,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.nn.init as init
-from manifolds.base import Manifold, ManifoldParameter
 from torch import Tensor
 from torch.nn.modules.module import Module
-from config import USE_BIAS
+
+import config
+from manifolds.base import Manifold, ManifoldParameter
 
 
 class HypLinear(nn.Module):
@@ -41,7 +42,7 @@ class HypLinear(nn.Module):
         self.out_features = out_features
         self.c = c
         self.dropout = dropout
-        self.use_bias = USE_BIAS
+        self.use_bias = config.USE_BIAS
         self.bias = ManifoldParameter(
             torch.Tensor(out_features), requires_grad=True, c=c, manifold=manifold
         )

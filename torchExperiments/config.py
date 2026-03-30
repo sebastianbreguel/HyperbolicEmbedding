@@ -37,6 +37,39 @@ ROUND = 5
 EMB = {e: i for i, e in enumerate(VOCABULARY)}
 
 ##########################
+#####    Model Architecture
+##########################
+HIDDEN_SIZE = 64
+
+##########################
 #####    MNIST Task
 ##########################
 DIMENSIONS = 15
+
+##########################
+#####    Config API
+##########################
+
+_OVERRIDABLE = {
+    "epochs": "EPOCHS",
+    "learning_rate": "LEARNING_RATE",
+    "batch_size": "BATCH_SIZE",
+    "hidden_size": "HIDDEN_SIZE",
+    "use_bias": "USE_BIAS",
+    "seed": "SEED",
+    "dimensions": "DIMENSIONS",
+}
+
+def get_defaults() -> dict:
+    """Return current values of all overridable config parameters."""
+    import sys
+    module = sys.modules[__name__]
+    return {key: getattr(module, attr) for key, attr in _OVERRIDABLE.items()}
+
+def apply_config(overrides: dict) -> None:
+    """Override config module attributes at runtime."""
+    import sys
+    module = sys.modules[__name__]
+    for key, value in overrides.items():
+        if key in _OVERRIDABLE:
+            setattr(module, _OVERRIDABLE[key], value)

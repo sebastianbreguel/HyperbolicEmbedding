@@ -7,15 +7,13 @@ import pandas as pd
 import torch
 import torchvision.datasets as dsets
 import torchvision.transforms as transforms
-from manifolds import Euclidean, PoincareBall
-from models import HNN
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from torch.utils.data import DataLoader, Dataset
-from config import (
-    BATCH_SIZE, DIMENSIONS, IN_FEATURES, LARGE, SEED,
-    URL, URL_PREFIX_10, URL_PREFIX_30, URL_PREFIX_50,
-)
+
+import config
+from manifolds import Euclidean, PoincareBall
+from models import HNN
 
 
 def get_model(option: str, dataset: int, task: str) -> torch.nn.Module:
@@ -30,10 +28,10 @@ def get_model(option: str, dataset: int, task: str) -> torch.nn.Module:
         An HNN instance configured for the requested manifold and input size.
     """
     if task == "MNIST":
-        inputs = DIMENSIONS
+        inputs = config.DIMENSIONS
         outputs = 10
     elif task == "ganea":
-        inputs = 20 * LARGE + int(dataset * 0.2)
+        inputs = 20 * config.LARGE + int(dataset * 0.2)
         print(dataset, inputs)
         outputs = 2
     elif task == "mircea":
@@ -51,7 +49,7 @@ def get_model(option: str, dataset: int, task: str) -> torch.nn.Module:
     else:
         raise ValueError(f"Unknown model option: {option!r}")
 
-    return HNN(manifold, inputs, outputs, c, 64)
+    return HNN(manifold, inputs, outputs, c, config.HIDDEN_SIZE)
 
 
 def get_data(
@@ -70,17 +68,17 @@ def get_data(
         A 4-tuple ``(train_loader, val_loader, test_loader, y_test)`` where
         ``y_test`` is the raw numpy array of test labels (used for metrics).
     """
-    np.random.seed(SEED)
+    np.random.seed(config.SEED)
 
     if task == "mircea":
-        url = URL
+        url = config.URL
     else:
         if dataset == 10:
-            url = URL_PREFIX_10 + "_" + str(replace) + ".csv"
+            url = config.URL_PREFIX_10 + "_" + str(replace) + ".csv"
         elif dataset == 30:
-            url = URL_PREFIX_30 + "_" + str(replace) + ".csv"
+            url = config.URL_PREFIX_30 + "_" + str(replace) + ".csv"
         elif dataset == 50:
-            url = URL_PREFIX_50 + "_" + str(replace) + ".csv"
+            url = config.URL_PREFIX_50 + "_" + str(replace) + ".csv"
         else:
             raise ValueError(f"Unknown dataset prefix length: {dataset}")
 
@@ -88,8 +86,8 @@ def get_data(
     df = df.drop(df.columns[0], axis=1).sample(frac=1).reset_index(drop=True)
 
     if task == "mircea":
-        X = df.iloc[:, :IN_FEATURES]
-        y = df.iloc[:, IN_FEATURES:]
+        X = df.iloc[:, :config.IN_FEATURES]
+        y = df.iloc[:, config.IN_FEATURES:]
     else:
         X = df.iloc[:, 2:]
         y = df[["isPrefix", "isNotPrefix"]].iloc[:, :]
@@ -135,9 +133,9 @@ def get_data(
         torch.from_numpy(X_test).float(), torch.from_numpy(y_test).float()
     )
 
-    train_loader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
-    val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE, shuffle=True)
-    test_loader = DataLoader(dataset=test_dataset, batch_size=BATCH_SIZE, shuffle=True)
+    train_loader = DataLoader(dataset=train_dataset, batch_size=config.BATCH_SIZE, shuffle=True, num_workers=0)
+    val_loader = DataLoader(dataset=val_dataset, batch_size=config.BATCH_SIZE, shuffle=True)
+    test_loader = DataLoader(dataset=test_dataset, batch_size=config.BATCH_SIZE, shuffle=True)
 
     return train_loader, val_loader, test_loader, y_test
 
@@ -160,7 +158,7 @@ def getMNIST() -> tuple[DataLoader, DataLoader]:
     X_test = pd.read_csv("data/MNIST/test.csv", header=0).to_numpy()
     test_dataset.data = torch.from_numpy(X_test)
 
-    train_loader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True)
-    test_loader = DataLoader(dataset=test_dataset, batch_size=BATCH_SIZE, shuffle=False)
+    train_loader = DataLoader(dataset=train_dataset, batch_size=config.BATCH_SIZE, shuffle=True)
+    test_loader = DataLoader(dataset=test_dataset, batch_size=config.BATCH_SIZE, shuffle=False)
 
     return train_loader, test_loader

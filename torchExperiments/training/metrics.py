@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from torch import Tensor
 from torch.utils.data import DataLoader
 
-from config import NM
+import config
 
 
 def get_accuracy(loss: str, y_test: np.ndarray, model: nn.Module, loader: DataLoader, device: torch.device) -> float:
@@ -56,7 +56,7 @@ def get_accuracy(loss: str, y_test: np.ndarray, model: nn.Module, loader: DataLo
     else:
         y_pred_arr = np.array(y_pred)
         y_true_arr = np.array(y_true)
-        return round(float(np.linalg.norm(y_pred_arr - y_true_arr) / (0.2 * NM)), 4)
+        return round(float(np.linalg.norm(y_pred_arr - y_true_arr) / (0.2 * config.NM)), 4)
 
 
 def get_metrics(
@@ -103,7 +103,7 @@ def get_metrics(
         result += recall_score(decoded, y_pred, average=None).tolist()
 
     elif loss == "mse":
-        result = round(float(np.linalg.norm(y_pred_list - y_test) / (0.2 * NM)), 4)
+        result = round(float(np.linalg.norm(y_pred_list - y_test) / (0.2 * config.NM)), 4)
         print(f"Loss on Test Data: {result}")
 
     if was_training:

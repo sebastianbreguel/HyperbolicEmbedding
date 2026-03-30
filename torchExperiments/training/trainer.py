@@ -8,9 +8,10 @@ import wandb
 from torch import Tensor
 from torch.utils.data import DataLoader
 
+import config
 from manifolds import ManifoldParameter
 from optimizer import RiemannianAdam
-from config import DIMENSIONS, EPOCHS, LEARNING_RATE
+
 from .metrics import get_accuracy
 
 
@@ -57,11 +58,11 @@ def obtain_optimizer(optimizer_option: str, model: nn.Module) -> torch.optim.Opt
     ]
 
     if optimizer_option == "Adam":
-        return torch.optim.Adam(grouped, lr=LEARNING_RATE, betas=(0.9, 0.999))
+        return torch.optim.Adam(grouped, lr=config.LEARNING_RATE, betas=(0.9, 0.999))
     elif optimizer_option == "SGD":
-        return torch.optim.SGD(grouped, lr=LEARNING_RATE, momentum=0.9)
+        return torch.optim.SGD(grouped, lr=config.LEARNING_RATE, momentum=0.9)
     elif optimizer_option == "Radam":
-        return RiemannianAdam(grouped, lr=LEARNING_RATE, stabilize=10, betas=(0.9, 0.999))
+        return RiemannianAdam(grouped, lr=config.LEARNING_RATE, stabilize=10, betas=(0.9, 0.999))
     raise ValueError(f"Unknown optimizer: {optimizer_option!r}")
 
 
@@ -125,7 +126,7 @@ def run_model(
 
     Logs per-epoch metrics to stdout and to W&B.
     """
-    for e in range(1, EPOCHS + 1):
+    for e in range(1, config.EPOCHS + 1):
         train_loss = train_model(model, train_loader, criterion, optimizer, device)
         val_loss = val_process(model, val_loader, criterion, device)
 
@@ -161,14 +162,14 @@ def run_MNIST(
     optimizer: torch.optim.Optimizer,
 ) -> None:
     """Training loop for the MNIST task with UMAP-reduced inputs."""
-    for epoch in range(EPOCHS):
+    for epoch in range(config.EPOCHS):
         model.train()
         partial = torch.tensor(0)
         total_partial = 0
 
         for images, labels in train_loader:
             images, labels = images.to(device), labels.to(device)
-            images = images.view(-1, DIMENSIONS)
+            images = images.view(-1, config.DIMENSIONS)
             optimizer.zero_grad()
             outputs = model(images)
             loss = criterion(outputs, labels)
@@ -184,7 +185,7 @@ def run_MNIST(
         with torch.no_grad():
             for images, labels in test_loader:
                 images, labels = images.to(device), labels.to(device)
-                images = images.view(-1, DIMENSIONS)
+                images = images.view(-1, config.DIMENSIONS)
                 outputs = model(images)
                 _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)
@@ -192,7 +193,8 @@ def run_MNIST(
 
         train_acc = (partial / total_partial * 100).item()
         test_acc = (100 * correct / total).item()
+        epoch_loss = loss.item()
 
-        wandb.log({"epoch": epoch, "train_acc": train_acc, "test_acc": test_acc, "loss": loss.item()})
+        wandb.log({"epoch": epoch, "train_acc": train_acc, "test_acc": test_acc, "loss": epoch_loss})
         print(f"Epoch {epoch}: Loss {loss.item():.4f} | Train Acc {train_acc:.2f}% | Test Acc {test_acc:.2f}%")
         model.train()
