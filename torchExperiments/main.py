@@ -139,7 +139,7 @@ if "__main__" == __name__:
     parser.add_argument("--loss", choices=["cross", "mse"], default=None)
     parser.add_argument("--dataset", type=int, default=10, help="Prefix length (ganea)")
     parser.add_argument("--replace", type=float, default=0.5, help="Noise fraction for ganea")
-    parser.add_argument("--runs", type=int, default=10, help="Independent runs per experiment")
+    parser.add_argument("--runs", type=int, default=None, help="Independent runs per experiment")
     parser.add_argument("--wandb_project", type=str, default="hyperbolic-embedding")
     parser.add_argument("--debug", action="store_true", help="Enable autograd anomaly detection")
     parser.add_argument("--device", type=str, default="auto", help="Device: auto, cpu, cuda, mps")
@@ -158,12 +158,13 @@ if "__main__" == __name__:
             if args.experiment < 0 or args.experiment >= len(experiments):
                 parser.error(f"--experiment {args.experiment} out of range (0-{len(experiments) - 1})")
             experiments = [experiments[args.experiment]]
-        runs = raw.get("runs", args.runs)
+        runs = args.runs if args.runs is not None else raw.get("runs", 10)
         experiments = [merge_with_defaults(exp) for exp in experiments]
         if args.dry_run:
             _print_sweep_table(experiments, runs)
         else:
-            device = resolve_device(raw.get("device", "auto"))
+            device_choice = args.device if args.device != "auto" else raw.get("device", "auto")
+            device = resolve_device(device_choice)
             print(f"Device: {device}")
             total = len(experiments) * runs
             run_num = 0
@@ -177,8 +178,9 @@ if "__main__" == __name__:
             parser.error("--model, --task, and --loss are required (or use --config)")
         device = resolve_device(args.device)
         print(f"Device: {device}")
-        for i in range(args.runs):
-            print(f"=== Run {i + 1}/{args.runs} ===")
+        num_runs = args.runs if args.runs is not None else 10
+        for i in range(num_runs):
+            print(f"=== Run {i + 1}/{num_runs} ===")
             wandb.init(
                 project=args.wandb_project,
                 name=f"{args.model}_{args.task}_dataset{args.dataset}_run{i}",
