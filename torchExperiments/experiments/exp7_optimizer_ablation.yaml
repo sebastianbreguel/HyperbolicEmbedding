@@ -44,7 +44,8 @@
 #
 # COMPUTE ESTIMATE
 # ----------------
-# 2 models × 3 optimizers × 10 runs = 60 runs
+# 1 model (hyperbolic) × 3 optimizers × 10 runs = 30 runs
+# (Euclidean excluded: Adam/Radam/SGD all equivalent on flat params)
 # =============================================================================
 
 task: ganea
@@ -56,6 +57,7 @@ epochs: 100
 runs: 10
 wandb_project: hyperbolic-geometry-comparison
 
+model: hyperbolic
+
 sweep:
-  model: [euclidean, hyperbolic]
   optimizer: [Adam, SGD, Radam]
