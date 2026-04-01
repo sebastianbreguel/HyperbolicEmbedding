@@ -1,0 +1,36 @@
+torchExperiments/pyproject.toml
+  88c2502905eafa69 5,17-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "d86b5631c4010d55ae8bc656dfc648e51985979a",
+  "prompts": {
+    "88c2502905eafa69": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d487ea87-d5e5-4580-9c99-a021e0f797fc",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "sebastianbreguel <62109266+sebastianbreguel@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 3,
+      "total_deletions": 1,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    },
+    "b441929c7a1fe8f9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e4766184-c180-4eed-9c6a-2fe3437bcdba",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "sebastianbreguel <62109266+sebastianbreguel@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 3437,
+      "overriden_lines": 0
+    }
+  }
+}
