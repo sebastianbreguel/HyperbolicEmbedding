@@ -1,0 +1,23 @@
+torchExperiments/training/data_loader.py
+  b441929c7a1fe8f9 149-151,155,161,163-164,166-169,171-180
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "33472b210c463d2ce974afcf5f108d60a813d91a",
+  "prompts": {
+    "b441929c7a1fe8f9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e4766184-c180-4eed-9c6a-2fe3437bcdba",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "sebastianbreguel <62109266+sebastianbreguel@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 21,
+      "total_deletions": 12,
+      "accepted_lines": 1190,
+      "overriden_lines": 0
+    }
+  }
+}
