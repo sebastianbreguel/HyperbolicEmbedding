@@ -60,12 +60,12 @@ class TestHNNEuclidean:
         out = euc_model(x)
         assert torch.isfinite(out).all()
 
-    def test_softmax_output(self, euc_model: HNN):
-        """Euclidean model uses nn.Softmax — output should sum to 1."""
+    def test_raw_logit_output(self, euc_model: HNN):
+        """Euclidean model outputs raw logits for CrossEntropyLoss compatibility."""
         x = torch.randn(4, 10)
         out = euc_model(x)
-        sums = out.sum(dim=1)
-        torch.testing.assert_close(sums, torch.ones(4), atol=1e-5, rtol=1e-5)
+        assert out.shape == (4, 3)
+        assert torch.isfinite(out).all()
 
 
 class TestHNNVariousSizes:

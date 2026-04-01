@@ -41,7 +41,7 @@ class HNN(nn.Module):
         self.linear2 = HypLinear(manifold, hidden, out_features, c, dropout=0)
         self.hyp_act = HypAct(manifold, c, c, nn.ReLU())
 
-        self.softmax: nn.Module = nn.Softmax(dim=1)
+        self.softmax: nn.Module = nn.Identity()
         if self.c == 1:
             self.softmax = HyperbolicMLR(manifold, out_features, out_features, c)
 
