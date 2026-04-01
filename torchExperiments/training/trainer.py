@@ -84,6 +84,7 @@ def train_model(
         optimizer.zero_grad()
         loss = criterion(model(X_batch), y_batch)
         loss.backward()
+        nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()
         total_loss += loss.item()
     return total_loss
@@ -163,37 +164,39 @@ def run_MNIST(
     """Training loop for the MNIST task with UMAP-reduced inputs."""
     for epoch in range(config.EPOCHS):
         model.train()
-        partial = torch.tensor(0)
-        total_partial = 0
+        correct_train = 0
+        total_train = 0
+        total_loss = 0.0
+        num_batches = 0
 
         for images, labels in train_loader:
             images, labels = images.to(device), labels.to(device)
-            images = images.view(-1, config.DIMENSIONS)
             optimizer.zero_grad()
             outputs = model(images)
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
             _, predicted = torch.max(outputs.data, 1)
-            partial += (predicted == labels).sum()
-            total_partial += labels.size(0)
+            correct_train += (predicted == labels).sum().item()
+            total_train += labels.size(0)
+            total_loss += loss.item()
+            num_batches += 1
 
-        correct = torch.tensor(0)
-        total = 0
+        correct_test = 0
+        total_test = 0
         model.eval()
         with torch.no_grad():
             for images, labels in test_loader:
                 images, labels = images.to(device), labels.to(device)
-                images = images.view(-1, config.DIMENSIONS)
                 outputs = model(images)
                 _, predicted = torch.max(outputs.data, 1)
-                total += labels.size(0)
-                correct += (predicted == labels).sum()
+                total_test += labels.size(0)
+                correct_test += (predicted == labels).sum().item()
 
-        train_acc = (partial / total_partial * 100).item()
-        test_acc = (100 * correct / total).item()
-        epoch_loss = loss.item()
+        train_acc = correct_train / total_train * 100
+        test_acc = correct_test / total_test * 100
+        epoch_loss = total_loss / num_batches
 
         wandb.log({"epoch": epoch, "train_acc": train_acc, "test_acc": test_acc, "loss": epoch_loss})
-        print(f"Epoch {epoch}: Loss {loss.item():.4f} | Train Acc {train_acc:.2f}% | Test Acc {test_acc:.2f}%")
+        print(f"Epoch {epoch}: Loss {epoch_loss:.4f} | Train Acc {train_acc:.2f}% | Test Acc {test_acc:.2f}%")
         model.train()
