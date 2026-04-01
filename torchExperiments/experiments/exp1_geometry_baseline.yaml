@@ -40,7 +40,7 @@
 #
 # COMPUTE ESTIMATE
 # ----------------
-# 2 models × 10 runs = 20 runs (Radam acts as Adam on Euclidean params)
+# 2 models × 2 optimizers × 10 runs = 40 runs
 # =============================================================================
 
 task: ganea
@@ -51,7 +51,6 @@ epochs: 80
 runs: 10
 wandb_project: hyperbolic-geometry-comparison
 
-optimizer: Radam
-
 sweep:
   model: [euclidean, hyperbolic]
+  optimizer: [Adam, Radam]
