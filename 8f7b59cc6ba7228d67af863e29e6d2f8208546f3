@@ -1,0 +1,23 @@
+torchExperiments/experiments/exp4_hierarchy_depth.yaml
+  b441929c7a1fe8f9 51,56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "8f7b59cc6ba7228d67af863e29e6d2f8208546f3",
+  "prompts": {
+    "b441929c7a1fe8f9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e4766184-c180-4eed-9c6a-2fe3437bcdba",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "sebastianbreguel <62109266+sebastianbreguel@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 1198,
+      "overriden_lines": 0
+    }
+  }
+}
