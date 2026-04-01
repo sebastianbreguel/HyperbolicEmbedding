@@ -18,7 +18,7 @@ from typing import List
 import pandas as pd
 import torch
 import torchvision.datasets as dsets
-import torchvision.transforms as transforms
+import torchvision.transforms.v2 as transforms
 
 from config import (
     DIMENSIONS,
@@ -191,8 +191,8 @@ def data_MNIST() -> None:
     ``data/MNIST/test.csv``.  The UMAP reducer is fit on the training set
     and applied (transform-only) to the test set to avoid leakage.
     """
-    train_dataset = dsets.MNIST(root="./", train=True, transform=transforms.ToTensor(), download=True)
-    test_dataset = dsets.MNIST(root="./", train=False, transform=transforms.ToTensor())
+    train_dataset = dsets.MNIST(root="./", train=True, transform=transforms.Compose([transforms.ToImage(), transforms.ToDtype(torch.float32, scale=True)]), download=True)
+    test_dataset = dsets.MNIST(root="./", train=False, transform=transforms.Compose([transforms.ToImage(), transforms.ToDtype(torch.float32, scale=True)]))
 
     X_train = train_dataset.data.numpy()
     import umap

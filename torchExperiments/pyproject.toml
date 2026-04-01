@@ -4,14 +4,14 @@ version = "0.1.0"
 description = "Hyperbolic neural network experiments with PyTorch"
 requires-python = ">=3.9"
 dependencies = [
-    "geoopt==0.5.0",
+    "geoopt>=0.5.1",
     "numpy==1.23.2",
     "pandas==1.4.4",
     "pyyaml>=6.0",
-    "scikit-learn==1.1.2",
+    "scikit-learn>=1.5.0",
     "scipy==1.10.0",
-    "torch<=1.13.0",
-    "torchvision==0.13.1",
+    "torch==2.6.0",
+    "torchvision==0.21.0",
     "umap-learn==0.5.3",
     "wandb>=0.16.0",
 ]
