@@ -5,8 +5,6 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 import torch
-import torchvision.datasets as dsets
-import torchvision.transforms as transforms
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from torch.utils.data import DataLoader, Dataset
@@ -148,25 +146,36 @@ def get_data(
     return train_loader, val_loader, test_loader, y_test
 
 
+MNIST_DATA_DIR = "data"
+
+
 def getMNIST() -> tuple[DataLoader, DataLoader]:
     """Load pre-computed UMAP-reduced MNIST embeddings from CSV files.
 
-    Expects ``data/MNIST/train.csv`` and ``data/MNIST/test.csv`` to exist.
+    Expects ``{MNIST_DATA_DIR}/MNIST/train.csv`` and ``{MNIST_DATA_DIR}/MNIST/test.csv``.
     Generate them first with ``python data.py --task MNIST``.
 
     Returns:
         ``(train_loader, test_loader)`` with the UMAP-reduced embeddings.
     """
-    train_dataset = dsets.MNIST(root="./data", train=True, transform=transforms.ToTensor(), download=True)
-    test_dataset = dsets.MNIST(root="./data", train=False, transform=transforms.ToTensor())
+    from torch.utils.data import TensorDataset
 
-    X_train = pd.read_csv("data/MNIST/train.csv", header=0).to_numpy()
-    train_dataset.data = torch.from_numpy(X_train)
+    train_df = pd.read_csv(f"{MNIST_DATA_DIR}/MNIST/train.csv", header=0)
+    test_df = pd.read_csv(f"{MNIST_DATA_DIR}/MNIST/test.csv", header=0)
 
-    X_test = pd.read_csv("data/MNIST/test.csv", header=0).to_numpy()
-    test_dataset.data = torch.from_numpy(X_test)
+    X_train = torch.from_numpy(train_df.iloc[:, 1:].to_numpy()).float()
+    y_train = torch.from_numpy(train_df.iloc[:, 0].to_numpy()).long()
+    X_test = torch.from_numpy(test_df.iloc[:, 1:].to_numpy()).float()
+    y_test = torch.from_numpy(test_df.iloc[:, 0].to_numpy()).long()
 
-    train_loader = DataLoader(dataset=train_dataset, batch_size=config.BATCH_SIZE, shuffle=True)
-    test_loader = DataLoader(dataset=test_dataset, batch_size=config.BATCH_SIZE, shuffle=False)
-
+    train_loader = DataLoader(
+        dataset=TensorDataset(X_train, y_train),
+        batch_size=config.BATCH_SIZE,
+        shuffle=True,
+    )
+    test_loader = DataLoader(
+        dataset=TensorDataset(X_test, y_test),
+        batch_size=config.BATCH_SIZE,
+        shuffle=False,
+    )
     return train_loader, test_loader
