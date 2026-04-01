@@ -66,6 +66,15 @@ class PoincareBall(Manifold):
         dist_c = artanh(sqrt_c * self.mobius_add(-p1, p2, dim=-1).norm(dim=-1, p=2, keepdim=False))
         return (dist_c * 2 / sqrt_c) ** 2
 
+    def dist(self, p1: Tensor, p2: Tensor) -> Tensor:
+        """Geodesic distance (Eq. 8, non-squared).
+
+        d_c(x,y) = 2/sqrt(c) * artanh(sqrt(c) * ||-x ⊕_c y||)
+        """
+        sqrt_c = self.c**0.5
+        diff_norm = self.mobius_add(-p1, p2, dim=-1).norm(dim=-1, p=2, keepdim=False)
+        return 2 / sqrt_c * artanh(sqrt_c * diff_norm)
+
     def egrad2rgrad(self, p: Tensor, dp: Tensor) -> Tensor:
         """Scale Euclidean gradient to Riemannian gradient: dp / λ_p^2."""
         dp /= self._lambda_x(p).pow(2)
