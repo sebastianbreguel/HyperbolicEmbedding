@@ -40,7 +40,7 @@ def get_accuracy(loss: str, y_test: np.ndarray, model: nn.Module, loader: DataLo
             output = model(inputs)
 
             if loss == "cross":
-                y_pred.extend((torch.max(torch.exp(output), 1)[1]).data.cpu().numpy())
+                y_pred.extend((torch.max(output, 1)[1]).data.cpu().numpy())
                 y_true.extend(labels.data.cpu().numpy())
             else:  # mse — accumulate raw predictions and true labels from loader
                 y_pred.extend(output.cpu().numpy())
@@ -50,8 +50,7 @@ def get_accuracy(loss: str, y_test: np.ndarray, model: nn.Module, loader: DataLo
         model.train()
 
     if loss == "cross":
-        decoded = [int(np.where(i == 1)[0][0]) for i in y_true]
-        return float(accuracy_score(decoded, y_pred))
+        return float(accuracy_score(y_true, y_pred))
     else:
         y_pred_arr = np.array(y_pred)
         y_true_arr = np.array(y_true)
@@ -89,17 +88,16 @@ def get_metrics(
         with torch.no_grad():
             for inputs, labels in test_loader:
                 output = model(inputs)
-                y_pred.extend((torch.max(torch.exp(output), 1)[1]).data.cpu().numpy())
+                y_pred.extend((torch.max(output, 1)[1]).data.cpu().numpy())
                 y_true.extend(labels.data.cpu().numpy())
 
-        decoded = [int(np.where(i == 1)[0][0]) for i in y_true]
-        acc = accuracy_score(decoded, y_pred)
+        acc = accuracy_score(y_true, y_pred)
         print(f"Accuracy on {len(y_test)} test samples: {acc:.4f}", end=" | ")
 
         result = [round(acc, 3)]
-        result += f1_score(decoded, y_pred, average=None).tolist()
-        result += precision_score(decoded, y_pred, average=None, zero_division=1).tolist()
-        result += recall_score(decoded, y_pred, average=None).tolist()
+        result += f1_score(y_true, y_pred, average=None).tolist()
+        result += precision_score(y_true, y_pred, average=None, zero_division=1).tolist()
+        result += recall_score(y_true, y_pred, average=None).tolist()
 
     elif loss == "mse":
         result = round(float(np.linalg.norm(y_pred_list - y_test) / (0.2 * config.NM)), 4)

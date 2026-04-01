@@ -67,10 +67,9 @@ class TestTrainValLoop:
         model = HNN(manifold, in_features=5, out_features=2, c=1.0, hidden=8)
         device = torch.device("cpu")
 
-        # Tiny dataset: 20 samples, 2 classes (one-hot labels)
+        # Tiny dataset: 20 samples, 2 classes (class index labels)
         X = torch.randn(20, 5) * 0.1
-        y = torch.zeros(20, 2)
-        y[torch.arange(20), torch.randint(0, 2, (20,))] = 1.0
+        y = torch.randint(0, 2, (20,))
 
         loader = DataLoader(TensorDataset(X, y), batch_size=10)
         criterion = nn.CrossEntropyLoss()
@@ -110,9 +109,8 @@ class TestGetAccuracy:
         device = torch.device("cpu")
 
         X = torch.randn(16, 5) * 0.1
-        # One-hot labels
-        y = torch.zeros(16, 2)
-        y[torch.arange(16), torch.randint(0, 2, (16,))] = 1.0
+        # Class index labels
+        y = torch.randint(0, 2, (16,))
 
         loader = DataLoader(TensorDataset(X, y), batch_size=8)
         y_test = y.numpy()
@@ -145,8 +143,7 @@ class TestGetMetrics:
         model = HNN(manifold, in_features=5, out_features=2, c=1.0, hidden=8)
 
         X = torch.randn(20, 5) * 0.1
-        y = torch.zeros(20, 2)
-        y[torch.arange(20), torch.randint(0, 2, (20,))] = 1.0
+        y = torch.randint(0, 2, (20,))
 
         loader = DataLoader(TensorDataset(X, y), batch_size=10)
         y_test = y.numpy()

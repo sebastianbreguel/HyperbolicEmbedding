@@ -108,9 +108,16 @@ def get_data(
     X_val, y_val = np.array(X_val), np.array(y_val)
     X_test, y_test = np.array(X_test), np.array(y_test)
 
-    y_train = y_train.astype(float)
-    y_val = y_val.astype(float)
-    y_test = y_test.astype(float)
+    if task == "ganea":
+        # CrossEntropyLoss expects class indices (long), not one-hot
+        y_train = np.argmax(y_train, axis=1).astype(np.int64)
+        y_val = np.argmax(y_val, axis=1).astype(np.int64)
+        y_test = np.argmax(y_test, axis=1).astype(np.int64)
+    else:
+        # mircea: regression with float targets
+        y_train = y_train.astype(float)
+        y_val = y_val.astype(float)
+        y_test = y_test.astype(float)
 
     class RegressionDataset(Dataset):
         def __init__(self, X_data: np.ndarray, y_data: np.ndarray) -> None:
@@ -124,13 +131,16 @@ def get_data(
             return len(self.X_data)
 
     train_dataset = RegressionDataset(
-        torch.from_numpy(X_train).float(), torch.from_numpy(y_train).float()
+        torch.from_numpy(X_train).float(),
+        torch.from_numpy(y_train) if task == "ganea" else torch.from_numpy(y_train).float()
     )
     val_dataset = RegressionDataset(
-        torch.from_numpy(X_val).float(), torch.from_numpy(y_val).float()
+        torch.from_numpy(X_val).float(),
+        torch.from_numpy(y_val) if task == "ganea" else torch.from_numpy(y_val).float()
     )
     test_dataset = RegressionDataset(
-        torch.from_numpy(X_test).float(), torch.from_numpy(y_test).float()
+        torch.from_numpy(X_test).float(),
+        torch.from_numpy(y_test) if task == "ganea" else torch.from_numpy(y_test).float()
     )
 
     train_loader = DataLoader(dataset=train_dataset, batch_size=config.BATCH_SIZE, shuffle=True, num_workers=0)
