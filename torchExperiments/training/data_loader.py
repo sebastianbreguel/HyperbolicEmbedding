@@ -140,8 +140,8 @@ def get_data(
     )
 
     train_loader = DataLoader(dataset=train_dataset, batch_size=config.BATCH_SIZE, shuffle=True, num_workers=0)
-    val_loader = DataLoader(dataset=val_dataset, batch_size=config.BATCH_SIZE, shuffle=True)
-    test_loader = DataLoader(dataset=test_dataset, batch_size=config.BATCH_SIZE, shuffle=True)
+    val_loader = DataLoader(dataset=val_dataset, batch_size=config.BATCH_SIZE, shuffle=False)
+    test_loader = DataLoader(dataset=test_dataset, batch_size=config.BATCH_SIZE, shuffle=False)
 
     return train_loader, val_loader, test_loader, y_test
 
