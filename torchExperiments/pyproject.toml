@@ -20,6 +20,7 @@ dev = [
     "ruff>=0.4.0",
     "ty>=0.0.1a0",
     "bandit[toml]>=1.7.0",
+    "pytest>=8.4.2",
 ]
 
 [tool.ruff]

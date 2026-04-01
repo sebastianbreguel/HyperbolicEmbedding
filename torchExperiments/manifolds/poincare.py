@@ -22,7 +22,7 @@ class PoincareBall(Manifold):
     def __init__(self, c: float) -> None:
         super().__init__()
         self.name = "PoincareBall"
-        self.min_norm: float = 1e-15
+        self.min_norm: float = 1e-7
         self.c = c
         # dtype-dependent numerical eps for boundary projection
         self.eps: dict[torch.dtype, float] = {torch.float32: 4e-3, torch.float64: 1e-5}
