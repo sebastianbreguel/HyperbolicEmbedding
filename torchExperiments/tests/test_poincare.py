@@ -225,3 +225,32 @@ class TestInner:
         inner = poincare.inner(x, u, keepdim=False)
         # inner returns shape (4, 3) — per-component along last dim
         assert (inner.abs() < 1e-6).all()
+
+
+class TestDist:
+    def test_dist_equals_sqrt_sqdist(self):
+        """dist() should return the non-squared geodesic distance."""
+        ball = PoincareBall(c=1.0)
+        torch.manual_seed(42)
+        p1 = ball.proj(ball.expmap0(torch.randn(4, 3) * 0.1))
+        p2 = ball.proj(ball.expmap0(torch.randn(4, 3) * 0.1))
+        d = ball.dist(p1, p2)
+        sd = ball.sqdist(p1, p2)
+        torch.testing.assert_close(d, sd.sqrt(), atol=1e-5, rtol=1e-5)
+
+    def test_dist_symmetry(self):
+        """d(x, y) == d(y, x)."""
+        ball = PoincareBall(c=1.0)
+        torch.manual_seed(42)
+        p1 = ball.proj(ball.expmap0(torch.randn(4, 3) * 0.1))
+        p2 = ball.proj(ball.expmap0(torch.randn(4, 3) * 0.1))
+        torch.testing.assert_close(ball.dist(p1, p2), ball.dist(p2, p1), atol=1e-5, rtol=1e-5)
+
+    def test_dist_non_negative(self):
+        """Geodesic distance is always >= 0."""
+        ball = PoincareBall(c=1.0)
+        torch.manual_seed(42)
+        p1 = ball.proj(ball.expmap0(torch.randn(8, 5) * 0.3))
+        p2 = ball.proj(ball.expmap0(torch.randn(8, 5) * 0.3))
+        d = ball.dist(p1, p2)
+        assert (d >= 0).all()
