@@ -52,7 +52,9 @@ class HyperbolicMLR(nn.Module):
 
     def reset_parameters(self) -> None:
         nn.init.kaiming_uniform_(self.a_vals, a=np.sqrt(5))
-        nn.init.kaiming_uniform_(self.p_vals, a=np.sqrt(5))
+        # p_vals are mapped to the ball via expmap0 — keep them small
+        # to avoid boundary saturation (consistent with manifold.init_weights)
+        nn.init.uniform_(self.p_vals, -1e-3, 1e-3)
 
 
 # ---------------------------------------------------------------------------
