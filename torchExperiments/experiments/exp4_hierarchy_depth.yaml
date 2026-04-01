@@ -43,14 +43,14 @@
 
 task: ganea
 loss: cross
-replace: 0.1
 optimizer: Radam
 epochs: 80
 runs: 8
 wandb_project: hyperbolic-geometry-comparison
 
-hidden_size: 64
+replace: 0.1
 
 sweep:
   model: [euclidean, hyperbolic]
   dataset: [10, 30, 50]
+  hidden_size: [32, 64, 128]
