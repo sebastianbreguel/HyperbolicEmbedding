@@ -85,6 +85,7 @@ def train_model(
         optimizer.zero_grad()
         loss = criterion(model(X_batch), y_batch)
         loss.backward()
+        nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()
         total_loss += loss.item()
     return total_loss
