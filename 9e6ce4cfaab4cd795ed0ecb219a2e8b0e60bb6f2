@@ -1,0 +1,23 @@
+torchExperiments/manifolds/poincare.py
+  b441929c7a1fe8f9 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "9e6ce4cfaab4cd795ed0ecb219a2e8b0e60bb6f2",
+  "prompts": {
+    "b441929c7a1fe8f9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e4766184-c180-4eed-9c6a-2fe3437bcdba",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "sebastianbreguel <62109266+sebastianbreguel@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 1,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}
