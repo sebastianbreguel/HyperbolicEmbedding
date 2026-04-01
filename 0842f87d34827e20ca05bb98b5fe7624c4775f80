@@ -1,0 +1,25 @@
+torchExperiments/models/hnn.py
+  b441929c7a1fe8f9 44
+torchExperiments/tests/test_model.py
+  b441929c7a1fe8f9 63-64,67-68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "0842f87d34827e20ca05bb98b5fe7624c4775f80",
+  "prompts": {
+    "b441929c7a1fe8f9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e4766184-c180-4eed-9c6a-2fe3437bcdba",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "sebastianbreguel <62109266+sebastianbreguel@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 11,
+      "total_deletions": 13,
+      "accepted_lines": 1206,
+      "overriden_lines": 0
+    }
+  }
+}
