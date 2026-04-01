@@ -60,11 +60,21 @@ _OVERRIDABLE = {
     "dimensions": "DIMENSIONS",
 }
 
+# Snapshot of original defaults at import time — immune to apply_config mutations
+_ORIGINAL_DEFAULTS: dict[str, object] = {
+    "epochs": EPOCHS,
+    "learning_rate": LEARNING_RATE,
+    "batch_size": BATCH_SIZE,
+    "hidden_size": HIDDEN_SIZE,
+    "use_bias": USE_BIAS,
+    "seed": SEED,
+    "dimensions": DIMENSIONS,
+}
+
+
 def get_defaults() -> dict:
-    """Return current values of all overridable config parameters."""
-    import sys
-    module = sys.modules[__name__]
-    return {key: getattr(module, attr) for key, attr in _OVERRIDABLE.items()}
+    """Return the original default values (unaffected by apply_config)."""
+    return dict(_ORIGINAL_DEFAULTS)
 
 def apply_config(overrides: dict) -> None:
     """Override config module attributes at runtime."""
