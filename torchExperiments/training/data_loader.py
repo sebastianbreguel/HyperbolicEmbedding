@@ -68,8 +68,6 @@ def get_data(
         A 4-tuple ``(train_loader, val_loader, test_loader, y_test)`` where
         ``y_test`` is the raw numpy array of test labels (used for metrics).
     """
-    np.random.seed(config.SEED)
-
     if task == "mircea":
         url = config.URL
     else:

@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 
+import numpy as np
 import torch
 import wandb
 
@@ -108,6 +109,9 @@ def _print_sweep_table(experiments: list[dict], runs: int) -> None:
 
 def _run_experiment(exp_config: dict, run_index: int, device: torch.device | None = None) -> None:
     """Run a single experiment with the given config."""
+    effective_seed = exp_config.get("seed", 0) + run_index
+    torch.manual_seed(effective_seed)
+    np.random.seed(effective_seed)
     config.apply_config(exp_config)
     task = exp_config["task"]
     model_name = exp_config["model"]
@@ -119,7 +123,7 @@ def _run_experiment(exp_config: dict, run_index: int, device: torch.device | Non
     wandb.init(
         project=wandb_project,
         name=f"{model_name}_{task}_ds{dataset}_run{run_index}",
-        config={**exp_config, "run_index": run_index, "device": str(device)},
+        config={**exp_config, "run_index": run_index, "effective_seed": effective_seed, "device": str(device)},
     )
     train_eval(model_name, optimizer_name, dataset, loss, replace, task, device)
     wandb.finish()
@@ -180,7 +184,10 @@ if "__main__" == __name__:
         print(f"Device: {device}")
         num_runs = args.runs if args.runs is not None else 10
         for i in range(num_runs):
-            print(f"=== Run {i + 1}/{num_runs} ===")
+            effective_seed = config.SEED + i
+            torch.manual_seed(effective_seed)
+            np.random.seed(effective_seed)
+            print(f"=== Run {i + 1}/{num_runs} (seed={effective_seed}) ===")
             wandb.init(
                 project=args.wandb_project,
                 name=f"{args.model}_{args.task}_dataset{args.dataset}_run{i}",
