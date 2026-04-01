@@ -1,0 +1,27 @@
+torchExperiments/tests/test_training.py
+  b441929c7a1fe8f9 70,72,112-113,146
+torchExperiments/training/data_loader.py
+  b441929c7a1fe8f9 111-120,134-135,138-139,142-143
+torchExperiments/training/metrics.py
+  b441929c7a1fe8f9 53,91,94,98-100
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "dccfe63679bed61ac8a25be6952d23aff36eb765",
+  "prompts": {
+    "b441929c7a1fe8f9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e4766184-c180-4eed-9c6a-2fe3437bcdba",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "sebastianbreguel <62109266+sebastianbreguel@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 1196,
+      "overriden_lines": 0
+    }
+  }
+}
