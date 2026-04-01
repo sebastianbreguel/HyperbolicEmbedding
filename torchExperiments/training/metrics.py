@@ -54,7 +54,7 @@ def get_accuracy(loss: str, y_test: np.ndarray, model: nn.Module, loader: DataLo
     else:
         y_pred_arr = np.array(y_pred)
         y_true_arr = np.array(y_true)
-        return round(float(np.linalg.norm(y_pred_arr - y_true_arr) / (0.2 * config.NM)), 4)
+        return round(float(np.linalg.norm(y_pred_arr - y_true_arr) / np.sqrt(len(y_true_arr))), 4)
 
 
 def get_metrics(
@@ -100,7 +100,7 @@ def get_metrics(
         result += recall_score(y_true, y_pred, average=None).tolist()
 
     elif loss == "mse":
-        result = round(float(np.linalg.norm(y_pred_list - y_test) / (0.2 * config.NM)), 4)
+        result = round(float(np.linalg.norm(y_pred_list - y_test) / np.sqrt(len(y_test))), 4)
         print(f"Loss on Test Data: {result}")
 
     if was_training:
