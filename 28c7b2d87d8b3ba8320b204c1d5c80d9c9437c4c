@@ -1,0 +1,40 @@
+HyperbolicTimbrenet/pyproject.toml
+  88c2502905eafa69 11
+torchExperiments/pyproject.toml
+  88c2502905eafa69 7,11,13-14
+torchExperiments/training/data_gen.py
+  88c2502905eafa69 21,194-195
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "28c7b2d87d8b3ba8320b204c1d5c80d9c9437c4c",
+  "prompts": {
+    "88c2502905eafa69": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d487ea87-d5e5-4580-9c99-a021e0f797fc",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "sebastianbreguel <62109266+sebastianbreguel@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 10,
+      "total_deletions": 10,
+      "accepted_lines": 8,
+      "overriden_lines": 0
+    },
+    "b441929c7a1fe8f9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e4766184-c180-4eed-9c6a-2fe3437bcdba",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "sebastianbreguel <62109266+sebastianbreguel@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 2268,
+      "total_deletions": 0,
+      "accepted_lines": 3437,
+      "overriden_lines": 0
+    }
+  }
+}
